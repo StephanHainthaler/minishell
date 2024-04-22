@@ -6,12 +6,14 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/22 10:04:30 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/04/22 14:52:40 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# define _DEFAULT_SOURCE
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -19,6 +21,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <readline/readline.h>
+# include <readline/history.h>
 # include <sys/stat.h>
 # include <sys/resource.h>
 # include <sys/time.h>
