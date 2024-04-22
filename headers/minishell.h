@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/22 09:35:58 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/04/22 10:04:30 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdbool.h>
 # include <string.h>
 # include <unistd.h>
 # include <readline/readline.h>
@@ -31,8 +32,5 @@
 # include <termios.h>
 # include <curses.h>
 # include <term.h>
-
-
-
 
 #endif
