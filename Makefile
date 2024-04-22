@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
+#    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/04/22 09:11:17 by shaintha         ###   ########.fr        #
+#    Updated: 2024/04/22 15:31:38 by juitz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := minishell
 
 CC := cc
-CFLAGS := -Wall -Wextra -Werror #-g
+CFLAGS := -Wall -Wextra -Werror -fsanitize=leak #-g
 
 SRC_DIR := sources
 OBJ_DIR := objects
@@ -34,7 +34,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 
 $(NAME): $(OBJS)
 	@cd $(LIBFT_DIR) && make -s
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT_DIR)/libft.a
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT_DIR)/libft.a -lreadline
+	@LSAN_OPTIONS=suppressions=./lsan_suppress.txt ./$(NAME)
 
 clean:
 	@rm -rf $(OBJ_DIR)
