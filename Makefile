@@ -6,14 +6,14 @@
 #    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/04/22 15:41:36 by shaintha         ###   ########.fr        #
+#    Updated: 2024/04/22 15:43:48 by shaintha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := minishell
 
 CC := cc
-CFLAGS := -Wall -Wextra -Werror -fsanitize=leak #-g
+CFLAGS := -Wall -Wextra -Werror #-g
 
 SRC_DIR := sources
 OBJ_DIR := objects
@@ -35,7 +35,6 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 $(NAME): $(OBJS)
 	@cd $(LIBFT_DIR) && make -s
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT_DIR)/libft.a -lreadline
-	@LSAN_OPTIONS=suppressions=./lsan_suppress.txt ./$(NAME)
 
 clean:
 	@rm -rf $(OBJ_DIR)
