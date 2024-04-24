@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/23 12:15:46 by shaintha         ###   ########.fr       */
+/*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
+/*   Updated: 2024/04/23 12:15:34 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int main(int argc, char *argv[])
+int	read_input(void)
 {
-	if (argc != 1)
+	char	*input;
+	
+	input = readline("./minishell ");
+	if (input == NULL)
 		return (1);
-	printf("Start of minishell-test!: %d %s\n", argc, argv[0]);
-	if (read_input() == 1)
-		return (1);	
+	printf("%s\n", input);
+    //rl_clear_history();
+    //lex_input(input);
 	return (0);
 }
-

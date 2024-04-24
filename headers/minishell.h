@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/22 10:04:30 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/04/24 09:45:54 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,37 @@
 # include <termios.h>
 # include <curses.h>
 # include <term.h>
+
+typedef struct s_list
+{
+	int				content;
+	int				index;
+	struct s_list	*next;
+}					t_list;
+
+typedef struct s_simp_cmd
+{
+	char	**args;
+	int		num_of_aval_args;
+	int		num_of_args;
+}			t_simp_cmd;
+
+typedef struct s_cmd
+{
+	t_simp_cmd	**simp_cmds;
+	int		num_of_aval_simp_cmds;
+	int		num_of_simp_cmds;
+	char	*infile;
+	char	*outfile;
+	char	*errfile;
+	int		background;
+}			t_cmd;
+
+
+
+int	read_input(void);
+
+
+
 
 #endif
