@@ -6,13 +6,14 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/24 09:45:54 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/04/25 11:34:05 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "libft.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
@@ -33,12 +34,17 @@
 # include <curses.h>
 # include <term.h>
 
-typedef struct s_list
+
+typedef enum s_type
 {
-	int				content;
-	int				index;
-	struct s_list	*next;
-}					t_list;
+	WORD = 1,
+	PIPE,
+	NUMBER,
+	RE_IN,
+	RE_OUT,
+	HERE_DOC,
+	APPEND,
+}			t_type;
 
 typedef struct s_simp_cmd
 {
@@ -58,9 +64,19 @@ typedef struct s_cmd
 	int		background;
 }			t_cmd;
 
+typedef struct s_lexer
+{
+	t_list	*token_list;
+	t_type	token_type;
+	char	*input;
+	int		i;
+}			t_lexer;	
+
 
 
 int	read_input(void);
+t_list	*lex_input(char *input);
+t_list	*get_redir_token(char *input, int i);
 
 
 
