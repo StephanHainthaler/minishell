@@ -1,22 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
+/*   Updated: 2024/04/25 16:34:40 by juitz            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/minishell.h"
 
 int	read_input(void)
 {
 	t_lexer	lex;
-	char	*input;
 	
 	lex.token_list = NULL;
 	lex.input = NULL;
 	lex.input = readline("./minishell ");
-	if (input == NULL)
+	if (lex.input == NULL)
 		return (1);
 	lex.i = 0;
-	lex_input(&lex);
+	if (lex_input(&lex) == 1)
+		return (1);
 	ft_putlst_fd(lex.token_list, 1);
 	return (0);
 }
 
-void	lex_input(t_lexer *lex)
+int	lex_input(t_lexer *lex)
 {
 	t_list	*new_token;
 
@@ -24,21 +36,21 @@ void	lex_input(t_lexer *lex)
 	{
 		while (ft_isspace(lex->input[lex->i]) == true)
 			lex->i++;
-		//if (lex->input[lex->i] == '|')			//PIPE_TOKEN		
-			//get_pipe_token(lex);	//new_token = ft_lstnew("PIPE", 6);
+		if (lex->input[lex->i] == '|')		
+			new_token = ft_lstnew(PIPE, "|");
 		if (lex->input[lex->i] == '<' || lex->input[lex->i] == '>')		
-			new_token = get_redir_token(lex);	//RE_DIR_TOKENS
-		else
-			new_token = get_word_token(lex);	//WORD_TOKEN
-
+			new_token = get_redir_token(lex);
+		else 
+			new_token = get_word_token(lex);
 		if (new_token == NULL)
 		{
 			if (lex->token_list != NULL)
-				ft_lstclear(lex->token_list);
-			return (NULL);
+				ft_lstclear(&lex->token_list);
+			return (1);
 		}
-		ft_lstadd_back(lex->token_list, new_token);
+		ft_lstadd_back(&lex->token_list, new_token);
 	}
+	return (0);
 }
 
 t_list	*get_word_token(t_lexer *lex)
@@ -48,30 +60,6 @@ t_list	*get_word_token(t_lexer *lex)
 	int		j;
 
 	attr = NULL;
-	
-}
-
-t_list	*get_redir_token(t_lexer *lex)
-{
-	t_list	*new_token;
-	char	*attr;
-	t_type	type;
-	int		j;
-
-	attr = NULL;
-	if (lex->input[lex->i] == '<')
-		type = 1; //GREAT == INFILE
-	if (lex->input[lex->i] == '>')
-		type = 2; //LESSER == OUTFILE
-	lex->i++;
-	if (lex->input[lex->i] == '<' && lex->input[lex->i - 1] == '<')
-		type = 3; //LESSERLESSER == HERE_DOC
-	if (lex->input[lex->i] == '>' && lex->input[lex->i - 1] == '>')
-		type = 4; //GREATGREAT == APPEND
-	while (ft_isspace(lex->input[lex->i]) == true)
-		lex->i++;
-	if (lex->input[lex->i] == '\0')
-		type = 5; //NULL
 	j = 0;
 	while (lex->input[lex->i] != '\0')
 	{
@@ -81,8 +69,60 @@ t_list	*get_redir_token(t_lexer *lex)
 		j++;
 	}
 	attr = (char *)malloc((j + 1) * sizeof(char));
-	ft_strlcpy(attr, lex->input + (lex->i - j), j);
-	printf("%s\n", attr);
-	printf("%c\n", lex->input[lex->i]);
-	new_token = ft_lstnew(attr, type);
+	if (attr == NULL)
+		return (NULL);
+	ft_strlcpy(attr, lex->input + (lex->i - j), j + 1);
+	new_token = ft_lstnew(WORD, attr);
+	return (new_token);
+}
+
+t_type	get_redir_type(t_lexer *lex)
+{
+	t_type	type;
+	
+	if (lex->input[lex->i] == '<' && lex->input[lex->i + 1] != '<')
+		type = RE_IN;
+	if (lex->input[lex->i] == '>' && lex->input[lex->i + 1] != '>')
+		type = RE_OUT;
+	lex->i++;
+	if (lex->input[lex->i] == '<' && lex->input[lex->i - 1] == '<')
+	{
+		type = HERE_DOC;
+		lex->i++;
+	}
+	if (lex->input[lex->i] == '>' && lex->input[lex->i - 1] == '>')
+	{
+		type = APPEND;
+		lex->i++;
+	}
+	return (type);
+}
+
+t_list	*get_redir_token(t_lexer *lex)
+{
+	t_list	*new_token;
+	t_type	type;
+	char	*attr;
+	int		j;
+
+	attr = NULL;
+	type = get_redir_type(lex);
+	while (ft_isspace(lex->input[lex->i]) == true)
+		lex->i++;
+	if (lex->input[lex->i] == '\0')
+		return (NULL);
+	j = 0;
+	while (lex->input[lex->i] != '\0')
+	{
+		if (ft_isspace(lex->input[lex->i]) == true)
+			break ;
+		lex->i++;
+		j++;
+	}
+	attr = (char *)malloc((j + 1) * sizeof(char));
+	if (attr == NULL)
+		return (NULL);
+	ft_strlcpy(attr, lex->input + (lex->i - j), j + 1);
+	new_token = ft_lstnew(type, attr);
+	return (new_token);
 }
