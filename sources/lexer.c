@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/25 13:47:33 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/04/25 14:05:14 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@
 int	read_input(void)
 {
 	t_lexer	lex;
-	char	*input;
 	
 	lex.token_list = NULL;
 	lex.input = NULL;
 	lex.input = readline("./minishell ");
-	if (input == NULL)
+	if (lex.input == NULL)
 		return (1);
 	lex.i = 0;
-	lex_input(&lex);
+	if (lex_input(&lex) == 1)
+		return (1);
 	ft_putlst_fd(lex.token_list, 1);
 	return (0);
 }
 
-void	lex_input(t_lexer *lex)
+int	lex_input(t_lexer *lex)
 {
 	t_list	*new_token;
 
@@ -41,27 +41,29 @@ void	lex_input(t_lexer *lex)
 		if (lex->input[lex->i] == '<' || lex->input[lex->i] == '>')		
 			new_token = get_redir_token(lex);	//RE_DIR_TOKENS
 		else
-			new_token = get_word_token(lex);	//WORD_TOKEN
+			lex->i++;
+		// 	new_token = get_word_token(lex);	//WORD_TOKEN
 
 		if (new_token == NULL)
 		{
 			if (lex->token_list != NULL)
-				ft_lstclear(lex->token_list);
-			return (NULL);
+				ft_lstclear(&lex->token_list);
+			return (1);
 		}
-		ft_lstadd_back(lex->token_list, new_token);
+		ft_lstadd_back(&lex->token_list, new_token);
 	}
+	return (0);
 }
 
-t_list	*get_word_token(t_lexer *lex)
-{
-	t_list	*new_token;
-	char	*attr;
-	int		j;
+// t_list	*get_word_token(t_lexer *lex)
+// {
+// 	t_list	*new_token;
+// 	char	*attr;
+// 	int		j;
 
-	attr = NULL;
+// 	attr = NULL;
 	
-}
+// }
 
 t_list	*get_redir_token(t_lexer *lex)
 {
@@ -72,18 +74,18 @@ t_list	*get_redir_token(t_lexer *lex)
 
 	attr = NULL;
 	if (lex->input[lex->i] == '<')
-		type = 1; //GREAT == INFILE
+		type = RE_IN;
 	if (lex->input[lex->i] == '>')
-		type = 2; //LESSER == OUTFILE
+		type = RE_OUT;
 	lex->i++;
 	if (lex->input[lex->i] == '<' && lex->input[lex->i - 1] == '<')
-		type = 3; //LESSERLESSER == HERE_DOC
+		type = HERE_DOC;
 	if (lex->input[lex->i] == '>' && lex->input[lex->i - 1] == '>')
-		type = 4; //GREATGREAT == APPEND
+		type = APPEND;
 	while (ft_isspace(lex->input[lex->i]) == true)
 		lex->i++;
 	if (lex->input[lex->i] == '\0')
-		type = 5; //NULL
+		return (NULL);
 	j = 0;
 	while (lex->input[lex->i] != '\0')
 	{
@@ -93,8 +95,11 @@ t_list	*get_redir_token(t_lexer *lex)
 		j++;
 	}
 	attr = (char *)malloc((j + 1) * sizeof(char));
+	if (attr == NULL)
+		return (NULL);
 	ft_strlcpy(attr, lex->input + (lex->i - j), j);
 	printf("%s\n", attr);
 	printf("%c\n", lex->input[lex->i]);
 	new_token = ft_lstnew(attr, type);
+	return (new_token);
 }

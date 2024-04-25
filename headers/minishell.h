@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/25 11:34:05 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/04/25 14:01:43 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,6 @@
 # include <term.h>
 
 
-typedef enum s_type
-{
-	WORD = 1,
-	PIPE,
-	NUMBER,
-	RE_IN,
-	RE_OUT,
-	HERE_DOC,
-	APPEND,
-}			t_type;
-
 typedef struct s_simp_cmd
 {
 	char	**args;
@@ -67,7 +56,6 @@ typedef struct s_cmd
 typedef struct s_lexer
 {
 	t_list	*token_list;
-	t_type	token_type;
 	char	*input;
 	int		i;
 }			t_lexer;	
@@ -75,8 +63,9 @@ typedef struct s_lexer
 
 
 int	read_input(void);
-t_list	*lex_input(char *input);
-t_list	*get_redir_token(char *input, int i);
+int	lex_input(t_lexer *lex);
+t_list	*get_word_token(t_lexer *lex);
+t_list	*get_redir_token(t_lexer *lex);
 
 
 
