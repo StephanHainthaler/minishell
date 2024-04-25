@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
+#    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/04/23 09:33:57 by shaintha         ###   ########.fr        #
+#    Updated: 2024/04/25 17:16:10 by juitz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := minishell
 
 CC := cc
-CFLAGS := -Wall -Wextra -Werror #-g
+CFLAGS := -Wall -Wextra -Werror -g
 
 SRC_DIR := sources
 OBJ_DIR := objects

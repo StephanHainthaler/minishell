@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/25 16:34:40 by juitz            ###   ########.fr       */
+/*   Updated: 2024/04/25 16:48:20 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ int	lex_input(t_lexer *lex)
 	{
 		while (ft_isspace(lex->input[lex->i]) == true)
 			lex->i++;
-		if (lex->input[lex->i] == '|')		
+		if (lex->input[lex->i] == '|')
 			new_token = ft_lstnew(PIPE, "|");
-		if (lex->input[lex->i] == '<' || lex->input[lex->i] == '>')		
+		if (lex->input[lex->i] == '<' || lex->input[lex->i] == '>')
 			new_token = get_redir_token(lex);
-		else 
+		else
 			new_token = get_word_token(lex);
 		if (new_token == NULL)
 		{

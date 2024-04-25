@@ -6,11 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/04/25 14:05:57 by juitz            ###   ########.fr       */
-=======
-/*   Updated: 2024/04/25 14:01:43 by shaintha         ###   ########.fr       */
->>>>>>> origin/stephan
+/*   Updated: 2024/04/25 17:14:20 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +33,6 @@
 # include <termios.h>
 # include <curses.h>
 # include <term.h>
-# include <readline/readline.h>
 # include <readline/history.h>
 
 
