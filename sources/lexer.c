@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/26 15:10:29 by juitz            ###   ########.fr       */
+/*   Updated: 2024/04/26 16:01:51 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,13 @@ int	lex_input(t_lexer *lex)
 		if (lex->input[lex->i] == '|')
 		{
 			new_token = ft_lstnew(PIPE, "|");
-			new_token->type = get_pipe_type(lex);
+			printf("%d", new_token->type);
 		}
 		if (lex->input[lex->i] == '<' || lex->input[lex->i] == '>')
+		{
 			new_token = get_redir_token(lex);
+			printf("%d", new_token->type);
+		}
 		else
 			new_token = get_word_token(lex);
 		if (new_token == NULL)
@@ -77,18 +80,6 @@ t_list	*get_word_token(t_lexer *lex)
 	ft_strlcpy(attr, lex->input + (lex->i - j), j + 1);
 	new_token = ft_lstnew(WORD, attr);
 	return (new_token);
-}
-
-t_type	get_pipe_type(t_lexer *lex)
-{
-	t_type type;
-
-	if (lex->input[lex->i] == '|')
-	{
-		type = PIPE;
-		lex->i++;
-	}
-	return (type);
 }
 
 t_type	get_redir_type(t_lexer *lex)
@@ -141,3 +132,14 @@ t_list	*get_redir_token(t_lexer *lex)
 	new_token = ft_lstnew(type, attr);
 	return (new_token);
 }
+/* t_type	get_pipe_type(t_lexer *lex)
+{
+	t_type type;
+
+	if (lex->input[lex->i] == '|')
+	{
+		type = PIPE;
+		lex->i++;
+	}
+	return (type);
+} */
