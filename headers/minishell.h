@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/25 17:14:20 by juitz            ###   ########.fr       */
+/*   Updated: 2024/04/26 15:08:18 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct s_lexer
 
 int	read_input(void);
 int	lex_input(t_lexer *lex);
+t_type	get_pipe_type(t_lexer *lex);
 t_list	*get_word_token(t_lexer *lex);
 t_list	*get_redir_token(t_lexer *lex);
 
