@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/29 15:49:49 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/04/29 16:01:04 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@
 # include <curses.h>
 # include <term.h>
 
-
 typedef struct s_simp_cmd
 {
 	char	**args;
@@ -45,13 +44,13 @@ typedef struct s_simp_cmd
 typedef struct s_cmd
 {
 	t_simp_cmd	**simp_cmds;
-	int		num_of_aval_simp_cmds;
-	int		num_of_simp_cmds;
-	char	*infile;
-	char	*outfile;
-	char	*errfile;
-	int		background;
-}			t_cmd;
+	int			num_of_aval_simp_cmds;
+	int			num_of_simp_cmds;
+	char		*infile;
+	char		*outfile;
+	char		*errfile;
+	int			background;
+}				t_cmd;
 
 typedef struct s_lexer
 {
@@ -60,15 +59,11 @@ typedef struct s_lexer
 	int		i;
 }			t_lexer;	
 
-
 //lexer.c
-int	read_input(void);
-int	lex_input(t_lexer *lex);
+int		read_input(void);
+int		lex_input(t_lexer *lex);
 t_list	*get_word_token(t_lexer *lex);
 t_list	*get_non_word_token(t_lexer *lex);
 bool	is_token(char c);
-
-
-
 
 #endif
