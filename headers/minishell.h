@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/29 09:59:08 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/04/29 15:49:49 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,12 @@ typedef struct s_lexer
 }			t_lexer;	
 
 
-
+//lexer.c
 int	read_input(void);
 int	lex_input(t_lexer *lex);
 t_list	*get_word_token(t_lexer *lex);
-t_list	*get_redir_token(t_lexer *lex);
+t_list	*get_non_word_token(t_lexer *lex);
+bool	is_token(char c);
 
 
 
