@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/25 14:43:46 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/04/29 11:05:59 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,12 @@ int	lex_input(t_lexer *lex)
 	{
 		while (ft_isspace(lex->input[lex->i]) == true)
 			lex->i++;
-		if (lex->input[lex->i] == '|')		
+		if (lex->input[lex->i] == '|')
+		{	
 			new_token = ft_lstnew(PIPE, "|");
-		if (lex->input[lex->i] == '<' || lex->input[lex->i] == '>')		
+			lex->i++;
+		}
+		else if (lex->input[lex->i] == '<' || lex->input[lex->i] == '>')		
 			new_token = get_redir_token(lex);
 		else 
 			new_token = get_word_token(lex);
@@ -63,7 +66,8 @@ t_list	*get_word_token(t_lexer *lex)
 	j = 0;
 	while (lex->input[lex->i] != '\0')
 	{
-		if (ft_isspace(lex->input[lex->i]) == true)
+		if (ft_isspace(lex->input[lex->i]) == true || lex->input[lex->i] == '<' 
+			|| lex->input[lex->i] == '>' || lex->input[lex->i] == '|')
 			break ;
 		lex->i++;
 		j++;
@@ -105,7 +109,6 @@ t_list	*get_redir_token(t_lexer *lex)
 	char	*attr;
 	int		j;
 
-	attr = NULL;
 	type = get_redir_type(lex);
 	while (ft_isspace(lex->input[lex->i]) == true)
 		lex->i++;
@@ -114,7 +117,8 @@ t_list	*get_redir_token(t_lexer *lex)
 	j = 0;
 	while (lex->input[lex->i] != '\0')
 	{
-		if (ft_isspace(lex->input[lex->i]) == true)
+		if (ft_isspace(lex->input[lex->i]) == true || lex->input[lex->i] == '<' 
+			|| lex->input[lex->i] == '>' || lex->input[lex->i] == '|')
 			break ;
 		lex->i++;
 		j++;
