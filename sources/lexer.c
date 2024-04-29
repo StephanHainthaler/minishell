@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/29 11:05:59 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/04/29 11:42:56 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	read_input(void)
 	if (lex_input(&lex) == 1)
 		return (1);
 	ft_putlst_fd(lex.token_list, 1);
+	ft_lstclear(&lex.token_list);
 	return (0);
 }
 
