@@ -6,7 +6,7 @@
 #    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/04/29 11:57:59 by shaintha         ###   ########.fr        #
+#    Updated: 2024/04/29 15:48:19 by shaintha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,16 +15,15 @@ NAME := minishell
 CC := cc
 CFLAGS := -Wall -Wextra -Werror #-g
 VALGRIND := $(shell which valgrind)
-VALFLAGS := --suppressions=./supp.supp
-
-# --errors-for-leak-kinds=all \
-# --leak-check=full \
-# --read-var-info=yes \
-# --show-error-list=yes \
-# --show-leak-kinds=all \
-# --suppressions=./supp.supp \
-# --trace-children=yes \
-# --track-origins=yes
+VFLAGS := --suppressions=./supp.supp \
+--errors-for-leak-kinds=all \
+--leak-check=full \
+--read-var-info=yes \
+--show-error-list=yes \
+--show-leak-kinds=all \
+--suppressions=./supp.supp \
+--trace-children=yes \
+--track-origins=yes
 
 SRC_DIR := sources
 OBJ_DIR := objects
@@ -59,7 +58,6 @@ fclean: clean
 re: fclean all
 
 val: all
-	@$(VALGRIND) $(VALFLAGS) "./$(NAME)"
+	@$(VALGRIND) $(VFLAGS) "./$(NAME)"
 
 .PHONY: all clean fclean re val
-
