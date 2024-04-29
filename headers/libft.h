@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 11:52:49 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/25 14:05:51 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/04/29 09:13:44 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 typedef enum s_type
 {
 	WORD = 1,
-	NUMBER,
+	//NUMBER,
 	PIPE,
 	RE_IN,
 	RE_OUT,
