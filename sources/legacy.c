@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/29 15:43:44 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/04/29 16:03:07 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_type	get_redir_type(t_lexer *lex)
 {
 	t_type	type;
-	
+
 	if (lex->input[lex->i] == '<' && lex->input[lex->i + 1] != '<')
 		type = RE_IN;
 	if (lex->input[lex->i] == '>' && lex->input[lex->i + 1] != '>')
@@ -62,7 +62,6 @@ t_type	get_redir_type(t_lexer *lex)
 // 	new_token = ft_lstnew(type, attr);
 // 	return (new_token);
 // }
-
 
 // int	lex_input_old(t_lexer *lex)
 // {

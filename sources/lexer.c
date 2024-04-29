@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/29 15:43:50 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/04/29 16:02:02 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	read_input(void)
 {
 	t_lexer	lex;
-	
+
 	lex.token_list = NULL;
 	lex.input = NULL;
 	lex.input = readline("./minishell ");
@@ -41,7 +41,7 @@ int	lex_input(t_lexer *lex)
 			break ;
 		if (is_token(lex->input[lex->i]) == true)
 			new_token = get_non_word_token(lex);
-		else 
+		else
 			new_token = get_word_token(lex);
 		if (new_token == NULL)
 		{
@@ -71,7 +71,8 @@ t_list	*get_word_token(t_lexer *lex)
 	j = 0;
 	while (lex->input[lex->i] != '\0')
 	{
-		if (ft_isspace(lex->input[lex->i]) == true || is_token(lex->input[lex->i]) == true)
+		if (ft_isspace(lex->input[lex->i]) == true
+			|| is_token(lex->input[lex->i]) == true)
 			break ;
 		lex->i++;
 		j++;
@@ -111,11 +112,8 @@ t_list	*get_non_word_token(t_lexer *lex)
 
 // char	*handle_double_quotes(t_lexer *lex)
 // {
-
-
 // }
 
 // char	*handle_single_quotes(t_lexer *lex)
 // {
-	
 // }
