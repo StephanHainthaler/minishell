@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/02 12:31:19 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/02 16:31:25 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ int	read_input(t_minishell *ms)
 	if (lex_input(&lex) == 1)
 		return (1);
 	ft_putlst_fd(lex.token_list, 1);
-	// expand_env(&lex, &lex.token_list);
-	// ft_putlst_fd(lex.token_list, 1);
+	//expand_env(&lex, &lex.token_list);
+	check_for_expansion(&lex.token_list, ms->envp);
+	ft_putendl_fd("", 1);
+	ft_putlst_fd(lex.token_list, 1);
 	ft_lstclear(&lex.token_list);
 	return (0);
 }
@@ -153,52 +155,64 @@ t_list	*handle_quotes(t_lexer *lex)
 	
 }
 
-char	*handle_expansion(t_lexer *lex, char *to_expand)
-{
-	char	*new_str;
-	int		len;
-	int		i;
-	int		j;
 
-	new_str = NULL;
-	i = 0;
-	while (to_expand[i] != '\0' && to_expand[i] != '$')
-		i++;
-	len = i;
-	while (to_expand[len] != '\0' && ft_isspace(to_expand[len]) == false)
-		len++;
-	j = 0;
-	while (lex->envp[j] != NULL)
+int	check_for_expansion(t_list **token_list, char **envp)
+{
+	t_list	*current_node;
+	int		i;
+
+	current_node = *token_list;
+	if (token_list == NULL)
+		return (1);
+	while (current_node != NULL)
 	{
-		//printf("%s\n", lex->envp[j]);
-		if (ft_strnstr(lex->envp[j], to_expand + 1, len) == NULL)
+		if (current_node->type == 1)
+		{
+			i = 0;
+			while (current_node->attr[i] != '\0')
+			{
+				if (current_node->attr[i] == '$')
+				{
+					current_node->attr = handle_expansion(current_node->attr, envp, &i);
+					continue;
+				}
+				i++;
+			}
+		}
+		current_node = current_node->next;
+	}
+	return (0);
+}
+
+char	*handle_expansion(char *to_expand, char **envp, int *i)
+{
+	char	*exp_str;
+	int		len;
+	int		j;
+	
+	if (ft_isspace(to_expand[*i + 1]) == true || to_expand[*i + 1] == '\0')
+		return (to_expand);
+	//*i++;
+	len = -1; //starts at -1 because we dont need the '$' for evnp!
+	while (to_expand[len] != '\0' && ft_isspace(to_expand[len]) == false)
+		len++; //len == $<env_var_name_len>
+	j = 0;
+	while (envp[j] != NULL)
+	{
+		if (ft_strnstr(envp[j], to_expand + 1, len) == NULL)
 			j++;
 		else
 		{
-			ft_putendl_fd("HELP3", 1);
-			ft_putendl_fd(lex->envp[j] + len, 1);
-			ft_putnbr_fd(ft_strlen(lex->envp[j]), 1);
-			ft_putstr_fd("\n", 1);
-			new_str = (char *)malloc(sizeof(char) * 300);
-			ft_strlcpy(new_str, lex->envp[j] + len, ft_strlen(lex->envp[j]) - ft_strlen(to_expand));
-			ft_putendl_fd("HELP4", 1);
-			return (new_str);
+			exp_str = ft_substr(envp[j], len, ft_strlen(envp[j]) - ft_strlen(to_expand) + 1);
+			if (exp_str == NULL)
+				return (NULL);
+			*i = 0;
+			return (exp_str);
 		}
 	}
 	return (NULL);
 }
 
-void	expand_env(t_lexer *lex, t_list **lst)
-{
-	t_list	*temp;
 
-	temp = *lst;
-	if (lst == NULL)
-		return ;
-	while (temp != NULL)
-	{
-		if (ft_strchr(temp->attr, '$'))
-			temp->attr = handle_expansion(lex, temp->attr);
-		temp = temp->next;
-	}
-}
+
+

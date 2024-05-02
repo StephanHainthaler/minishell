@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/29 16:03:07 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/02 16:26:47 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,19 @@ t_type	get_redir_type(t_lexer *lex)
 // 		ft_lstadd_back(&lex->token_list, new_token);
 // 	}
 // 	return (0);
+// }
+
+// void	expand_env(t_lexer *lex, t_list **lst)
+// {
+// 	t_list	*temp;
+
+// 	temp = *lst;
+// 	if (lst == NULL)
+// 		return ;
+// 	while (temp != NULL)
+// 	{
+// 		if (temp->type == 1 && ft_strchr(temp->attr, '$'))
+// 			temp->attr = handle_expansion(lex, temp->attr);
+// 		temp = temp->next;
+// 	}
 // }
