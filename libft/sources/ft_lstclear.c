@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lst_clear.c                                     :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 10:35:06 by shaintha          #+#    #+#             */
-/*   Updated: 2023/11/13 10:35:07 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/02 10:10:11 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	ft_lstclear(t_list **lst)
 		current_node = *lst;
 		if (current_node != NULL)
 			ft_lstdelone(lst, current_node);
+		current_node = current_node->next;
 	}
 	*lst = NULL;
 }
