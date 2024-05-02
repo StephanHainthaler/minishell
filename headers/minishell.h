@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/29 16:01:04 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:19:44 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,26 @@ typedef struct s_lexer
 	t_list	*token_list;
 	char	*input;
 	int		i;
-}			t_lexer;	
+	char	**envp;
+	//bool	is_in_single_quotes;
+	//bool	is_in_double_quotes;
+}			t_lexer;
+
+typedef struct s_minishell
+{
+	int		argc;
+	char	**argv;
+	char	**envp;
+}			t_minishell;
 
 //lexer.c
-int		read_input(void);
+int	read_input(t_minishell *ms);
 int		lex_input(t_lexer *lex);
 t_list	*get_word_token(t_lexer *lex);
 t_list	*get_non_word_token(t_lexer *lex);
 bool	is_token(char c);
+t_list	*handle_quotes(t_lexer *lex);
+char	*handle_expansion(t_lexer *lex, char *to_expand);
+void	expand_env(t_lexer *lex, t_list **lst);
 
 #endif
