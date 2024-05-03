@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/03 12:43:12 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/03 14:20:33 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,9 @@ t_type	get_redir_type(t_lexer *lex)
 {
 	t_type	type;
 	
-	if (lex->input[lex->i] == '<' && lex->input[lex->i + 1] != '<')
+	if (lex->input[lex->i] == '<' && lex->input[lex->i + 1] != '<' && lex->input[lex->i + 1] != '\0')
 		type = RE_IN;
-	if (lex->input[lex->i] == '>' && lex->input[lex->i + 1] != '>')
+	if (lex->input[lex->i] == '>' && lex->input[lex->i + 1] != '>' && lex->input[lex->i + 1] != '\0')
 		type = RE_OUT;
 	lex->i++;
 	if (lex->input[lex->i] == '<' && lex->input[lex->i - 1] == '<')
