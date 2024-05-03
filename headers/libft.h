@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 11:52:49 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/25 16:46:41 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/03 12:07:33 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,6 @@ void	ft_lstdelone(t_list **lst, t_list *node);
 void	ft_lstclear(t_list **lst);
 void	ft_free(void *ptr);
 void	ft_free_strarr(char **strarr);
+void	ft_error(char *str);
 
 #endif

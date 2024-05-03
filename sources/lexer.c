@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/26 16:01:51 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/03 12:43:12 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	read_input(void)
 		return (1);
 	lex.i = 0;
 	if (lex_input(&lex) == 1)
+		return (1);
+	if (check_valid_input(&lex) == 1)
 		return (1);
 	ft_putlst_fd(lex.token_list, 1);
 	return (0);

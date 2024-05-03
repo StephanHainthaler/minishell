@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/03 12:25:26 by juitz            ###   ########.fr       */
+/*   Created: 2024/05/02 13:26:12 by juitz             #+#    #+#             */
+/*   Updated: 2024/05/03 12:46:43 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int main(int argc, char *argv[])
+int check_valid_input(t_lexer *lex)
 {
-	if (argc != 1)
-		return (1);
-	printf("Start of minishell-test!: %d %s\n", argc, argv[0]);
-	if (read_input() == 1)
-		return (1);
+	t_list *head;
+	t_list *current;
+
+	head = lex->token_list;
+	current = lex->token_list;
+	while (current != NULL)
+	{
+		if (current->type == RE_IN && current->next != NULL && current->next->type != WORD)
+			return (ft_error("parse error near `>'"), 1);
+		current = current->next;
+	}
+	lex->token_list = head;
 	return (0);
 }
-
+	

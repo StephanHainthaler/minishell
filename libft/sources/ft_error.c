@@ -1,24 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/03 12:25:26 by juitz            ###   ########.fr       */
+/*   Created: 2024/05/03 12:05:57 by juitz             #+#    #+#             */
+/*   Updated: 2024/05/03 12:06:59 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minishell.h"
+#include "../../headers/libft.h"
 
-int main(int argc, char *argv[])
+void	ft_error(char *str)
 {
-	if (argc != 1)
-		return (1);
-	printf("Start of minishell-test!: %d %s\n", argc, argv[0]);
-	if (read_input() == 1)
-		return (1);
-	return (0);
+	ft_putendl_fd(str, 2);
 }
-

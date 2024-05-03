@@ -6,7 +6,7 @@
 #    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/04/25 17:16:10 by juitz            ###   ########.fr        #
+#    Updated: 2024/05/03 12:18:57 by juitz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ LIBFT_DIR := libft
 MAIN_DIR := main
 
 SRCS := $(SRC_DIR)/main.c \
-$(SRC_DIR)/lexer.c
+$(SRC_DIR)/lexer.c \
+$(SRC_DIR)/parser.c
 
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
