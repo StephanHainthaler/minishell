@@ -6,24 +6,14 @@
 #    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/05/03 15:55:01 by juitz            ###   ########.fr        #
+#    Updated: 2024/05/03 12:18:57 by juitz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := minishell
 
 CC := cc
-CFLAGS := -Wall -Wextra -Werror #-g
-VALGRIND := $(shell which valgrind)
-VFLAGS := --suppressions=./supp.supp \
---errors-for-leak-kinds=all \
---leak-check=full \
---read-var-info=yes \
---show-error-list=yes \
---show-leak-kinds=all \
---suppressions=./supp.supp \
---trace-children=yes \
---track-origins=yes
+CFLAGS := -Wall -Wextra -Werror -g
 
 SRC_DIR := sources
 OBJ_DIR := objects
@@ -58,7 +48,5 @@ fclean: clean
 
 re: fclean all
 
-val: all
-	@$(VALGRIND) $(VFLAGS) "./$(NAME)"
+.PHONY: all clean fclean re
 
-.PHONY: all clean fclean re val
