@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 11:52:49 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/29 10:24:03 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/03 12:05:34 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ typedef struct s_list
 {
 	t_type			type;
 	char			*attr;
+	bool			in_squotes;
+	bool			in_dquotes;
+	int				quote_start;
+	int				quote_end;
 	struct s_list	*next;
 }					t_list;
 
