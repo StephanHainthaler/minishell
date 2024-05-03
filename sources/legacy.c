@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/02 16:26:47 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/03 15:37:25 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,65 @@ t_type	get_redir_type(t_lexer *lex)
 // 			temp->attr = handle_expansion(lex, temp->attr);
 // 		temp = temp->next;
 // 	}
+// }
+
+// t_list	*handle_quotes(t_lexer *lex)
+// {
+// 	t_list	*new_token;
+// 	char	*attr;
+// 	char	quote;
+// 	bool	is_closed;
+// 	int		len;
+
+// 	if (lex->input[lex->i] == '\"')
+// 		quote = '\"';
+// 	else
+// 		quote = '\'';
+// 	is_closed = false;
+// 	lex->i++;
+// 	len = 1;
+// 	while (lex->input[lex->i] != '\0')
+// 	{
+// 		if (lex->input[lex->i] == quote)
+// 			is_closed = true;
+// 		lex->i++;
+// 		len++;
+// 	}
+// 	// if (is_closed == false)
+// 	// 	return (NULL);
+// 	attr = (char *)malloc((len + 2) * sizeof(char));
+// 	if (attr == NULL)
+// 		return (NULL);
+// 	ft_strlcpy(attr, lex->input + (lex->i - 1 - len), len + 2);
+// 	new_token = ft_lstnew(WORD, attr);
+// 	return (new_token);
+// }
+
+// t_list	*get_word_token2(t_lexer *lex)
+// {
+// 	t_list	*new_token;
+// 	char	*attr;
+// 	int		len;
+
+// 	attr = NULL;
+// 	len = 0;
+// 	while (lex->input[lex->i] != '\0')
+// 	{
+// 		// if (lex->input[lex->i] == '\'' || lex->input[lex->i] == '\"')
+// 		// 	return (handle_quotes(lex));
+// 		if (ft_isspace(lex->input[lex->i]) == true
+// 			|| is_token(lex->input[lex->i]) == true)
+// 			//|| lex->input[lex->i] == '"' || lex->input[lex->i] == '\'')
+// 			break ;
+// 		if (lex->input[lex->i] == '\'' || lex->input[lex->i] == '\"')
+// 			return (handle_quotes(lex));
+// 		lex->i++;
+// 		len++;
+// 	}
+// 	attr = (char *)malloc((len + 1) * sizeof(char));
+// 	if (attr == NULL)
+// 		return (NULL);
+// 	ft_strlcpy(attr, lex->input + (lex->i - len), len + 1);
+// 	new_token = ft_lstnew(WORD, attr);
+// 	return (new_token);
 // }
