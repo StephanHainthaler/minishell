@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/03 15:42:10 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/06 09:36:45 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ int	read_input(t_minishell *ms)
 	lex.i = 0;
 	if (lex_input(&lex) == 1)
 		return (1);
+	printf("Before expansion: \n");
 	ft_putlst_fd(lex.token_list, 1);
-	//expand_env(&lex, &lex.token_list);
-	//check_for_expansion(&lex.token_list, ms->envp);
+	check_for_expansion(&lex.token_list, ms->envp);
+	printf("After expansion: \n");
+	ft_putlst_fd(lex.token_list, 1);
 	ft_lstclear(&lex.token_list);
 	return (0);
 }
@@ -118,8 +120,6 @@ t_list	*get_non_word_token(t_lexer *lex)
 	return (new_token);
 }
 
-
-
 int	handle_quotes(t_lexer *lex, char quote, int *len)
 {
 	bool	is_closed;
@@ -130,10 +130,8 @@ int	handle_quotes(t_lexer *lex, char quote, int *len)
 	*len += 1;
 	while (lex->input[lex->i] != '\0')
 	{
-		//printf("Character: %c\n", lex->input[lex->i]);
 		if (lex->input[lex->i] == quote)
 		{
-			//printf("Found end quote!\n");
 			is_closed = true;
 			break ;
 		}
@@ -183,8 +181,6 @@ int	check_for_expansion(t_list **token_list, char **envp)
 	int		i;
 
 	current_node = *token_list;
-	if (token_list == NULL)
-		return (1);
 	while (current_node != NULL)
 	{
 		if (current_node->type == 1)
@@ -192,7 +188,11 @@ int	check_for_expansion(t_list **token_list, char **envp)
 			i = 0;
 			while (current_node->attr[i] != '\0')
 			{
-				if (current_node->attr[i] == '$')
+				if (current_node->attr[i] == '\'' && current_node->in_squotes == false)
+					current_node->in_squotes = true;
+				else
+					current_node->in_squotes = false;
+				if (current_node->attr[i] == '$' && current_node->in_squotes == false)
 				{
 					current_node->attr = handle_expansion(current_node->attr, envp, &i);
 					if (current_node->attr == NULL)
@@ -213,8 +213,10 @@ char	*handle_expansion(char *to_expand, char **envp, int *i)
 	int		len;
 	int		j;
 	
+	
+	printf("First c: %c and pos: %d\n", to_expand[*i], *i);
 	if (ft_isspace(to_expand[*i + 1]) == true || to_expand[*i + 1] == '\0')
-		return (to_expand);
+		return (*i = *i + 1, to_expand);
 	len = 0;
 	while (to_expand[*i] != '\0' && ft_isspace(to_expand[*i]) == false)
 	{
@@ -267,9 +269,4 @@ char	*handle_invalid_expansion(char *str, int len)
 	free(str);
 	return (new_str);	
 }
-
-//"Hello$WORLD World"
-
-
-
 
