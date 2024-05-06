@@ -1,0 +1,1 @@
+ft_lstclear valgrind ft_error

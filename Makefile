@@ -6,7 +6,7 @@
 #    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/05/03 15:55:01 by juitz            ###   ########.fr        #
+#    Updated: 2024/05/06 14:42:08 by juitz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,8 @@ MAIN_DIR := main
 
 SRCS := $(SRC_DIR)/main.c \
 $(SRC_DIR)/lexer.c \
-$(SRC_DIR)/parser.c
+$(SRC_DIR)/parser.c \
+$(SRC_DIR)/input_checks.c
 
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
