@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/06 09:36:45 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/06 11:02:27 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	read_input(t_minishell *ms)
 	if (lex.input == NULL)
 		return (1);
 	lex.i = 0;
+	if (ft_strncmp(lex.input, "exit", 4) == 0)
+		exit (0);
 	if (lex_input(&lex) == 1)
 		return (1);
 	printf("Before expansion: \n");
@@ -211,12 +213,15 @@ int	check_for_expansion(t_list **token_list, char **envp)
 char	*handle_expansion(char *to_expand, char **envp, int *i)
 {
 	int		len;
+	int		pos;
 	int		j;
 	
 	
-	printf("First c: %c and pos: %d\n", to_expand[*i], *i);
-	if (ft_isspace(to_expand[*i + 1]) == true || to_expand[*i + 1] == '\0')
+	//printf("First c: %c and pos: %d\n", to_expand[*i], *i);
+	if (ft_isspace(to_expand[*i + 1]) == true || to_expand[*i + 1] == '\0'
+		|| to_expand[*i + 1] == '\'' || to_expand[*i + 1] == '"')
 		return (*i = *i + 1, to_expand);
+	pos = *i + 1;
 	len = 0;
 	while (to_expand[*i] != '\0' && ft_isspace(to_expand[*i]) == false)
 	{
@@ -224,32 +229,50 @@ char	*handle_expansion(char *to_expand, char **envp, int *i)
 		len++;
 	}
 	j = 0;
-	printf("Total strlen= %zu, str_pos= %i, env_len= %i\n", ft_strlen(to_expand), *i, len);
+	//printf("env_var_name: %s\n env_var_len: %d\n pos: %d\n ", to_expand + pos, len - 1, pos);
 	while (envp[j] != NULL)
 	{
-		if (ft_strnstr(envp[j], to_expand + 1, len - 1) == NULL)
+		if (ft_strnstr(envp[j], to_expand + pos, len - 1) == NULL)
 			j++;
 		else
 		{
 			*i = 0;
-			return (handle_valid_expansion(to_expand, envp[j], len));
+			return (handle_valid_expansion(to_expand, envp[j], len, pos));
 		}
 	}
 	*i = 0;
 	return (handle_invalid_expansion(to_expand, len));
 }
 
-char	*handle_valid_expansion(char *to_expand, char *env, int len)
+char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos)
 {
+	char	*exp_str;
 	char	*exp_var;
+	int		i;
+	int		j;
 	
-	ft_putendl_fd(env, 1);
-	exp_var = ft_substr(env, len, ft_strlen(env) - ft_strlen(to_expand));
+	exp_var = ft_substr(env, len, ft_strlen(env) - pos);
 	if (exp_var == NULL)
 		return (NULL);
 	ft_putendl_fd(exp_var, 1);
-	return (exp_var);
+	exp_str = (char *)malloc(((ft_strlen(to_expand) - len + ft_strlen(exp_var) + 1) * sizeof(char)));
+	if (exp_str == NULL)
+		return (free(exp_var), NULL);
+	i = 0;
+	j = 0;
+	while (to_expand[j] != '\0' && to_expand[j] != '$')
+		exp_str[i++] = to_expand[j++];
+	j = 0;
+	while (exp_var[j] != '\0')
+		exp_str[i++] = exp_var[j++];
+	j = pos + len - 1;
+	while (to_expand[j] != '\0')
+		exp_str[i++] = to_expand[j++];
+	exp_str[i] = '\0';
+	ft_putendl_fd(exp_str, 1);
+	return (free(to_expand), free(exp_var), exp_str);
 }
+
 
 char	*handle_invalid_expansion(char *str, int len)
 {
