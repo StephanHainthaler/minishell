@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/03 15:54:37 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/06 15:10:45 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	read_input(t_minishell *ms)
 	if (check_valid_input(&lex) == 1)
 		return (1);
 	ft_putlst_fd(lex.token_list, 1);
+	parse_tokens_to_struct(&lex);
 	//expand_env(&lex, &lex.token_list);
 	//check_for_expansion(&lex.token_list, ms->envp);
 	ft_lstclear(&lex.token_list);

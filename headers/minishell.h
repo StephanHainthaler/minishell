@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/03 15:54:45 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/06 15:07:56 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,6 @@ char	*handle_expansion(char *to_expand, char **envp, int *i);
 char	*handle_invalid_expansion(char *str, int len);
 void	expand_env(t_lexer *lex, t_list **lst);
 char	*handle_valid_expansion(char *to_expand, char *env, int len);
+t_simp_cmd *parse_tokens_to_struct(t_lexer *lex);
 
 #endif
