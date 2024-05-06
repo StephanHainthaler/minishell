@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/06 15:10:45 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/06 16:31:30 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,7 +268,7 @@ char	*handle_invalid_expansion(char *str, int len)
 	ft_strlcat(new_str + i, str + i + len, ft_strlen(str) - len - i + 1);
 	//printf("New size should be: 13 and is actually %lu\n", ft_strlen(new_str));
 	free(str);
-	return (new_str);	
+	return (new_str);
 }
 
 //"Hello$WORLD World"
