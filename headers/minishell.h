@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/06 09:18:13 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/06 10:03:40 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,6 @@ int		check_for_expansion(t_list **token_list, char **envp);
 char	*handle_expansion(char *to_expand, char **envp, int *i);
 char	*handle_invalid_expansion(char *str, int len);
 void	expand_env(t_lexer *lex, t_list **lst);
-char	*handle_valid_expansion(char *to_expand, char *env, int len);
+char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
 
 #endif
