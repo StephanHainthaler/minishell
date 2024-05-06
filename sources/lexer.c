@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/06 11:02:27 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/06 15:48:03 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,6 @@ int	handle_quotes(t_lexer *lex, char quote, int *len)
 	return (0);
 }
 
-
 int	check_for_quotes(t_list **token_list)
 {
 	t_list	*current_node;
@@ -163,7 +162,6 @@ int	check_for_quotes(t_list **token_list)
 			{
 				if (current_node->attr[i] == '"' || current_node->attr[i] == '\'')
 				{
-					//current_node->attr;
 					if (current_node->attr == NULL)
 						return (1);
 					ft_putendl_fd(current_node->attr, 1);
@@ -199,7 +197,6 @@ int	check_for_expansion(t_list **token_list, char **envp)
 					current_node->attr = handle_expansion(current_node->attr, envp, &i);
 					if (current_node->attr == NULL)
 						return (1);
-					ft_putendl_fd(current_node->attr, 1);
 					continue;
 				}
 				i++;
@@ -215,33 +212,37 @@ char	*handle_expansion(char *to_expand, char **envp, int *i)
 	int		len;
 	int		pos;
 	int		j;
+	//int		quote;
 	
-	
-	//printf("First c: %c and pos: %d\n", to_expand[*i], *i);
 	if (ft_isspace(to_expand[*i + 1]) == true || to_expand[*i + 1] == '\0'
-		|| to_expand[*i + 1] == '\'' || to_expand[*i + 1] == '"')
+		|| to_expand[*i + 1] == '\'' || to_expand[*i + 1] == '"'
+		|| to_expand[*i + 1] == '?')
 		return (*i = *i + 1, to_expand);
 	pos = *i + 1;
 	len = 0;
-	while (to_expand[*i] != '\0' && ft_isspace(to_expand[*i]) == false)
+	while (to_expand[*i] != '\0' && ft_isspace(to_expand[*i]) == false
+		&& to_expand[*i] != '\'' && to_expand[*i] != '"')
 	{
 		*i = *i + 1;
 		len++;
 	}
-	j = 0;
-	//printf("env_var_name: %s\n env_var_len: %d\n pos: %d\n ", to_expand + pos, len - 1, pos);
-	while (envp[j] != NULL)
+	// quote = 0;
+	// if (to_expand[*i] == '\'' || to_expand[*i] == '"')
+	// 	quote = 1;
+	printf("%s\n", to_expand + pos);
+	printf("To read chars: %d\n", len - 1);// - quote);
+	j = -1;
+	while (envp[++j] != NULL)
 	{
-		if (ft_strnstr(envp[j], to_expand + pos, len - 1) == NULL)
-			j++;
-		else
+		//if (ft_strnstr(envp[j], to_expand + pos, len - 1) != NULL) //&& envp[j][len - 1] == '=')
+		if (ft_strncmp(envp[j], to_expand + pos, len - 1) == 0)
 		{
-			*i = 0;
-			return (handle_valid_expansion(to_expand, envp[j], len, pos));
+			printf("%s\n", "Found");
+			return (*i = 0, handle_valid_expansion(to_expand, envp[j], len, pos));
 		}
 	}
-	*i = 0;
-	return (handle_invalid_expansion(to_expand, len));
+	printf("Never found\n");
+	return (*i = 0, handle_invalid_expansion(to_expand, len));
 }
 
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos)
@@ -251,9 +252,12 @@ char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos)
 	int		i;
 	int		j;
 	
-	exp_var = ft_substr(env, len, ft_strlen(env) - pos);
+	ft_putendl_fd(env, 1);
+	ft_putendl_fd(env + len, 1);
+	exp_var = ft_substr(env, len, ft_strlen(env) - len);
 	if (exp_var == NULL)
 		return (NULL);
+	printf("LEN: %d\n", len);
 	ft_putendl_fd(exp_var, 1);
 	exp_str = (char *)malloc(((ft_strlen(to_expand) - len + ft_strlen(exp_var) + 1) * sizeof(char)));
 	if (exp_str == NULL)
@@ -273,7 +277,6 @@ char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos)
 	return (free(to_expand), free(exp_var), exp_str);
 }
 
-
 char	*handle_invalid_expansion(char *str, int len)
 {
 	char	*new_str;
@@ -288,8 +291,6 @@ char	*handle_invalid_expansion(char *str, int len)
 		i++;
 	ft_strlcpy(new_str, str, i + 1);
 	ft_strlcat(new_str + i, str + i + len, ft_strlen(str) - len - i + 1);
-	//printf("New size should be: 13 and is actually %lu\n", ft_strlen(new_str));
 	free(str);
 	return (new_str);	
 }
-
