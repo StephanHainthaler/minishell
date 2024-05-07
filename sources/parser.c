@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 13:26:12 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/06 15:05:38 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/07 12:30:24 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ t_simp_cmd *parse_tokens_to_struct(t_lexer *lex)
 		{
 			simp_cmd->args[i] = ft_strdup(current->attr);
 			if (simp_cmd->args[i] == NULL)
-			{
-				//free
-				return (NULL);
-			}
+				return (ft_free(simp_cmd->args), NULL);
 			simp_cmd->num_of_aval_args++;
 			i++;
 		}
