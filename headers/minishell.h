@@ -20,6 +20,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <readline/readline.h>
+# include <readline/history.h>
 # include <sys/stat.h>
 # include <sys/resource.h>
 # include <sys/time.h>
