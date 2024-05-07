@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/07 11:37:21 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/07 14:17:50 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "libft.h"
+//# include "lexing.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
@@ -34,32 +35,12 @@
 # include <curses.h>
 # include <term.h>
 
-typedef struct s_simp_cmd
-{
-	char	**args;
-	int		num_of_aval_args;
-	int		num_of_args;
-}			t_simp_cmd;
-
-typedef struct s_cmd
-{
-	t_simp_cmd	**simp_cmds;
-	int			num_of_aval_simp_cmds;
-	int			num_of_simp_cmds;
-	char		*infile;
-	char		*outfile;
-	char		*errfile;
-	int			background;
-}				t_cmd;
-
 typedef struct s_lexer
 {
 	t_list	*token_list;
 	char	*input;
 	int		i;
 	char	**envp;
-	//bool	is_in_single_quotes;
-	//bool	is_in_double_quotes;
 }			t_lexer;
 
 typedef struct s_minishell
@@ -70,23 +51,22 @@ typedef struct s_minishell
 }			t_minishell;
 
 //lexer.c
-int	read_input(t_minishell *ms);
-int		lex_input(t_lexer *lex);
+int		read_input(t_minishell *ms);
+int		tokenize_input(t_lexer *lex);
+bool	is_token(char c);
 t_list	*get_word_token(t_lexer *lex);
 t_list	*get_non_word_token(t_lexer *lex);
-bool	is_token(char c);
-int		handle_quotes(t_lexer *lex, char quote, int *len);
+
+//expansion.c
 int		check_for_expansion(t_list **token_list, char **envp);
-int		check_for_dequotation(t_list **token_list);
-char	*handle_dequotation(char *to_trim, int i, int j);
 char	*handle_expansion(char *to_expand, char **envp, int *i);
-char	*handle_invalid_expansion(char *str, int len);
-void	expand_env(t_lexer *lex, t_list **lst);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
-int	get_dequoted_strlen(char *str);
+char	*handle_invalid_expansion(char *str, int len);
 
-
-//future libft functions:
-size_t	ft_strlen_except(const char *str, char *exceptions);
+//quotation.c
+int		check_for_dequotation(t_list **token_list);
+int		handle_quotes(t_lexer *lex, char quote, int *len);
+char	*handle_dequotation(char *to_trim, int i, int j);
+int		get_dequoted_strlen(char *str);
 
 #endif
