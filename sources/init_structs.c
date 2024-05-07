@@ -1,31 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/07 16:25:18 by juitz            ###   ########.fr       */
+/*   Created: 2024/05/07 14:01:11 by juitz             #+#    #+#             */
+/*   Updated: 2024/05/07 14:20:04 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int	main(int argc, char *argv[], char *env[])
-{
-	t_minishell	ms;
-	
-	ft_bzero(&ms, sizeof(t_minishell));
-	if (argc != 1)
-		return (1);
-	ms.argc = argc;
-	ms.argv = argv;
-	ms.envp = env;
-	while (true)
-	{
-		if (read_input(&ms) == 1)
-			return (1);
-	}
-	return (0);
-}
+void	init_structs(t_minishell *ms)
