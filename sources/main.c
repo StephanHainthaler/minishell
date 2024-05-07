@@ -6,30 +6,25 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/04/22 15:34:07 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/06 11:03:17 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int	handle_input(void)
+int	main(int argc, char *argv[], char *env[])
 {
-	char	*input;
+	t_minishell	ms;
 	
-	input = readline("./minishell ");
-	if (input == NULL)
+	if (argc != 1)
 		return (1);
-	printf("%s\n", input);
-	return (0);
-}
-
-int	main(int argc, char *argv[])
-{
-	printf("Start of minishell-test!: %d %s\n", argc, argv[0]);
+	ms.argc = argc;
+	ms.argv = argv;
+	ms.envp = env;
 	while (true)
 	{
-		if (handle_input() == 1)
-			break ;
+		if (read_input(&ms) == 1)
+			return (1);
 	}
 	return (0);
 }
