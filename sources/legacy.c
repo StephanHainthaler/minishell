@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/03 15:37:25 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/07 13:52:03 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,102 @@ t_type	get_redir_type(t_lexer *lex)
 		lex->i++;
 	}
 	return (type);
+}
+
+size_t	ft_strlen_except(const char *str, char *exceptions)
+{
+	size_t	len;
+	bool	is_except;
+	int		i;
+	int		j;
+
+	len = 0;
+	i = 0;
+	while (str[i] != '\0')
+	{
+		is_except = false;
+		j = 0;
+		while (exceptions[j] != '\0')
+		{
+			if (str[i] == exceptions[j])
+				is_except = true;
+			j++;
+		}
+		if (is_except == false)
+			len++;
+		i++;
+	}
+	return (len);
+}
+
+char	*handle_expansion(char *to_expand, char **envp, int *i)
+{
+	int		len;
+	int		pos;
+	int		j;
+	//int		quote;
+	
+	if (ft_isspace(to_expand[*i + 1]) == true || to_expand[*i + 1] == '\0'
+		|| to_expand[*i + 1] == '\'' || to_expand[*i + 1] == '"'
+		|| to_expand[*i + 1] == '?')
+		return (*i = *i + 1, to_expand);
+	pos = *i + 1;
+	len = 0;
+	while (to_expand[*i] != '\0' && ft_isspace(to_expand[*i]) == false
+		&& to_expand[*i] != '\'' && to_expand[*i] != '"')
+	{
+		*i = *i + 1;
+		len++;
+	}
+	// quote = 0;
+	// if (to_expand[*i] == '\'' || to_expand[*i] == '"')
+	// 	quote = 1;
+	// printf("%s\n", to_expand + pos);
+	// printf("To read chars: %d\n", len - 1);// - quote);
+	j = -1;
+	while (envp[++j] != NULL)
+	{
+		//if (ft_strnstr(envp[j], to_expand + pos, len - 1) != NULL) //&& envp[j][len - 1] == '=')
+		if (ft_strncmp(envp[j], to_expand + pos, len - 1) == 0)
+		{
+			// printf("%s\n", "Found");
+			return (*i = 0, handle_valid_expansion(to_expand, envp[j], len, pos));
+		}
+	}
+	// printf("Never found\n");
+	return (*i = 0, handle_invalid_expansion(to_expand, len));
+}
+
+char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos)
+{
+	char	*exp_str;
+	char	*exp_var;
+	int		i;
+	int		j;
+	
+	// ft_putendl_fd(env, 1);
+	// ft_putendl_fd(env + len, 1);
+	exp_var = ft_substr(env, len, ft_strlen(env) - len);
+	if (exp_var == NULL)
+		return (NULL);
+	// printf("LEN: %d\n", len);
+	// ft_putendl_fd(exp_var, 1);
+	exp_str = (char *)malloc(((ft_strlen(to_expand) - len + ft_strlen(exp_var) + 1) * sizeof(char)));
+	if (exp_str == NULL)
+		return (free(exp_var), NULL);
+	i = 0;
+	j = 0;
+	while (to_expand[j] != '\0' && to_expand[j] != '$')
+		exp_str[i++] = to_expand[j++];
+	j = 0;
+	while (exp_var[j] != '\0')
+		exp_str[i++] = exp_var[j++];
+	j = pos + len - 1;
+	while (to_expand[j] != '\0')
+		exp_str[i++] = to_expand[j++];
+	exp_str[i] = '\0';
+	// ft_putendl_fd(exp_str, 1);
+	return (free(to_expand), free(exp_var), exp_str);
 }
 
 // t_list	*get_redir_token_old(t_lexer *lex)
