@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:41:06 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/06 14:41:49 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/08 18:15:13 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int check_valid_input(t_lexer *lex)
 			return (ft_error("parse error near `<<'"), 1);
 		if (current->type == APPEND && current->next != NULL && current->next->type != WORD)
 			return (ft_error("parse error near `>>'"), 1);
+		if (current->type != WORD && current->next == NULL)
+			return (ft_error("word token required as last input"), 1);
 		current = current->next;
 	}
 	lex->token_list = head;
