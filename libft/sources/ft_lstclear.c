@@ -6,11 +6,12 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 10:35:06 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/02 10:10:11 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/13 09:41:51 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/libft.h"
+#include <stdio.h>
 
 void	ft_lstclear(t_list **lst)
 {
@@ -23,7 +24,6 @@ void	ft_lstclear(t_list **lst)
 		current_node = *lst;
 		if (current_node != NULL)
 			ft_lstdelone(lst, current_node);
-		current_node = current_node->next;
 	}
 	*lst = NULL;
 }
