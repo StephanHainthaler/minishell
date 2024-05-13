@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/07 14:21:23 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/13 14:30:13 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,10 @@ t_list	*get_non_word_token(t_lexer *lex);
 
 //expansion.c
 int		check_for_expansion(t_list **token_list, char **envp);
-char	*handle_expansion(char *to_expand, char **envp, int *i);
+char	*handle_expansion(t_list *node, char **envp, int *i, char quote);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
 char	*handle_invalid_expansion(char *str, int len);
+char	handle_quotes_in_expansion(t_list *node, char quote);
 
 //quotation.c
 int		check_for_dequotation(t_list **token_list);
