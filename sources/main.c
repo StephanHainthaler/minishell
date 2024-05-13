@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/13 17:34:30 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/13 17:46:48 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ int	main(int argc, char *argv[], char *env[])
 	{
 		if (read_input(&ms) == 1)
 			return (1);
-		// if (parse_input(&ms) == 1)
-		// 	return (1);
 	}
 	return (0);
 }
