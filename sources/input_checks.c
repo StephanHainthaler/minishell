@@ -6,12 +6,11 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 14:41:06 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/08 18:15:13 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/13 16:38:16 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-#include "../headers/libft.h"
 
 int check_valid_input(t_lexer *lex)
 {

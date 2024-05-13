@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/08 18:08:36 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/13 16:51:18 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef struct s_minishell
 	int		argc;
 	char	**argv;
 	char	**envp;
+	t_list	*history;
 	t_lexer	*lex;
 	t_simp_cmd *simp_cmd;
 	t_cmd		*cmd;
@@ -84,14 +85,18 @@ t_list	*get_non_word_token(t_lexer *lex);
 
 //expansion.c
 int		check_for_expansion(t_list **token_list, char **envp);
-char	*handle_expansion(char *to_expand, char **envp, int *i);
+char	*handle_expansion(t_list *node, char **envp, int *i, char quote);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
 char	*handle_invalid_expansion(char *str, int len);
+char	handle_quotes_in_expansion(t_list *node, char quote);
 
 //quotation.c
 int		check_for_dequotation(t_list **token_list);
 int		handle_quotes(t_lexer *lex, char quote, int *len);
 char	*handle_dequotation(char *to_trim, int i, int j);
 int		get_dequoted_strlen(char *str);
+
+//history.c
+t_list	*ft_lstnew_history(char *input);
 
 #endif

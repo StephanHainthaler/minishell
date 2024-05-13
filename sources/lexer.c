@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/08 18:19:05 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/13 17:36:14 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,23 +23,25 @@ int	read_input(t_minishell *ms)
 	if (lex.input == NULL)
 		return (1);
 	lex.i = 0;
+	add_history(lex.input);
 	if (ft_strncmp(lex.input, "exit", 4) == 0)
+	{
+		rl_clear_history();
 		exit (0);
+	}
 	if (tokenize_input(&lex) == 1)
 		return (1);
 			// printf("After tokenization: \n");
 			// ft_putlst_fd(lex.token_list, 1);
 	if (check_for_expansion(&lex.token_list, ms->envp) == 1)
 		return (1);
-			// printf("After expansion: \n");
-			// ft_putlst_fd(lex.token_list, 1);
+			printf("After expansion: \n");
+			ft_putlst_fd(lex.token_list, 1);
 	if (check_for_dequotation(&lex.token_list) == 1)
 		return (1);
 			// printf("After dequotation: \n");
 			// ft_putlst_fd(lex.token_list, 1);
-	if (check_valid_input(&lex) == 1)
-		return (1);
-	//parse_tokens_to_struct(ms);
+	ft_lstclear(&lex.token_list);
 	return (0);
 }
 

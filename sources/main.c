@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/07 16:25:18 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/13 17:34:30 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	main(int argc, char *argv[], char *env[])
 {
 	t_minishell	ms;
 	
-	ft_bzero(&ms, sizeof(t_minishell));
 	if (argc != 1)
 		return (1);
 	ms.argc = argc;
@@ -26,6 +25,8 @@ int	main(int argc, char *argv[], char *env[])
 	{
 		if (read_input(&ms) == 1)
 			return (1);
+		// if (parse_input(&ms) == 1)
+		// 	return (1);
 	}
 	return (0);
 }

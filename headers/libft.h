@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 11:52:49 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/08 18:16:16 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/13 16:50:43 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_list
 {
 	t_type			type;
 	char			*attr;
+	char			*input;
 	bool			in_squotes;
 	bool			in_dquotes;
 	struct s_list	*next;
