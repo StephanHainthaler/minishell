@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/07 14:11:37 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/13 14:30:40 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,13 @@ int	read_input(t_minishell *ms)
 			// ft_putlst_fd(lex.token_list, 1);
 	if (check_for_expansion(&lex.token_list, ms->envp) == 1)
 		return (1);
-			// printf("After expansion: \n");
-			// ft_putlst_fd(lex.token_list, 1);
+			printf("After expansion: \n");
+			ft_putlst_fd(lex.token_list, 1);
 	if (check_for_dequotation(&lex.token_list) == 1)
 		return (1);
 			// printf("After dequotation: \n");
 			// ft_putlst_fd(lex.token_list, 1);
+	ft_lstclear(&lex.token_list);
 	return (0);
 }
 

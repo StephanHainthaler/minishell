@@ -6,11 +6,65 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/07 13:52:03 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/13 11:29:19 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+int	check_for_expansion(t_list **token_list, char **envp)
+{
+	t_list	*current_node;
+
+	current_node = *token_list;
+	while (current_node != NULL)
+	{
+		if (current_node->type == WORD)
+		{
+			if (ft_strchr(current_node->attr, '$') != NULL)
+			{
+				current_node->attr = handle_expansion(current_node->attr, envp, 0);
+				if (current_node->attr == NULL)
+					return (1);
+			}
+		}
+		current_node = current_node->next;
+	}
+	return (0);
+}
+
+char	*handle_expansion(char *to_expand, char **envp, int i)
+{
+	int		len;
+	int		pos;
+	int		j;
+
+	while (to_expand[i] != '$' && to_expand[i] != '\0')
+		i++;
+	if (ft_isspace(to_expand[i + 1]) == true || to_expand[i + 1] == '\0'
+		|| to_expand[i + 1] == '\'' || to_expand[i + 1] == '"'
+		|| to_expand[i + 1] == '?' || to_expand[i + 1] == '$')
+		return (to_expand);
+	pos = i + 1;
+	len = 0;
+	while (to_expand[i] != '\0' && ft_isspace(to_expand[i]) == false
+		&& to_expand[i] != '\'' && to_expand[i] != '"')
+	{
+		i = i + 1;
+		len++;
+	}
+	j = -1;
+	while (envp[++j] != NULL)
+	{
+		if (ft_strncmp(envp[j], to_expand + pos, len - 1) == 0)
+			return (handle_valid_expansion(to_expand, \
+				envp[j], len, pos));
+	}
+	return (handle_invalid_expansion(to_expand, len));
+}
+
+
+
 
 t_type	get_redir_type(t_lexer *lex)
 {
