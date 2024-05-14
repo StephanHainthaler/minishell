@@ -6,14 +6,14 @@
 #    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/05/07 14:19:50 by shaintha         ###   ########.fr        #
+#    Updated: 2024/05/14 12:31:16 by shaintha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := minishell
 
 CC := cc
-CFLAGS := -Wall -Wextra -Werror #-g
+CFLAGS := -Wall -Wextra -Werror -g
 VALGRIND := $(shell which valgrind)
 VFLAGS := --suppressions=./supp.supp \
 --errors-for-leak-kinds=all \
@@ -33,7 +33,9 @@ MAIN_DIR := main
 SRCS := $(SRC_DIR)/main.c \
 $(SRC_DIR)/lexer.c \
 $(SRC_DIR)/expansion.c \
-$(SRC_DIR)/quotation.c
+$(SRC_DIR)/quotation.c \
+$(SRC_DIR)/initialization.c \
+$(SRC_DIR)/free.c
 
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
