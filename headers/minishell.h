@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/13 14:30:13 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/14 12:21:33 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,15 @@ typedef struct s_lexer
 
 typedef struct s_minishell
 {
+	t_lexer	*lex;
 	int		argc;
 	char	**argv;
 	char	**envp;
 }			t_minishell;
+
+//initialization.c 
+int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
+int		initialize_lexer(t_minishell *ms);
 
 //lexer.c
 int		read_input(t_minishell *ms);
@@ -69,5 +74,10 @@ int		check_for_dequotation(t_list **token_list);
 int		handle_quotes(t_lexer *lex, char quote, int *len);
 char	*handle_dequotation(char *to_trim, int i, int j);
 int		get_dequoted_strlen(char *str);
+
+//free.c
+void	free_lexer(t_lexer *lex);
+void	free_minishell(t_minishell *ms);
+void	free_and_exit(t_minishell *ms);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/13 14:48:00 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/14 12:17:21 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,33 @@
 
 int	read_input(t_minishell *ms)
 {
-	t_lexer	lex;
-
-	lex.token_list = NULL;
-	lex.input = NULL;
-	lex.envp = ms->envp;
-	lex.input = readline("./minishell ");
-	if (lex.input == NULL)
+	if (initialize_lexer(ms) == 1)
 		return (1);
-	lex.i = 0;
-	if (ft_strncmp(lex.input, "exit", 4) == 0)
-		exit (0);
-	if (tokenize_input(&lex) == 1)
+	while (true)
+	{	
+		ms->lex->input = readline("./minishell$ ");
+		if (ms->lex->input == NULL)
+			return (1);
+		if (ft_isspace_str(ms->lex->input) == false)
+			break ;
+	}
+	add_history(ms->lex->input);
+	if (ft_strncmp(ms->lex->input, "exit", 4) == 0)
+		free_and_exit(ms);
+	ms->lex->i = 0;
+	if (tokenize_input(ms->lex) == 1)
 		return (1);
 			// printf("After tokenization: \n");
 			// ft_putlst_fd(lex.token_list, 1);
-	if (check_for_expansion(&lex.token_list, ms->envp) == 1)
+	if (check_for_expansion(&ms->lex->token_list, ms->envp) == 1)
 		return (1);
-			//printf("After expansion: \n");
-			//ft_putlst_fd(lex.token_list, 1);
-	if (check_for_dequotation(&lex.token_list) == 1)
-		return (1);
-			printf("After dequotation: \n");
-			ft_putlst_fd(lex.token_list, 1);
-	ft_lstclear(&lex.token_list);
+			// printf("After expansion: \n");
+			// ft_putlst_fd(lex.token_list, 1);
+	// if (check_for_dequotation(&lex.token_list) == 1)
+	// 	return (1);
+			// printf("After dequotation: \n");
+			// ft_putlst_fd(lex.token_list, 1);
+	//parse_tokens_to_struct(ms);
 	return (0);
 }
 
