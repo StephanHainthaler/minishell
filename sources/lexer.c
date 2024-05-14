@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/13 17:50:26 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/14 17:40:43 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,33 @@
 
 int	read_input(t_minishell *ms)
 {
-	t_lexer	lex;
-
-	lex.token_list = NULL;
-	lex.input = NULL;
-	lex.envp = ms->envp;
-	lex.input = readline("./minishell ");
-	if (lex.input == NULL)
+	if (initialize_lexer(ms) == 1)
 		return (1);
-	lex.i = 0;
-	add_history(lex.input);
-	if (ft_strncmp(lex.input, "exit", 4) == 0)
-	{
-		rl_clear_history();
-		exit (0);
+	while (true)
+	{	
+		ms->lex->input = readline("./minishell$ ");
+		if (ms->lex->input == NULL)
+			return (1);
+		if (ft_isspace_str(ms->lex->input) == false)
+			break ;
 	}
-	if (tokenize_input(&lex) == 1)
+	add_history(ms->lex->input);
+	if (ft_strncmp(ms->lex->input, "exit", 4) == 0)
+		free_and_exit(ms);
+	ms->lex->i = 0;
+	if (tokenize_input(ms->lex) == 1)
 		return (1);
 			// printf("After tokenization: \n");
 			// ft_putlst_fd(lex.token_list, 1);
-	if (check_for_expansion(&lex.token_list, ms->envp) == 1)
+	if (check_for_expansion(&ms->lex->token_list, ms->envp) == 1)
 		return (1);
-			printf("After expansion: \n");
-			ft_putlst_fd(lex.token_list, 1);
-	if (check_for_dequotation(&lex.token_list) == 1)
-		return (1);
+			// printf("After expansion: \n");
+			// ft_putlst_fd(lex.token_list, 1);
+	// if (check_for_dequotation(&lex.token_list) == 1)
+	// 	return (1);
 			// printf("After dequotation: \n");
 			// ft_putlst_fd(lex.token_list, 1);
-	parse_tokens_to_struct(ms);
-	ft_lstclear(&lex.token_list);
+	//parse_tokens_to_struct(ms);
 	return (0);
 }
 

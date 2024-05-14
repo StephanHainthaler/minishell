@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/13 17:46:48 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/14 17:41:27 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,17 @@ int	main(int argc, char *argv[], char *env[])
 	
 	if (argc != 1)
 		return (1);
-	ms.argc = argc;
-	ms.argv = argv;
-	ms.envp = env;
+	if (initialize_minishell(&ms, argc, argv, env) == 1)
+		return (1);
 	while (true)
 	{
 		if (read_input(&ms) == 1)
-			return (1);
+			free_and_exit(&ms);
+		free_lexer(ms.lex);
+		if (parse_tokens_to_struct(&ms) == NULL)
+			free_and_exit(&ms);
+		if (split_command(&ms) == NULL)
+			free_and_exit(&ms);
 	}
 	return (0);
 }

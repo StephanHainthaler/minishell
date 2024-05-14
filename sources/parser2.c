@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   parser2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/02 13:26:12 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/14 17:38:12 by juitz            ###   ########.fr       */
+/*   Created: 2024/05/14 15:18:02 by juitz             #+#    #+#             */
+/*   Updated: 2024/05/14 15:18:06 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,45 +48,3 @@ char **parse_tokens_to_struct(t_minishell *ms)
 	store_input_in_struct(ms);
 	return (ms->cmd->simp_cmd);
 }
-char **split_command(t_minishell *ms)
-{
-	int i;
-	int j;
-
-	i = 0;
-	j = 0;
-	ms->cmd->full_cmd = malloc((ms->cmd->num_of_simp_cmds + 1) * sizeof(char *));
-	if (ms->cmd->full_cmd == NULL)
-		return (NULL);
-	while (ms->cmd->simp_cmd[i])
-	{
-		if (ms->cmd->simp_cmd[i][0] == '|')
-		{
-			i++;
-			j++;
-		}
-		ms->cmd->full_cmd[j] = ft_strjoin(ms->cmd->full_cmd[j], ms->cmd->simp_cmd[i]);
-		if (ms->cmd->full_cmd[j] == NULL)
-			return (ft_free(ms->cmd->full_cmd), NULL);
-		i++;
-	}
-	ms->cmd->full_cmd[j + 1] = NULL;
-	return (ms->cmd->full_cmd);
-}
-/* int main(void)
-{
-	t_minishell ms;
-	t_simp_cmd	simp_cmd;
-	t_lexer lex;
-	
-	int j = 0;
-	//ft_putendl_fd("test1", 1);
-	ms.simp_cmd = parse_tokens_to_struct(ms.lex);
-	while (ms.simp_cmd->args[j])
-	{
-		printf("%s", ms.simp_cmd->args[j]);
-		j++;
-	}
-} */
-
-

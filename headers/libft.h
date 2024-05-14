@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 11:52:49 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/13 16:50:43 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/14 13:58:13 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ bool	ft_isalnum(int c);
 bool	ft_isascii(int c);
 bool	ft_isprint(int c);
 bool	ft_isspace(int c);
+bool	ft_isspace_str(char *str);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
 size_t	ft_strlen(const char *str);
