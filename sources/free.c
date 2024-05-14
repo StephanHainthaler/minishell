@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/14 12:30:56 by shaintha         ###   ########.fr       */
+/*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
+/*   Updated: 2024/05/14 12:31:03 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int	main(int argc, char *argv[], char *env[])
+void	free_minishell(t_minishell *ms)
 {
-	t_minishell	ms;
-	
-	if (argc != 1)
-		return (1);
-	if (initialize_minishell(&ms, argc, argv, env) == 1)
-		return (1);
-	while (true)
-	{
-		if (read_input(&ms) == 1)
-			free_and_exit(&ms);
-		free_lexer(ms.lex);
-	}
-	return (0);
+	if (ms->envp != NULL)
+		ft_free_strarr(ms->envp);
+}
+
+void	free_lexer(t_lexer *lex)
+{
+	if (lex->token_list != NULL)
+		ft_lstclear(&lex->token_list);
+	free(lex);
+}
+
+void	free_and_exit(t_minishell *ms)
+{
+	free_lexer(ms->lex);
+	free_minishell(ms);
+	rl_clear_history();
+	exit(0);
 }
