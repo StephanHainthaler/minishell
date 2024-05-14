@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 13:26:12 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/14 17:45:08 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/14 17:52:41 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,11 @@ char **parse_tokens_to_struct(t_minishell *ms)
 	ms->cmd->simp_cmd = malloc((ms->cmd->num_of_args + 1) * sizeof(char *));
 	if (ms->cmd->simp_cmd == NULL)
 		return (free(ms->cmd), NULL);
-	//ms->cmd->simp_cmd = ft_split(ms->lex->input, '|');
 	store_input_in_struct(ms);
+	// ms->cmd->simp_cmd = ft_split(ms->lex->input, '|');
 	return (ms->cmd->simp_cmd);
 }
-/* char **split_command(t_minishell *ms)
+char **split_command(t_minishell *ms)
 {
 	int i;
 	int j;
@@ -73,7 +73,7 @@ char **parse_tokens_to_struct(t_minishell *ms)
 	}
 	ms->cmd->full_cmd[j + 1] = NULL;
 	return (ms->cmd->full_cmd);
-} */
+}
 /* int main(void)
 {
 	t_minishell ms;
