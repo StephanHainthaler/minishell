@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:44:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/13 12:57:56 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/13 16:09:37 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,23 +128,19 @@ char	handle_quotes_in_expansion(t_list *node, char quote)
 {
 	if (quote == '\'')
 	{
-		if (node->in_squotes == false)
+		if (node->in_squotes == false && node->in_dquotes == false)
 			node->in_squotes = true;
 		else
-		{
 			node->in_squotes = false;
-			quote = '\0';
-		}
 	}
 	else
 	{
-		if (node->in_dquotes == false)
+		if (node->in_dquotes == false && node->in_squotes == false)
 			node->in_dquotes = true;
 		else
-		{
 			node->in_dquotes = false;
-			quote = '\0';
-		}
 	}
+	if (node->in_dquotes == false && node->in_squotes == false)
+		quote = '\0';
 	return (quote);
 }
