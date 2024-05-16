@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/16 17:00:07 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/16 17:06:49 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ void	free_lexer(t_lexer *lex);
 void	free_and_exit(t_minishell *ms);
 
 //signals.c
+int		signals(t_minishell *ms);
 void	ft_handle_signal(int signal, siginfo_t *info, void *context);
 
 #endif
