@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 14:40:37 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/16 16:10:46 by juitz            ###   ########.fr       */
+/*   Created: 2024/05/16 16:41:38 by juitz             #+#    #+#             */
+/*   Updated: 2024/05/16 16:58:33 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-char ***split_commands(t_minishell *ms)
+void	ft_handle_signal(int signal, siginfo_t *info, void *context)
 {
-	char ***commands;
-	
-	*commands = ft_split(ms->lex->input, '|');
+	if (signal == SIGINT)
+		return ;
 }

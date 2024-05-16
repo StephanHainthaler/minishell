@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/14 17:50:41 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/16 17:00:07 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,9 @@ typedef struct s_minishell
 	t_lexer	*lex;
 	//t_simp_cmd *simp_cmd;
 	t_cmd		*cmd;
-}			t_minishell;
+	struct sigaction	sa_signal;
+	sigset_t			block_mask;
+}				t_minishell;
 
 //parser.c
 char		**parse_tokens_to_struct(t_minishell *ms);
@@ -108,5 +110,8 @@ int	initialize_lexer(t_minishell *ms);
 void	free_minishell(t_minishell *ms);
 void	free_lexer(t_lexer *lex);
 void	free_and_exit(t_minishell *ms);
+
+//signals.c
+void	ft_handle_signal(int signal, siginfo_t *info, void *context);
 
 #endif
