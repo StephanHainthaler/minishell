@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 13:26:12 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/14 17:52:41 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/16 12:17:40 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char **parse_tokens_to_struct(t_minishell *ms)
 	if (ms->cmd->simp_cmd == NULL)
 		return (free(ms->cmd), NULL);
 	store_input_in_struct(ms);
-	// ms->cmd->simp_cmd = ft_split(ms->lex->input, '|');
+	ms->cmd->simp_cmd = ft_split(ms->lex->input, '|');
 	return (ms->cmd->simp_cmd);
 }
 char **split_command(t_minishell *ms)
@@ -89,5 +89,3 @@ char **split_command(t_minishell *ms)
 		j++;
 	}
 } */
-
-
