@@ -6,11 +6,49 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/13 11:29:19 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/16 12:13:26 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+char	*handle_expansion(t_list *node, char **envp, int *i)
+{
+	int		len;
+	int		pos;
+	int		j;
+
+	if (ft_isspace(node->attr[*i + 1]) == true || node->attr[*i + 1] == '\0'
+		|| node->attr[*i + 1] == '?' || node->attr[*i + 1] == '$'
+		|| node->attr[*i + 1] == '"' || node->attr[*i + 1] == '\'')
+		return (node->attr);
+	pos = *i + 1; //pos == c after $
+	len = 0;
+	while (node->attr[*i] != '\0' && ft_isspace(node->attr[*i]) == false && node->attr[*i] != '\'' && node->attr[*i] != '"')
+	{
+		if (node->attr[*i + 1] == '$')
+		{
+			len++;
+			break ;
+		}
+		*i = *i + 1;
+		len++;
+	}
+	if (node->attr[*i] == '\'' || node->attr[*i] == '"')
+		handle_quotes_in_expansion(node, node->attr[*i]);
+	if (node->in_squotes == true)
+		return (node->attr);
+	j = 0;
+	while (envp[j] != NULL)
+	{
+		if (ft_strncmp(envp[j], node->attr + pos, len - 1) == 0)
+			return (*i = -1, node->in_dquotes = false, node->in_squotes = false, \
+			handle_valid_expansion(node->attr, envp[j], len, pos));
+		j++;
+	}
+	return (*i = -1, node->in_dquotes = false, node->in_squotes = false, \
+	handle_invalid_expansion(node->attr, len));
+}
 
 int	check_for_expansion(t_list **token_list, char **envp)
 {
@@ -62,9 +100,6 @@ char	*handle_expansion(char *to_expand, char **envp, int i)
 	}
 	return (handle_invalid_expansion(to_expand, len));
 }
-
-
-
 
 t_type	get_redir_type(t_lexer *lex)
 {

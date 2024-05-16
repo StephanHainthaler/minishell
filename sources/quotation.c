@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:46:31 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/07 14:00:14 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/14 10:17:08 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*handle_dequotation(char *to_trim, int i, int j)
 		if (to_trim[i] == '\'' || to_trim[i] == '"')
 		{
 			quote = to_trim[i++];
-			while (to_trim[i] != quote)
+			while (to_trim[i] != quote)// && to_trim[i])
 				trim_str[j++] = to_trim[i++];
 			i++;
 		}

@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/14 12:21:33 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:54:31 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdbool.h>
 # include <string.h>
 # include <unistd.h>
+# include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/stat.h>
@@ -43,6 +44,26 @@ typedef struct s_lexer
 	char	**envp;
 }			t_lexer;
 
+typedef struct s_executor
+{
+	char	**simp_cmd;
+	char	**paths;
+	char	*cmd_path;
+	bool	is_path_set;
+	char	**envp;
+	// char	*infile;
+	// char	*outfile;
+	// int		fd_infile;
+	// int		fd_outfile;
+	// char	**cmds;
+	// char	**split_cmd;
+	// bool	is_path_set;
+	// int		pipe;
+	// pid_t	cpid1;
+	// pid_t	cpid2;
+	// char	**envp;
+}			t_executor;
+
 typedef struct s_minishell
 {
 	t_lexer	*lex;
@@ -64,10 +85,10 @@ t_list	*get_non_word_token(t_lexer *lex);
 
 //expansion.c
 int		check_for_expansion(t_list **token_list, char **envp);
-char	*handle_expansion(t_list *node, char **envp, int *i, char quote);
+char	*handle_expansion(t_list *node, char **envp, int *i);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
 char	*handle_invalid_expansion(char *str, int len);
-char	handle_quotes_in_expansion(t_list *node, char quote);
+void	handle_quotes_in_expansion(t_list *node, char quote, int i);
 
 //quotation.c
 int		check_for_dequotation(t_list **token_list);

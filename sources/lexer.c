@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/14 12:17:21 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/16 09:19:56 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,16 @@ int	read_input(t_minishell *ms)
 	add_history(ms->lex->input);
 	if (ft_strncmp(ms->lex->input, "exit", 4) == 0)
 		free_and_exit(ms);
-	ms->lex->i = 0;
 	if (tokenize_input(ms->lex) == 1)
 		return (1);
-			// printf("After tokenization: \n");
-			// ft_putlst_fd(lex.token_list, 1);
 	if (check_for_expansion(&ms->lex->token_list, ms->envp) == 1)
 		return (1);
-			// printf("After expansion: \n");
-			// ft_putlst_fd(lex.token_list, 1);
-	// if (check_for_dequotation(&lex.token_list) == 1)
+			printf("After expansion: \n");
+			ft_putlst_fd(ms->lex->token_list, 1);
+	// if (check_for_dequotation(&ms->lex->token_list) == 1)
 	// 	return (1);
-			// printf("After dequotation: \n");
-			// ft_putlst_fd(lex.token_list, 1);
+	// 		printf("After dequotation: \n");
+	// 		ft_putlst_fd(ms->lex->token_list, 1);
 	//parse_tokens_to_struct(ms);
 	return (0);
 }
