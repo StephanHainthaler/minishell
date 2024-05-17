@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/17 11:38:58 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/17 14:37:53 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,9 @@ typedef struct s_cmd
 {
 	char		***cmd_list;
 	char		**simp_cmd;
-	int			num_of_aval_args;
-	int			num_of_args;
+	char		*full_line;
+	// int			num_of_aval_args;
+	// int			num_of_args;
 	int			num_of_aval_simp_cmds;
 	int			num_of_simp_cmds;
 	char		*infile;
@@ -79,7 +80,7 @@ typedef struct s_minishell
 
 //parser.c
 char		**parse_tokens_to_struct(t_minishell *ms);
-char		**split_command(t_minishell *ms);
+char		***split_commands(t_minishell *ms);
 int			check_valid_input(t_lexer *lex);
 
 //lexer.c
