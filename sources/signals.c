@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:41:38 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/16 17:06:15 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/16 17:17:23 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	ft_handle_signal(int signal, siginfo_t *info, void *context)
 {
+	(void)context;
+	(void)info;
 	if (signal == SIGINT)
 		return ;
 }

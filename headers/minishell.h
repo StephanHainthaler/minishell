@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/16 17:06:49 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/17 11:38:58 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct s_lexer
 
 typedef struct s_cmd
 {
-	char		**full_cmd;
+	char		***cmd_list;
 	char		**simp_cmd;
 	int			num_of_aval_args;
 	int			num_of_args;
