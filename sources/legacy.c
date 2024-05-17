@@ -12,6 +12,35 @@
 
 #include "../headers/minishell.h"
 
+int	read_input(t_minishell *ms)
+{
+	if (initialize_lexer(ms) == 1)
+		return (1);
+	while (true)
+	{	
+		ms->lex->input = readline("./minishell$ ");
+		if (ms->lex->input == NULL)
+			return (1);
+		if (ft_isspace_str(ms->lex->input) == false)
+			break ;
+	}
+	add_history(ms->lex->input);
+	if (ft_strncmp(ms->lex->input, "exit", 4) == 0)
+		free_and_exit(ms);
+	if (tokenize_input(ms->lex) == 1)
+		return (1);
+	if (check_for_expansion(&ms->lex->token_list, ms->envp) == 1)
+		return (1);
+			// printf("After expansion: \n");
+			// ft_putlst_fd(ms->lex->token_list, 1);
+	if (check_for_dequotation(&ms->lex->token_list) == 1)
+		return (1);
+			printf("After dequotation: \n");
+			ft_putlst_fd(ms->lex->token_list, 1);
+	//parse_tokens_to_struct(ms);
+	return (0);
+}
+
 char	*handle_expansion(t_list *node, char **envp, int *i)
 {
 	int		len;

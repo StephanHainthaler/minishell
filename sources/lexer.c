@@ -31,13 +31,10 @@ int	read_input(t_minishell *ms)
 		return (1);
 	if (check_for_expansion(&ms->lex->token_list, ms->envp) == 1)
 		return (1);
-			printf("After expansion: \n");
+	if (check_for_dequotation(&ms->lex->token_list) == 1)
+		return (1);
+			printf("After dequotation: \n");
 			ft_putlst_fd(ms->lex->token_list, 1);
-	// if (check_for_dequotation(&ms->lex->token_list) == 1)
-	// 	return (1);
-	// 		printf("After dequotation: \n");
-	// 		ft_putlst_fd(ms->lex->token_list, 1);
-	//parse_tokens_to_struct(ms);
 	return (0);
 }
 

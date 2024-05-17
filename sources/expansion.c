@@ -66,7 +66,6 @@ char	*handle_expansion(t_list *node, char **envp, int *i)
 	}
 	if (node->attr[*i] == '\'')
 	{
-		printf("Test1\n");
 		handle_quotes_in_expansion(node, node->attr[*i], *i);
 		if (node->in_squotes == true)
 		{
@@ -88,10 +87,10 @@ char	*handle_expansion(t_list *node, char **envp, int *i)
 	while (envp[j] != NULL)
 	{
 		if (ft_strncmp(envp[j], node->attr + pos + 1, len - 1) == 0)
-			return (*i = pos, handle_valid_expansion(node->attr, envp[j], len, pos + 1));
+			return (*i = -1, node->in_squotes = false, node->in_dquotes = false, handle_valid_expansion(node->attr, envp[j], len, pos));
 		j++;
 	}
-	return (*i = pos, handle_invalid_expansion(node->attr, len));
+	return (*i = -1, node->in_squotes = false, node->in_dquotes = false, handle_invalid_expansion(node->attr, len));
 }
 
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos)
@@ -110,12 +109,12 @@ char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos)
 		return (free(exp_var), NULL);
 	i = 0;
 	j = 0;
-	while (to_expand[j] != '\0' && to_expand[j] != '$')
+	while (to_expand[j] != '\0' && j != pos)
 		exp_str[i++] = to_expand[j++];
 	j = 0;
 	while (exp_var[j] != '\0')
 		exp_str[i++] = exp_var[j++];
-	j = pos + len - 1;
+	j = pos + 1 + len - 1;
 	while (to_expand[j] != '\0')
 		exp_str[i++] = to_expand[j++];
 	exp_str[i] = '\0';
