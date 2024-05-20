@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 11:52:49 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/14 13:58:13 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/20 13:26:41 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int		ft_memcmp(const void *str1, const void *str2, size_t n);
 void	*ft_calloc(size_t nmemb, size_t n);
 char	*ft_strdup(const char *src);
 char	**ft_strarrdup(char **src);
+char	**ft_stradd_tostrarr(char **strarr, char *str);
 char	*ft_substr(char const *str, unsigned int start, size_t len);
 char	*ft_strjoin(char const *str1, char const *str2);
 char	*ft_strjoin_gnl(char *str1, char *str2);
