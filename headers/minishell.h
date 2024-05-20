@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/16 14:54:31 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/20 09:32:55 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,15 @@ t_list	*get_non_word_token(t_lexer *lex);
 int		check_for_expansion(t_list **token_list, char **envp);
 char	*handle_expansion(t_list *node, char **envp, int *i);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
-char	*handle_invalid_expansion(char *str, int len);
-void	handle_quotes_in_expansion(t_list *node, char quote, int i);
+char	*handle_invalid_expansion(char *str, int len, int pos);
+int		get_envname_len(t_list *node, int *i);
 
 //quotation.c
 int		check_for_dequotation(t_list **token_list);
 int		handle_quotes(t_lexer *lex, char quote, int *len);
 char	*handle_dequotation(char *to_trim, int i, int j);
 int		get_dequoted_strlen(char *str);
+void	handle_quotes_in_expansion(t_list *node, char quote);
 
 //free.c
 void	free_lexer(t_lexer *lex);
