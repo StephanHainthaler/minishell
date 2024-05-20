@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/16 09:19:56 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/20 09:37:38 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	read_input(t_minishell *ms)
 	if (initialize_lexer(ms) == 1)
 		return (1);
 	while (true)
-	{	
+	{
 		ms->lex->input = readline("./minishell$ ");
 		if (ms->lex->input == NULL)
 			return (1);
@@ -33,8 +33,6 @@ int	read_input(t_minishell *ms)
 		return (1);
 	if (check_for_dequotation(&ms->lex->token_list) == 1)
 		return (1);
-			printf("After dequotation: \n");
-			ft_putlst_fd(ms->lex->token_list, 1);
 	return (0);
 }
 

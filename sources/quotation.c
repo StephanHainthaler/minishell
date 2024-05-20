@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:46:31 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/14 10:17:08 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/20 09:35:51 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*handle_dequotation(char *to_trim, int i, int j)
 		if (to_trim[i] == '\'' || to_trim[i] == '"')
 		{
 			quote = to_trim[i++];
-			while (to_trim[i] != quote)// && to_trim[i])
+			while (to_trim[i] != quote)
 				trim_str[j++] = to_trim[i++];
 			i++;
 		}
@@ -109,4 +109,18 @@ int	get_dequoted_strlen(char *str)
 		i++;
 	}
 	return (ft_strlen(str) - num_of_quotes);
+}
+
+void	handle_quotes_in_expansion(t_list *node, char quote)
+{
+	if (quote == '\'')
+	{
+		if (node->in_dquotes == false)
+			node->in_squotes = !(node->in_squotes);
+	}
+	if (quote == '"')
+	{
+		if (node->in_squotes == false)
+			node->in_dquotes = !(node->in_dquotes);
+	}
 }
