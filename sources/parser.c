@@ -1,16 +1,19 @@
 #include "../headers/minishell.h"
 
-int count_pipes(t_minishell *ms)
+int	count_pipes(t_minishell *ms)
 {
-	int i;
+	t_list *head;
+	t_list *current;
 
-	i = 0;
-	while (ms->lex->input[i])
+	head = ms->lex->token_list;
+	current = ms->lex->token_list;
+	while (current != NULL)
 	{
-		if (ms->lex->input[i] == '|')
+		if (ms->lex->token_list->type == PIPE)
 			ms->cmd->num_of_simp_cmds++;
-		i++;
+		current = current->next;
 	}
+	ms->lex->token_list = head;
 	return (ms->cmd->num_of_simp_cmds);
 }
 
@@ -19,14 +22,10 @@ char ***split_commands(t_minishell *ms)
 	int i;
 
 	i = 0;
-	printf("%s", ms->lex->input);
-	
 	ms->cmd->simp_cmd = ft_split(ms->lex->input, '|');
 	if(!ms->cmd->simp_cmd)
 		return (NULL);
-	printf("Test2\n");
 	ms->cmd->cmd_list = malloc(sizeof(char **) * (ms->cmd->num_of_simp_cmds + 1));
-	printf("Test3\n");
 	while (i <= ms->cmd->num_of_simp_cmds)
 	{
 		ms->cmd->cmd_list[i] = ft_split(ms->cmd->simp_cmd[i], ' ');

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:44:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/13 12:57:56 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/20 11:41:38 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,69 +14,60 @@
 
 int	check_for_expansion(t_list **token_list, char **envp)
 {
-	t_list	*current_node;
-	char	quote;
+	t_list	*cur_node;
 	int		i;
 
-	current_node = *token_list;
-	while (current_node != NULL)
+	cur_node = *token_list;
+	while (cur_node != NULL)
 	{
-		if (current_node->type == WORD)
+		if (cur_node->type == WORD)
 		{
 			i = 0;
-			quote = '\0';
-			while (current_node->attr[i] != '\0')
+			while (cur_node->attr[i] != '\0')
 			{
-				if (current_node->attr[i] == '\'' || current_node->attr[i] == '"')
-					quote = handle_quotes_in_expansion(current_node, current_node->attr[i]);
-				if (current_node->attr[i] == '$' && current_node->in_squotes == false)
+				if (cur_node->attr[i] == '\'' || cur_node->attr[i] == '"')
+					handle_quotes_in_expansion(cur_node, cur_node->attr[i]);
+				if (cur_node->attr[i] == '$' && cur_node->in_squotes == false)
 				{
-					current_node->attr = handle_expansion(current_node, envp, &i, quote);
-					if (current_node->attr == NULL)
+					cur_node->attr = handle_expansion(cur_node, envp, &i);
+					if (cur_node->attr == NULL)
 						return (1);
-					continue ;
 				}
 				i++;
 			}
 		}
-		current_node = current_node->next;
+		cur_node = cur_node->next;
 	}
 	return (0);
 }
 
-char	*handle_expansion(t_list *node, char **envp, int *i, char quote)
+char	*handle_expansion(t_list *node, char **envp, int *i)
 {
 	int		len;
 	int		pos;
 	int		j;
 
-	quote = '\0';
 	if (ft_isspace(node->attr[*i + 1]) == true || node->attr[*i + 1] == '\0'
-		|| node->attr[*i + 1] == '\'' || node->attr[*i + 1] == '"'
-		|| node->attr[*i + 1] == '?' || node->attr[*i + 1] == '$')
-		return (*i = *i + 1, node->attr);
-	pos = *i + 1;
-	len = 0;
-	while (node->attr[*i] != '\0' && ft_isspace(node->attr[*i]) == false
-		&& node->attr[*i] != '\'' && node->attr[*i] != '"')
+		|| node->attr[*i + 1] == '?' || node->attr[*i + 1] == '$'
+		|| node->attr[*i + 1] == '"' || node->attr[*i + 1] == '\'')
+		return (node->attr);
+	pos = *i;
+	len = get_envname_len(node, i);
+	if (node->attr[*i] == '\'')
 	{
-		if (node->attr[*i + 1] == '$')
-		{
-			len++;
-			break ;
-		}
-		*i = *i + 1;
-		len++;
+		handle_quotes_in_expansion(node, node->attr[*i]);
+		if (node->in_squotes == true)
+			return (node->attr);
 	}
 	j = 0;
 	while (envp[j] != NULL)
 	{
-		if (ft_strncmp(envp[j], node->attr + pos, len - 1) == 0)
-			return (*i = 0, handle_valid_expansion(node->attr, \
-				envp[j], len, pos));
+		if (ft_strncmp(envp[j], node->attr + pos + 1, len - 1) == 0)
+			return (*i = pos - 1,
+				handle_valid_expansion(node->attr, envp[j], len, pos));
 		j++;
 	}
-	return (*i = 0, handle_invalid_expansion(node->attr, len));
+	return (*i = pos - 1, handle_invalid_expansion(node->attr, len, pos));
 }
 
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos)
@@ -95,19 +86,19 @@ char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos)
 		return (free(exp_var), NULL);
 	i = 0;
 	j = 0;
-	while (to_expand[j] != '\0' && to_expand[j] != '$')
+	while (to_expand[j] != '\0' && j != pos)
 		exp_str[i++] = to_expand[j++];
 	j = 0;
 	while (exp_var[j] != '\0')
 		exp_str[i++] = exp_var[j++];
-	j = pos + len - 1;
+	j = pos + 1 + len - 1;
 	while (to_expand[j] != '\0')
 		exp_str[i++] = to_expand[j++];
 	exp_str[i] = '\0';
 	return (free(to_expand), free(exp_var), exp_str);
 }
 
-char	*handle_invalid_expansion(char *str, int len)
+char	*handle_invalid_expansion(char *str, int len, int pos)
 {
 	char	*new_str;
 	int		i;
@@ -116,7 +107,7 @@ char	*handle_invalid_expansion(char *str, int len)
 	if (new_str == NULL)
 		return (NULL);
 	i = 0;
-	while (str[i] != '\0' && str[i] != '$')
+	while (str[i] != '\0' && i != pos)
 		i++;
 	ft_strlcpy(new_str, str, i + 1);
 	ft_strlcat(new_str + i, str + i + len, ft_strlen(str) - len - i + 1);
@@ -124,27 +115,21 @@ char	*handle_invalid_expansion(char *str, int len)
 	return (new_str);
 }
 
-char	handle_quotes_in_expansion(t_list *node, char quote)
+int	get_envname_len(t_list *node, int *i)
 {
-	if (quote == '\'')
+	int	len;
+
+	len = 0;
+	while (node->attr[*i] != '\0' && ft_isspace(node->attr[*i]) == false
+		&& node->attr[*i] != '\'' && node->attr[*i] != '"')
 	{
-		if (node->in_squotes == false)
-			node->in_squotes = true;
-		else
+		if (node->attr[*i + 1] == '$')
 		{
-			node->in_squotes = false;
-			quote = '\0';
+			len++;
+			break ;
 		}
+		*i = *i + 1;
+		len++;
 	}
-	else
-	{
-		if (node->in_dquotes == false)
-			node->in_dquotes = true;
-		else
-		{
-			node->in_dquotes = false;
-			quote = '\0';
-		}
-	}
-	return (quote);
+	return (len);
 }

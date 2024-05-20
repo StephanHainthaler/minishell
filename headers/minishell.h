@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/17 14:37:53 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/20 11:42:46 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ typedef struct s_cmd
 {
 	char		***cmd_list;
 	char		**simp_cmd;
-	char		*full_line;
+	//char		*full_line;
 	// int			num_of_aval_args;
 	// int			num_of_args;
-	int			num_of_aval_simp_cmds;
+	//int			num_of_aval_simp_cmds;
 	int			num_of_simp_cmds;
 	char		*infile;
 	char		*outfile;
@@ -92,12 +92,13 @@ t_list	*get_non_word_token(t_lexer *lex);
 
 //expansion.c
 int		check_for_expansion(t_list **token_list, char **envp);
-char	*handle_expansion(t_list *node, char **envp, int *i, char quote);
+char	*handle_expansion(t_list *node, char **envp, int *i);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
-char	*handle_invalid_expansion(char *str, int len);
-char	handle_quotes_in_expansion(t_list *node, char quote);
+char	*handle_invalid_expansion(char *str, int len, int pos);
+int		get_envname_len(t_list *node, int *i);
 
 //quotation.c
+void	handle_quotes_in_expansion(t_list *node, char quote);
 int		check_for_dequotation(t_list **token_list);
 int		handle_quotes(t_lexer *lex, char quote, int *len);
 char	*handle_dequotation(char *to_trim, int i, int j);
@@ -106,6 +107,7 @@ int		get_dequoted_strlen(char *str);
 //initialization.c
 int	initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
 int	initialize_lexer(t_minishell *ms);
+int	initialize_parser(t_minishell *ms);
 
 //free.c
 void	free_minishell(t_minishell *ms);

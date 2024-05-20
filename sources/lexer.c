@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/17 15:02:34 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/20 11:38:06 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	read_input(t_minishell *ms)
 	if (initialize_lexer(ms) == 1)
 		return (1);
 	while (true)
-	{	
+	{
 		ms->lex->input = readline("./minishell$ ");
 		if (ms->lex->input == NULL)
 			return (1);
@@ -27,20 +27,12 @@ int	read_input(t_minishell *ms)
 	add_history(ms->lex->input);
 	if (ft_strncmp(ms->lex->input, "exit", 4) == 0)
 		free_and_exit(ms);
-	ms->lex->i = 0;
 	if (tokenize_input(ms->lex) == 1)
 		return (1);
-			// printf("After tokenization: \n");
-			// ft_putlst_fd(lex.token_list, 1);
 	if (check_for_expansion(&ms->lex->token_list, ms->envp) == 1)
 		return (1);
-			// printf("After expansion: \n");
-			// ft_putlst_fd(lex.token_list, 1);
-	// if (check_for_dequotation(&lex.token_list) == 1)
-	// 	return (1);
-			// printf("After dequotation: \n");
-			// ft_putlst_fd(lex.token_list, 1);
-	//parse_tokens_to_struct(ms);
+	if (check_for_dequotation(&ms->lex->token_list) == 1)
+		return (1);
 	return (0);
 }
 

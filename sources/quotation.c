@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotation.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:46:31 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/07 14:00:14 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/20 11:39:48 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,18 @@ int	get_dequoted_strlen(char *str)
 		i++;
 	}
 	return (ft_strlen(str) - num_of_quotes);
+}
+
+void	handle_quotes_in_expansion(t_list *node, char quote)
+{
+	if (quote == '\'')
+	{
+		if (node->in_dquotes == false)
+			node->in_squotes = !(node->in_squotes);
+	}
+	if (quote == '"')
+	{
+		if (node->in_squotes == false)
+			node->in_dquotes = !(node->in_dquotes);
+	}
 }
