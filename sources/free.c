@@ -1,38 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strarrdup.c                                     :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/28 08:54:43 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/20 10:54:22 by shaintha         ###   ########.fr       */
+/*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
+/*   Updated: 2024/05/14 12:31:03 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+#include "../headers/minishell.h"
 
-char	**ft_strarrdup(char **src)
+void	free_minishell(t_minishell *ms)
 {
-	char	**dup;
-	int		arrcount;
-	int		i;
+	if (ms->envp != NULL)
+		ft_free_strarr(ms->envp);
+}
 
-	arrcount = ft_strarrlen(src);
-	dup = (char **)malloc((arrcount + 1) * sizeof(char *));
-	if (dup == NULL)
-		return (NULL);
-	i = 0;
-	while (src[i] != NULL)
-	{
-		dup[i] = ft_strdup(src[i]);
-		if (dup[i] == NULL)
-		{
-			ft_free_strarr(dup);
-			return (NULL);
-		}
-		i++;
-	}
-	dup[i] = NULL;
-	return (dup);
+void	free_lexer(t_lexer *lex)
+{
+	if (lex->token_list != NULL)
+		ft_lstclear(&lex->token_list);
+	free(lex);
+}
+
+void	free_and_exit(t_minishell *ms)
+{
+	free_lexer(ms->lex);
+	free_minishell(ms);
+	rl_clear_history();
+	exit(0);
 }

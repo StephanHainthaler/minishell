@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 11:52:49 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/06 09:05:24 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/20 10:56:17 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ bool	ft_isalnum(int c);
 bool	ft_isascii(int c);
 bool	ft_isprint(int c);
 bool	ft_isspace(int c);
+bool	ft_isspace_str(char *str);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
 size_t	ft_strlen(const char *str);
@@ -65,6 +66,7 @@ int		ft_memcmp(const void *str1, const void *str2, size_t n);
 void	*ft_calloc(size_t nmemb, size_t n);
 char	*ft_strdup(const char *src);
 char	**ft_strarrdup(char **src);
+char	**ft_stradd_tostrarr(char **strarr, char *str);
 char	*ft_substr(char const *str, unsigned int start, size_t len);
 char	*ft_strjoin(char const *str1, char const *str2);
 char	*ft_strjoin_gnl(char *str1, char *str2);

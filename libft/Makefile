@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: shaintha <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/12 09:25:55 by shaintha          #+#    #+#              #
-#    Updated: 2023/12/12 09:26:00 by shaintha         ###   ########.fr        #
+#    Updated: 2024/05/20 10:55:51 by shaintha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRCS :=  $(SRC_DIR)/ft_atoi.c \
 		$(SRC_DIR)/ft_putstrarr_fd.c \
 		$(SRC_DIR)/ft_split.c \
 		$(SRC_DIR)/ft_strarrdup.c \
+		$(SRC_DIR)/ft_stradd_tostrarr.c \
 		$(SRC_DIR)/ft_strarrlen.c \
 		$(SRC_DIR)/ft_strchr.c \
 		$(SRC_DIR)/ft_strdup.c \

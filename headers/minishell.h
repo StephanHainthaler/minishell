@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/07 14:21:23 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/20 09:32:55 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdbool.h>
 # include <string.h>
 # include <unistd.h>
+# include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/stat.h>
@@ -43,12 +44,37 @@ typedef struct s_lexer
 	char	**envp;
 }			t_lexer;
 
+typedef struct s_executor
+{
+	char	**simp_cmd;
+	char	**paths;
+	char	*cmd_path;
+	bool	is_path_set;
+	char	**envp;
+	// char	*infile;
+	// char	*outfile;
+	// int		fd_infile;
+	// int		fd_outfile;
+	// char	**cmds;
+	// char	**split_cmd;
+	// bool	is_path_set;
+	// int		pipe;
+	// pid_t	cpid1;
+	// pid_t	cpid2;
+	// char	**envp;
+}			t_executor;
+
 typedef struct s_minishell
 {
+	t_lexer	*lex;
 	int		argc;
 	char	**argv;
 	char	**envp;
 }			t_minishell;
+
+//initialization.c 
+int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
+int		initialize_lexer(t_minishell *ms);
 
 //lexer.c
 int		read_input(t_minishell *ms);
@@ -59,14 +85,21 @@ t_list	*get_non_word_token(t_lexer *lex);
 
 //expansion.c
 int		check_for_expansion(t_list **token_list, char **envp);
-char	*handle_expansion(char *to_expand, char **envp, int *i);
+char	*handle_expansion(t_list *node, char **envp, int *i);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
-char	*handle_invalid_expansion(char *str, int len);
+char	*handle_invalid_expansion(char *str, int len, int pos);
+int		get_envname_len(t_list *node, int *i);
 
 //quotation.c
 int		check_for_dequotation(t_list **token_list);
 int		handle_quotes(t_lexer *lex, char quote, int *len);
 char	*handle_dequotation(char *to_trim, int i, int j);
 int		get_dequoted_strlen(char *str);
+void	handle_quotes_in_expansion(t_list *node, char quote);
+
+//free.c
+void	free_lexer(t_lexer *lex);
+void	free_minishell(t_minishell *ms);
+void	free_and_exit(t_minishell *ms);
 
 #endif
