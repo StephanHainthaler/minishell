@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/14 11:56:25 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/20 10:02:15 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,14 @@ int	initialize_lexer(t_minishell *ms)
 	ms->lex->token_list = NULL;
 	ms->lex->input = NULL;
 	ms->lex->envp = ms->envp;
+	return (0);
+}
+
+int	initialize_parser(t_minishell *ms)
+{
+	ms->cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	if (ms->cmd == NULL)
+		return (1);
+	//init all other cmd values
 	return (0);
 }
