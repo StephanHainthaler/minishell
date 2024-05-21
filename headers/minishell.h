@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/21 14:33:30 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/21 15:57:33 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_minishell
 	t_lexer	*lex;
 	//t_simp_cmd *simp_cmd;
 	int			num_of_cmds;
+	t_cmd		*cmd;
 	t_cmd		**cmds;
 	struct sigaction	sa_signal;
 	sigset_t			block_mask;

@@ -6,11 +6,13 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/21 14:34:17 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/21 16:00:49 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+
 
 int	count_pipes(t_minishell *ms)
 {
@@ -66,6 +68,10 @@ t_cmd	**get_cmds(t_minishell *ms)
 		{
 			if (current->type == WORD)
 				ft_stradd_tostrarr(cmds[i]->simp_cmd, current->attr);
+			else if (current->type == RE_IN)
+				ms->cmd->infile = current->next->attr;
+			else if (current->type == RE_OUT)
+				ms->cmd->outfile = current->next->attr;
 			//NULL CHECK
 			//else if (current->type == RE_IN && current->next->type == WORD)
 			current = current->next;
