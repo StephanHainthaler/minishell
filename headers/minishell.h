@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/21 12:35:27 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/21 13:01:58 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_cmd
 {
 	//char		***cmd_arr;
 	char		**simp_cmd;
+	char		*args;
 	//char		*full_line;
 	// int			num_of_aval_args;
 	int			num_of_args;
