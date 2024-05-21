@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/21 13:01:58 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/21 14:33:30 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ typedef struct s_cmd
 	// int			num_of_aval_args;
 	int			num_of_args;
 	//int			num_of_aval_simp_cmds;
-	int			num_of_simp_cmds;
 	int			in_fd;
 	int			out_fd;
 	char		*infile;
@@ -76,7 +75,8 @@ typedef struct s_minishell
 	t_list	*history;
 	t_lexer	*lex;
 	//t_simp_cmd *simp_cmd;
-	t_cmd		*cmd;
+	int			num_of_cmds;
+	t_cmd		**cmds;
 	struct sigaction	sa_signal;
 	sigset_t			block_mask;
 }				t_minishell;

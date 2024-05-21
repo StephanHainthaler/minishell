@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/20 12:06:39 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/21 14:17:25 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int	initialize_lexer(t_minishell *ms)
 
 int	initialize_parser(t_minishell *ms)
 {
-	ms->cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	if (ms->cmd == NULL)
+	ms->cmds = (t_cmd *)malloc(sizeof(t_cmd));
+	if (ms->cmds == NULL)
 		return (1);
 	//init all other cmd values
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/21 13:50:41 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/21 14:34:17 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,51 +20,59 @@ int	count_pipes(t_minishell *ms)
 	while (current != NULL)
 	{
 		if (ms->lex->token_list->type == PIPE)
-			ms->cmd->num_of_simp_cmds++;
+			ms->num_of_cmds++;
 		current = current->next;
 	}
 	ms->lex->token_list = current;
-	return (ms->cmd->num_of_simp_cmds + 1);
+	return (ms->num_of_cmds + 1);
 }
-int	num_of_args(t_minishell *ms)
-{
-	t_list *current;
+// int	num_of_args(t_minishell *ms)
+// {
+// 	t_list *current;
 
-	current = ms->lex->token_list;
-	while (current != NULL)
-	{
-		if (current->type == WORD)
-			ms->cmd->num_of_args++;
-		current = current->next;
-	}
-	ms->lex->token_list = current;
-	return (ms->cmd->num_of_args);
-}
+// 	current = ms->lex->token_list;
+// 	while (current != NULL)
+// 	{
+// 		if (current->type == WORD)
+// 			ms->cmds->num_of_args++;
+// 		current = current->next;
+// 	}
+// 	ms->lex->token_list = current;
+// 	return (ms->cmds->num_of_args);
+// }
 
-t_cmd	*get_cmds(t_minishell *ms)
+t_cmd	**get_cmds(t_minishell *ms)
 {
+	t_cmd	**cmds;
 	t_cmd	*new_cmd;
 	t_list	*current;
+	//int cmd_nr[ms->cmds->num_of_simp_cmds + 1];
 	int i;
 	int j;
-	int cmd_nr[ms->cmd->num_of_simp_cmds + 1];
 
+	ms->cmds = (t_cmd **)malloc(ms->num_of_cmds * sizeof(t_cmd *));
+	if (ms->cmds == NULL)
+		return (NULL);
 	i = 0;
 	current = ms->lex->token_list;
-	while (current && i < ms->cmd->num_of_simp_cmds + 1)
+	while (current) //&& i < ms->cmds->num_of_simp_cmds + 1)
 	{
-		new_cmd->simp_cmd = malloc(sizeof(char *) * (ms->cmd->num_of_args + 1));
-		if (!new_cmd->simp_cmd)
-			return (NULL);
+		cmds[i] = (t_cmd *)malloc(sizeof(t_cmd));
+		//NULL CHECK
+		// cmds->simp_cmd = malloc(sizeof(char *) * (ms->cmds->num_of_args + 1));
+		// if (!cmds->simp_cmd)
+		// 	return (NULL);
 		while (current->type != PIPE)
 		{
 			if (current->type == WORD)
-				ft_stradd_tostrarr(new_cmd->simp_cmd, current->attr);
+				ft_stradd_tostrarr(cmds[i]->simp_cmd, current->attr);
+			//NULL CHECK
 			//else if (current->type == RE_IN && current->next->type == WORD)
-		}
+			current = current->next;
+		} 
 		current = current->next;
-		cmd_nr[i] = i;
+		//cmd_nr[i] = i;
 		i++;
-		return (new_cmd);
 	}
+	return (cmds);
 }
