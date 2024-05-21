@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/21 13:07:21 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/21 13:50:41 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,18 @@ t_cmd	*get_cmds(t_minishell *ms)
 	current = ms->lex->token_list;
 	while (current && i < ms->cmd->num_of_simp_cmds + 1)
 	{
-		new_cmd = malloc(sizeof(char *) * (ms->cmd->num_of_args + 1));
-		if (!new_cmd)
+		new_cmd->simp_cmd = malloc(sizeof(char *) * (ms->cmd->num_of_args + 1));
+		if (!new_cmd->simp_cmd)
 			return (NULL);
 		while (current->type != PIPE)
 		{
 			if (current->type == WORD)
-			{
 				ft_stradd_tostrarr(new_cmd->simp_cmd, current->attr);
-				if (current->type == RE_IN)
-					//change fd
-				current = current->next;
-			}
+			//else if (current->type == RE_IN && current->next->type == WORD)
 		}
+		current = current->next;
 		cmd_nr[i] = i;
 		i++;
-		}
+		return (new_cmd);
 	}
+}
