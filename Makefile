@@ -6,7 +6,7 @@
 #    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/05/16 17:14:41 by juitz            ###   ########.fr        #
+#    Updated: 2024/05/22 12:12:53 by juitz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,9 +31,9 @@ LIBFT_DIR := libft
 MAIN_DIR := main
 
 SRCS := $(SRC_DIR)/main.c \
+$(SRC_DIR)/input_checks.c \
 $(SRC_DIR)/lexer.c \
 $(SRC_DIR)/parser.c \
-$(SRC_DIR)/input_checks.c \
 $(SRC_DIR)/quotation.c \
 $(SRC_DIR)/expansion.c \
 $(SRC_DIR)/initialization.c \

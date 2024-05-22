@@ -6,7 +6,7 @@
 #    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/12 09:25:55 by shaintha          #+#    #+#              #
-#    Updated: 2024/05/03 12:22:36 by juitz            ###   ########.fr        #
+#    Updated: 2024/05/22 12:07:09 by juitz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,8 @@ SRCS :=  $(SRC_DIR)/ft_atoi.c \
 		$(SRC_DIR)/ft_lstclear.c \
 		$(SRC_DIR)/ft_free.c \
 		$(SRC_DIR)/ft_free_strarr.c \
-		$(SRC_DIR)/ft_error.c
+		$(SRC_DIR)/ft_error.c \
+		$(SRC_DIR)/ft_stradd_tostrarr.c
 
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 

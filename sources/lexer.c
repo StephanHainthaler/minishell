@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/20 11:38:06 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/22 12:13:44 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	read_input(t_minishell *ms)
 	while (true)
 	{
 		ms->lex->input = readline("./minishell$ ");
+		if (is_valid_input(ms->lex) == false)
+			return (1);
 		if (ms->lex->input == NULL)
 			return (1);
 		if (ft_isspace_str(ms->lex->input) == false)

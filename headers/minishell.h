@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/21 15:57:33 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/22 15:07:41 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,29 +43,31 @@ typedef struct s_lexer
 	char	**envp;
 }			t_lexer;
 
-/* typedef struct s_simp_cmd
-{
-	char	**args;
-	int		num_of_aval_args;
-	int		num_of_args;
-}			t_simp_cmd; */
-
 typedef struct s_cmd
 {
-	//char		***cmd_arr;
-	char		**simp_cmd;
-	char		*args;
-	//char		*full_line;
-	// int			num_of_aval_args;
-	int			num_of_args;
-	//int			num_of_aval_simp_cmds;
-	int			in_fd;
-	int			out_fd;
-	char		*infile;
-	char		*outfile;
-	char		*errfile;
-	int			background;
-}				t_cmd;
+    char    **simp_cmd;
+    char    *cmd_path;
+    char    *infile;
+    char    *outfile;
+    int        in_fd;
+    int        out_fd;
+    int        cmd_nbr;
+}            t_cmd;
+
+// typedef struct s_cmd
+// {
+// 	char		**simp_cmd;
+// 	char		*args;
+// 	// int			num_of_aval_args;
+// 	int			num_of_args;
+// 	//int			num_of_aval_simp_cmds;
+// 	int			in_fd;
+// 	int			out_fd;
+// 	char		*infile;
+// 	char		*outfile;
+// 	char		*errfile;
+// 	int			background;
+// }				t_cmd;
 
 typedef struct s_minishell
 {
@@ -74,7 +76,6 @@ typedef struct s_minishell
 	char	**envp;
 	t_list	*history;
 	t_lexer	*lex;
-	//t_simp_cmd *simp_cmd;
 	int			num_of_cmds;
 	t_cmd		*cmd;
 	t_cmd		**cmds;
@@ -83,9 +84,10 @@ typedef struct s_minishell
 }				t_minishell;
 
 //parser.c
+int			get_cmds(t_minishell *ms);
 char		**parse_tokens_to_struct(t_minishell *ms);
 char		***split_commands(t_minishell *ms);
-int			check_valid_input(t_lexer *lex);
+bool		is_valid_input(t_lexer *lex);
 
 //lexer.c
 int		read_input(t_minishell *ms);
@@ -112,6 +114,7 @@ int		get_dequoted_strlen(char *str);
 int	initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
 int	initialize_lexer(t_minishell *ms);
 int	initialize_parser(t_minishell *ms);
+int    initialize_cmd(t_cmd *cmd, int cmd_nbr);
 
 //free.c
 void	free_minishell(t_minishell *ms);
