@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/18 09:23:01 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/14 12:57:42 by juitz            ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/05/23 14:02:05 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../headers/libft.h"
 
@@ -25,7 +26,6 @@ bool	ft_isspace_str(char *str)
 	}
 	return (true);
 }
-
 bool	ft_isspace(int c)
 {
 	if (c == ' ' || c == '\f'

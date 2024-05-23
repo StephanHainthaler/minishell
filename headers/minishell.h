@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 12:40:32 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/23 14:00:39 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdbool.h>
 # include <string.h>
 # include <unistd.h>
+# include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/stat.h>
@@ -74,11 +75,11 @@ typedef struct s_minishell
 	char		**envp;
 }				t_minishell;
 
-//parser.c
-int			get_cmds(t_minishell *ms);
-char		**parse_tokens_to_struct(t_minishell *ms);
-char		***split_commands(t_minishell *ms);
-bool		is_valid_input(t_lexer *lex);
+//initialization.c 
+int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
+int		initialize_lexer(t_minishell *ms);
+int		initialize_executor(t_minishell *ms);
+int		initialize_cmd(t_cmd *cmd, int cmd_nbr);
 
 //lexer.c
 int		read_input(t_minishell *ms);
@@ -95,25 +96,24 @@ char	*handle_invalid_expansion(char *str, int len, int pos);
 int		get_envname_len(t_list *node, int *i);
 
 //quotation.c
-void	handle_quotes_in_expansion(t_list *node, char quote);
 int		check_for_dequotation(t_list **token_list);
 int		handle_quotes(t_lexer *lex, char quote, int *len);
 char	*handle_dequotation(char *to_trim, int i, int j);
 int		get_dequoted_strlen(char *str);
+void	handle_quotes_in_expansion(t_list *node, char quote);
 
-//initialization.c
-int	initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
-int	initialize_lexer(t_minishell *ms);
-int	initialize_parser(t_minishell *ms);
-int    initialize_cmd(t_cmd *cmd, int cmd_nbr);
+//parser.c
+int		parse_input(t_minishell *ms);
+bool	is_valid_input(t_lexer *lex);
+int		count_cmds(t_list **list);
+int		count_cmds(t_list **list);
+int		get_cmds(t_executor *exec, t_list **list);
 
 //free.c
-void	free_minishell(t_minishell *ms);
 void	free_lexer(t_lexer *lex);
+void	free_executor(t_executor *exec);
+void	free_cmds(t_cmd **cmds);
+void	free_minishell(t_minishell *ms);
 void	free_and_exit(t_minishell *ms);
-
-//signals.c
-int		signals(t_minishell *ms);
-void	ft_handle_signal(int signal, siginfo_t *info, void *context);
 
 #endif
