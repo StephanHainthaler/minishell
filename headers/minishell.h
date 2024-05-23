@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/22 15:07:41 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/23 12:40:32 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,42 +45,33 @@ typedef struct s_lexer
 
 typedef struct s_cmd
 {
-    char    **simp_cmd;
-    char    *cmd_path;
-    char    *infile;
-    char    *outfile;
-    int        in_fd;
-    int        out_fd;
-    int        cmd_nbr;
+    char	**simp_cmd;
+    char	*cmd_path;
+    char	*infile;
+    char	*outfile;
+    int		in_fd;
+    int		out_fd;
+    int		cmd_nbr;
 }            t_cmd;
 
-// typedef struct s_cmd
-// {
-// 	char		**simp_cmd;
-// 	char		*args;
-// 	// int			num_of_aval_args;
-// 	int			num_of_args;
-// 	//int			num_of_aval_simp_cmds;
-// 	int			in_fd;
-// 	int			out_fd;
-// 	char		*infile;
-// 	char		*outfile;
-// 	char		*errfile;
-// 	int			background;
-// }				t_cmd;
+typedef struct s_executor
+{
+	t_cmd	**cmds;
+	int		num_of_cmds;
+	int		num_of_pipes;
+	char	**paths;
+	int		**pipes;
+	pid_t	*cpids;
+	char	**envp;
+}			t_executor;
 
 typedef struct s_minishell
 {
-	int		argc;
-	char	**argv;
-	char	**envp;
-	t_list	*history;
-	t_lexer	*lex;
-	int			num_of_cmds;
-	t_cmd		*cmd;
-	t_cmd		**cmds;
-	struct sigaction	sa_signal;
-	sigset_t			block_mask;
+	t_lexer		*lex;
+	t_executor	*exec;
+	int			argc;
+	char		**argv;
+	char		**envp;
 }				t_minishell;
 
 //parser.c
