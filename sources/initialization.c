@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 09:37:55 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/23 11:44:54 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@ int	initialize_lexer(t_minishell *ms)
 
 int	initialize_cmd(t_cmd *cmd, int cmd_nbr)
 {	
+	cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	if (cmd == NULL)
+		return (1);
 	cmd->simp_cmd = NULL;
 	cmd->cmd_path = NULL;
 	cmd->infile = NULL;
@@ -50,12 +53,23 @@ int	initialize_cmd(t_cmd *cmd, int cmd_nbr)
 
 int	initialize_executor(t_minishell *ms)
 {
+	int	i;
+	
 	ms->exec = (t_executor *)malloc(sizeof(t_executor));
 	if (ms->exec == NULL)
 		return (1);
+	ms->exec->num_of_cmds = count_cmds(&ms->lex->token_list);
+	ms->exec->num_of_pipes = ms->exec->num_of_cmds - 1;
 	ms->exec->cmds = (t_cmd **)malloc(ms->exec->num_of_cmds * sizeof(t_cmd *));
 	if (ms->exec->cmds == NULL)
 		return (free(ms->exec), 1);
+	i = 0;
+	while (i < ms->exec->num_of_cmds)
+	{
+		if (initialize_cmd(ms->exec->cmds[i], i) == 1)
+			return (free_cmds(ms->exec->cmds), free(ms->exec), 1);
+		i++;
+	}
 	ms->exec->paths = NULL;
 	ms->exec->pipes = NULL;
 	ms->exec->cpids = NULL;

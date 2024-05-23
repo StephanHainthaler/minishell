@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/20 09:32:55 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/23 11:36:01 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,37 +44,42 @@ typedef struct s_lexer
 	char	**envp;
 }			t_lexer;
 
+typedef struct s_cmd
+{
+    char	**simp_cmd;
+    char	*cmd_path;
+    char	*infile;
+    char	*outfile;
+    int		in_fd;
+    int		out_fd;
+    int		cmd_nbr;
+}            t_cmd;
+
 typedef struct s_executor
 {
-	char	**simp_cmd;
+	t_cmd	**cmds;
+	int		num_of_cmds;
+	int		num_of_pipes;
 	char	**paths;
-	char	*cmd_path;
-	bool	is_path_set;
+	int		**pipes;
+	pid_t	*cpids;
 	char	**envp;
-	// char	*infile;
-	// char	*outfile;
-	// int		fd_infile;
-	// int		fd_outfile;
-	// char	**cmds;
-	// char	**split_cmd;
-	// bool	is_path_set;
-	// int		pipe;
-	// pid_t	cpid1;
-	// pid_t	cpid2;
-	// char	**envp;
 }			t_executor;
 
 typedef struct s_minishell
 {
-	t_lexer	*lex;
-	int		argc;
-	char	**argv;
-	char	**envp;
-}			t_minishell;
+	t_lexer		*lex;
+	t_executor	*exec;
+	int			argc;
+	char		**argv;
+	char		**envp;
+}				t_minishell;
 
 //initialization.c 
 int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
 int		initialize_lexer(t_minishell *ms);
+int		initialize_executor(t_minishell *ms);
+int		initialize_cmd(t_cmd *cmd, int cmd_nbr);
 
 //lexer.c
 int		read_input(t_minishell *ms);
@@ -97,8 +102,17 @@ char	*handle_dequotation(char *to_trim, int i, int j);
 int		get_dequoted_strlen(char *str);
 void	handle_quotes_in_expansion(t_list *node, char quote);
 
+//parser.c
+int		parse_input(t_minishell *ms);
+bool	is_valid_input(t_lexer *lex);
+int		count_cmds(t_list **list);
+int		count_cmds(t_list **list);
+int		get_cmds(t_executor *exec, t_list **list);
+
 //free.c
 void	free_lexer(t_lexer *lex);
+void	free_executor(t_executor *exec);
+void	free_cmds(t_cmd **cmds);
 void	free_minishell(t_minishell *ms);
 void	free_and_exit(t_minishell *ms);
 

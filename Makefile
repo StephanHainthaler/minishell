@@ -6,7 +6,7 @@
 #    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/05/14 12:31:16 by shaintha         ###   ########.fr        #
+#    Updated: 2024/05/23 10:03:03 by shaintha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,8 @@ $(SRC_DIR)/lexer.c \
 $(SRC_DIR)/expansion.c \
 $(SRC_DIR)/quotation.c \
 $(SRC_DIR)/initialization.c \
-$(SRC_DIR)/free.c
+$(SRC_DIR)/free.c \
+$(SRC_DIR)/parser.c
 
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 

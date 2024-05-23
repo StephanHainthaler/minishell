@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/20 10:56:38 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/23 11:10:24 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ int	main(int argc, char *argv[], char *env[])
 	{
 		if (read_input(&ms) == 1)
 			free_and_exit(&ms);
+		if (parse_input(&ms) == 1)
+			free_and_exit(&ms);
 		free_lexer(ms.lex);
+		free_executor(ms.exec);
 	}
 	return (0);
 }
