@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/23 11:05:33 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/23 12:53:09 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	parse_input(t_minishell *ms)
 {
 	if (initialize_executor(ms) == 1)
 		return (1);
-	printf("Number of cmds: %i\n", ms->exec->num_of_cmds);
 	// if (get_cmds(ms->exec, &ms->lex->token_list) == 1)
 	// 	return (free_executor(ms->exec), 1);
 	return (0);
