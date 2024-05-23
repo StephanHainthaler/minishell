@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 14:41:11 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/23 15:03:02 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	read_input(t_minishell *ms)
 	if (check_for_expansion(&ms->lex->token_list, ms->envp) == 1)
 		return (1);
 	if (check_for_dequotation(&ms->lex->token_list) == 1)
+		return (1);
+	if (is_valid_input(ms->lex) == false)
 		return (1);
 	return (0);
 }

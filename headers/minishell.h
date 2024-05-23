@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 14:40:22 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/23 15:07:00 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,9 @@ bool	is_token(char c);
 t_list	*get_word_token(t_lexer *lex);
 t_list	*get_non_word_token(t_lexer *lex);
 
+//input_checks.c
+bool is_valid_input(t_lexer *lex);
+
 //expansion.c
 int		check_for_expansion(t_list **token_list, char **envp);
 char	*handle_expansion(t_list *node, char **envp, int *i);
@@ -105,7 +108,6 @@ void	handle_quotes_in_expansion(t_list *node, char quote);
 //parser.c
 int		parse_input(t_minishell *ms);
 bool	is_valid_input(t_lexer *lex);
-int		count_cmds(t_list **list);
 int		count_cmds(t_list **list);
 int		get_cmds(t_executor *exec, t_list **list);
 
