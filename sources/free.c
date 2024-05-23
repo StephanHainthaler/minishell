@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 12:48:08 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:47:33 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,11 @@ void	free_minishell(t_minishell *ms)
 
 void	free_lexer(t_lexer *lex)
 {
+	if (lex == NULL)
+		return ;
 	if (lex->token_list != NULL)
 		ft_lstclear(&lex->token_list);
 	free(lex);
-}
-
-void	free_and_exit(t_minishell *ms)
-{
-	free_lexer(ms->lex);
-	free_minishell(ms);
-	rl_clear_history();
-	exit(0);
 }
 
 void	free_executor(t_executor *exec)
@@ -70,4 +64,12 @@ void	free_cmds(t_cmd **cmds, int	num_of_cmds)
 		i++;
 	}
 	free(cmds);
+}
+
+void	free_and_exit(t_minishell *ms)
+{
+	free_lexer(ms->lex);
+	free_minishell(ms);
+	rl_clear_history();
+	exit(0);
 }
