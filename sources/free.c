@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 13:47:33 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/23 16:02:36 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,13 @@ void	free_executor(t_executor *exec)
 {
 	if (exec == NULL)
 		return ;
+	if (exec->paths != NULL)
+		ft_free_strarr(exec->paths);
+	if (exec->cpids != NULL)
+		free(exec->cpids);
+	if (exec->pipes != NULL)
+		free(exec->pipes);
 	free_cmds(exec->cmds, exec->num_of_cmds);
-	//	exec->paths = NULL;
-	//	exec->pipes = NULL;
-	//	exec->cpids = NULL;
-	//	exec->envp = ms->envp;
 	free(exec);
 }
 

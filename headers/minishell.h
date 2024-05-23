@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 12:54:54 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/23 14:31:51 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_minishell
 int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
 int		initialize_lexer(t_minishell *ms);
 int		initialize_executor(t_minishell *ms);
+int		initialize_executor_2(t_minishell *ms);
 t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr);
 
 //lexer.c
@@ -108,6 +109,14 @@ bool	is_valid_input(t_lexer *lex);
 int		count_cmds(t_list **list);
 int		count_cmds(t_list **list);
 int		get_cmds(t_executor *exec, t_list **list);
+
+//executor.c
+
+//executor_utils.c
+char	**get_paths(t_executor *exec);
+char	*get_cmd_path(t_executor *exec, t_cmd *cmd);
+int		get_fd(char *file, bool is_in_fd);
+bool	is_path_set(char *envp[]);
 
 //free.c
 void	free_minishell(t_minishell *ms);
