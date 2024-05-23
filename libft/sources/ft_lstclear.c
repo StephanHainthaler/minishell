@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/23 14:02:16 by juitz            ###   ########.fr       */
+/*   Created: 2023/11/13 10:35:06 by shaintha          #+#    #+#             */
+/*   Updated: 2024/05/23 14:40:37 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	ft_lstclear(t_list **lst)
 		current_node = *lst;
 		if (current_node != NULL)
 			ft_lstdelone(lst, current_node);
-		
 	}
 	*lst = NULL;
 }

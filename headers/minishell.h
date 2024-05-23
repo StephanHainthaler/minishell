@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 14:00:39 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/23 14:40:22 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ typedef struct s_minishell
 int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
 int		initialize_lexer(t_minishell *ms);
 int		initialize_executor(t_minishell *ms);
-int		initialize_cmd(t_cmd *cmd, int cmd_nbr);
+t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr);
 
 //lexer.c
 int		read_input(t_minishell *ms);
@@ -110,10 +110,10 @@ int		count_cmds(t_list **list);
 int		get_cmds(t_executor *exec, t_list **list);
 
 //free.c
+void	free_minishell(t_minishell *ms);
 void	free_lexer(t_lexer *lex);
 void	free_executor(t_executor *exec);
-void	free_cmds(t_cmd **cmds);
-void	free_minishell(t_minishell *ms);
+void	free_cmds(t_cmd **cmds, int	num_of_cmds);
 void	free_and_exit(t_minishell *ms);
 
 #endif

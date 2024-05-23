@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 14:03:50 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/23 14:40:49 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,6 @@ int	initialize_lexer(t_minishell *ms)
 	return (0);
 }
 
-int	initialize_cmd(t_cmd *cmd, int cmd_nbr)
-{	
-	cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	if (cmd == NULL)
-		return (1);
-	cmd->simp_cmd = NULL;
-	cmd->cmd_path = NULL;
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	cmd->in_fd = 0;
-	cmd->out_fd = 1;
-	cmd->cmd_nbr = cmd_nbr;
-    return (0);
-}
-
 int	initialize_executor(t_minishell *ms)
 {
 	int	i;
@@ -66,8 +51,9 @@ int	initialize_executor(t_minishell *ms)
 	i = 0;
 	while (i < ms->exec->num_of_cmds)
 	{
-		if (initialize_cmd(ms->exec->cmds[i], i) == 1)
-			return (free_cmds(ms->exec->cmds), free(ms->exec), 1);
+		ms->exec->cmds[i] = initialize_cmd(ms->exec->cmds[i], i);
+		if (ms->exec->cmds[i] == NULL)
+			return (free_cmds(ms->exec->cmds, i), free(ms->exec), 1);
 		i++;
 	}
 	ms->exec->paths = NULL;
@@ -75,4 +61,19 @@ int	initialize_executor(t_minishell *ms)
 	ms->exec->cpids = NULL;
 	ms->exec->envp = ms->envp;
 	return (0);
+}
+
+t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr)
+{	
+	cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	if (cmd == NULL)
+		return (NULL);
+	cmd->simp_cmd = NULL;
+	cmd->cmd_path = NULL;
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
+	cmd->in_fd = 0;
+	cmd->out_fd = 1;
+	cmd->cmd_nbr = cmd_nbr;
+    return (cmd);
 }
