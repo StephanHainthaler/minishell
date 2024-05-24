@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 15:07:00 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/24 16:14:38 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int		get_dequoted_strlen(char *str);
 void	handle_quotes_in_expansion(t_list *node, char quote);
 
 //parser.c
+int		get_fd(char *file, bool is_in_fd);
 int		parse_input(t_minishell *ms);
 bool	is_valid_input(t_lexer *lex);
 int		count_cmds(t_list **list);
