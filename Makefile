@@ -6,7 +6,7 @@
 #    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/05/23 14:55:56 by juitz            ###   ########.fr        #
+#    Updated: 2024/05/24 17:32:51 by juitz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,8 @@ $(SRC_DIR)/lexer.c \
 $(SRC_DIR)/expansion.c \
 $(SRC_DIR)/quotation.c \
 $(SRC_DIR)/initialization.c \
+$(SRC_DIR)/parser.c \
+$(SRC_DIR)/executor_utils.c \
 $(SRC_DIR)/free.c \
 $(SRC_DIR)/input_checks.c
 

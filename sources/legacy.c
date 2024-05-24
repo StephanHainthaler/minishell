@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 14:04:01 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/24 17:36:50 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,97 @@ char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos)
 	// ft_putendl_fd(exp_str, 1);
 	return (free(to_expand), free(exp_var), exp_str);
 }
+char	**store_input_in_struct(t_minishell *ms)
+{
+	t_list *current;
+	int		i;
+
+	current = ms->lex->token_list;
+	i = 0;
+	while (current)
+	{
+		if (current->type >= 1 && current->type <= 7)
+		{
+			ms->cmd->simp_cmd[i] = ft_strdup(current->attr);
+			if (ms->cmd->simp_cmd[i] == NULL)
+				return (ft_free(ms->cmd->simp_cmd), NULL);
+			i++;
+		}
+		current = current->next;
+	}
+	ms->cmd->simp_cmd[i] = NULL;
+	return (ms->cmd->simp_cmd);
+}
+
+char **parse_tokens_to_struct(t_minishell *ms)
+{
+	ms->cmd = malloc(sizeof(t_cmd));
+	if (ms->cmd == NULL)
+		return (NULL);
+	ms->cmd->num_of_args = ft_lstsize(ms->lex->token_list);
+	ms->cmd->num_of_aval_simp_cmds = 0;
+	ms->cmd->simp_cmd = malloc((ms->cmd->num_of_args + 1) * sizeof(char *));
+	if (ms->cmd->simp_cmd == NULL)
+		return (free(ms->cmd), NULL);
+	store_input_in_struct(ms);
+	return (ms->cmd->simp_cmd);
+}
+
+int	count_pipes(t_minishell *ms)
+{
+	t_list *current;
+
+	current = ms->lex->token_list;
+	while (current != NULL)
+	{
+		if (ms->lex->token_list->type == PIPE)
+			ms->cmd->num_of_simp_cmds++;
+		current = current->next;
+	}
+	ms->lex->token_list = current;
+	return (ms->cmd->num_of_simp_cmds + 1);
+}
+
+char ***split_commands(t_minishell *ms)
+{
+	t_list *current;
+	int i;
+	int j;
+
+	i = 0;
+	current = ms->lex->token_list;
+	while (current)
+	{
+		while (current->type != PIPE)
+		{
+			if (current->type == WORD)
+			{
+				ft_stradd_tostrarr(ms->cmd->simp_cmd, current->attr);
+			if (current->type == RE_IN)
+				//change fd
+			current = current->next;
+		}
+		if (current->type == PIPE)
+		{
+			ms->cmd->
+		}
+
+	ms->lex->token_list = current;
+	ms->cmd->cmd_arr = malloc(sizeof(char **) * (ms->cmd->num_of_simp_cmds + 1));
+	while (i <= ms->cmd->num_of_simp_cmds)
+	{
+		ms->cmd->cmd_arr[i] = ft_split(ms->cmd->simp_cmd[i], '|');
+		if(!ms->cmd->cmd_arr)
+			return (NULL);
+		i++;
+	}
+	ms->cmd->cmd_arr[i] = NULL;
+	return (ms->cmd->cmd_arr);
+}
+
+	// ms->cmd->simp_cmd = ft_split(ms->lex->input, '|');
+	// if(!ms->cmd->simp_cmd)
+	// 	return (NULL);
 
 // t_list	*get_redir_token_old(t_lexer *lex)
 // {
