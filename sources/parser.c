@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/23 15:40:00 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/24 15:56:00 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	count_cmds(t_list **list)
 int		get_cmds(t_executor *exec, t_list **list)
 {
 	t_list	*current;
+	t_cmd	cmd;
 	int i;
 
 	i = 0;
@@ -60,10 +61,17 @@ int		get_cmds(t_executor *exec, t_list **list)
 					return (1); //free)
 				ft_putstrarr_fd(exec->cmds[i]->simp_cmd, 1);
 			}
-			// else if (current->type == RE_IN)
-			// 	ms->cmd->infile = current->next->attr;
-			// else if (current->type == RE_OUT)
-			// 	ms->cmd->outfile = current->next->attr;
+			else if (current->type == RE_IN || current->type == APPEND)
+			{
+				cmd.infile = current->next->attr;
+				cmd.in_fd = open(cmd.infile, O_WRONLY | O_TRUNC | O_CREAT, 0777);
+			}
+			else if (current->type == RE_OUT)
+			{
+				cmd.outfile = current->next->attr;
+				cmd.out_fd = open(cmd.outfile, O_RDONLY, 0777);
+			}
+			//else if (current->type == HERE_DOC)
 			printf("test5\n");
 			//NULL CHECK
 			current = current->next;
