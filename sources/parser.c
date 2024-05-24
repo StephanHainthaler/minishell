@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/24 16:16:31 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/24 16:56:24 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,8 @@ int		get_cmds(t_executor *exec, t_list **list)
 		// 	return (NULL);
 		while (current->next != NULL && current->type != PIPE)
 		{
-			printf("test3\n");
 			if (current->type == WORD)
 			{
-				printf("test4\n");
 				exec->cmds[i]->simp_cmd = ft_stradd_tostrarr(exec->cmds[i]->simp_cmd, current->attr);
 				if (!exec->cmds[i]->simp_cmd)
 					return (1); //free)
