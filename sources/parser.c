@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/23 12:53:09 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/27 11:56:53 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,77 @@
 
 int	parse_input(t_minishell *ms)
 {
+	int	i;
+
 	if (initialize_executor(ms) == 1)
 		return (1);
-	// if (get_cmds(ms->exec, &ms->lex->token_list) == 1)
-	// 	return (free_executor(ms->exec), 1);
+	if (get_cmds(ms->exec, &ms->lex->token_list) == 1)
+		return (free_executor(ms->exec), 1);
+	printf("Print all cmds:\n");
+	i = 0;
+	while (i < ms->exec->num_of_cmds)
+		ft_print_cmd(ms->exec->cmds[i++]);
+	printf("\n");
+	return (0);
+}
+
+// int	parse_input(t_minishell *ms)
+// {
+// 	if (initialize_executor(ms) == 1)
+// 		return (1);
+// 	// if (get_cmds(ms->exec, &ms->lex->token_list) == 1)
+// 	// 	return (free_executor(ms->exec), 1);
+// 	return (0);
+// }
+
+
+int		get_cmds(t_executor *exec, t_list **list)
+{
+	t_list	*current;
+	int i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	current = *list;
+	while (current) //&& i < ms->cmds->num_of_simp_cmds + 1)
+	{
+		if (current->type == WORD)
+		{
+			exec->cmds[i]->simp_cmd = ft_stradd_tostrarr(exec->cmds[i]->simp_cmd, current->attr);
+			if (exec->cmds[i]->simp_cmd == NULL)
+				return (1); //free)
+			printf("Added %s to simp_cmd\n", exec->cmds[i]->simp_cmd[j]);
+			j++;
+		}
+		if (current->type == RE_IN || current->type == APPEND)
+		{
+			current = current->next;
+			exec->cmds[i]->infile = current->attr;
+			exec->cmds[i]->in_fd = get_fd(exec->cmds[i]->infile, true);
+		}
+		if (current->type == RE_OUT)
+		{
+			current = current->next;
+			exec->cmds[i]->outfile = current->attr;
+			exec->cmds[i]->out_fd = get_fd(exec->cmds[i]->outfile, false);
+		}
+		if (current->type == PIPE)
+		{
+			printf("End of cmd\n");
+			//current = current->next;
+			//ft_print_cmd(exec->cmds[i]);
+			//current = current->next;
+			exec->cmds[i]->cmd_nbr = i;
+			j = 0;
+			i++;
+		}
+			//else if (current->type == HERE_DOC)
+			//NULL CHECK
+		printf("Next node\n");
+		current = current->next;
+	}
+	printf("End of cmd\n");
 	return (0);
 }
 
@@ -37,74 +104,20 @@ int	count_cmds(t_list **list)
 	return (num_of_cmds);
 }
 
-// int	get_cmds(t_executor *exec, t_list **list)
-// {
+void	ft_print_cmd(t_cmd *cmd)
+{
+	size_t	i;
 
-// 	t_list	*current;
-// 	//bool	has_wrd;
-// 	int 	i;
-
-// 	printf("Number of cmds: %d\n", exec->num_of_cmds);
-// 	i = 0;
-// 	current = *list;
-// 	printf("test0\n");
-// 	while (current && current->next) //&& i < ms->cmds->num_of_simp_cmds + 1)
-// 	{
-// 		//exec->cmds[i] = (t_cmd *)malloc(sizeof(t_cmd));
-// 		initialize_cmd(exec->cmds[i], i);
-// 		//NULL CHECK
-// 		// cmds->simp_cmd = malloc(sizeof(char *) * (ms->cmds->num_of_args + 1));
-// 		// if (!cmds->simp_cmd)
-// 		// 	return (NULL);
-// 		//has_wrd = false;
-// 		while (current->next != NULL && current->type != PIPE)
-// 		{
-// 			if (current->type == WORD)
-// 			{
-// 				has_wrd = true;
-// 				ms->cmds[i]->simp_cmd = ft_stradd_tostrarr(ms->cmds[i]->simp_cmd, current->attr);
-// 				if (!ms->cmds)
-// 					return (1); //free)
-// 				ft_putstrarr_fd(ms->cmds[i]->simp_cmd, 1);
-// 			}
-// 			// else if (current->type == RE_IN)
-// 			// 	ms->cmd->infile = current->next->attr;
-// 			// else if (current->type == RE_OUT)
-// 			// 	ms->cmd->outfile = current->next->attr;
-// 			//NULL CHECK
-// 			current = current->next;
-// 		}
-// 		current = current->next;
-// 		i++;
-// 	}
-// 	// if (has_wrd == false)
-// 	// 	return (ft_error("parse error: need at least one word"), 1);
-// 	return (0);
-// }
-
-
-
-// bool is_valid_input(t_lexer *lex)
-// {
-// 	t_list *head;
-// 	t_list *current;
-
-// 	head = lex->token_list;
-// 	current = lex->token_list;
-// 	while (current != NULL)
-// 	{
-// 		if (current->type == RE_IN && current->next != NULL && current->next->type != WORD)
-// 			return (ft_error("parse error near `<'"), false);
-// 		if (current->type == RE_OUT && current->next != NULL && current->next->type != WORD)
-// 			return (ft_error("parse error near `>'"), false);
-// 		if (current->type == HERE_DOC && current->next != NULL && current->next->type != WORD)
-// 			return (ft_error("parse error near `<<'"), false);
-// 		if (current->type == APPEND && current->next != NULL && current->next->type != WORD)
-// 			return (ft_error("parse error near `>>'"), false);
-// 		if (current->type != WORD && current->next == NULL)
-// 			return (ft_error("word token required as last input"), false);
-// 		current = current->next;
-// 	}
-// 	lex->token_list = head;
-// 	return (true);
-// }
+	i = 0;
+	while (i < ft_strarrlen(cmd->simp_cmd))
+	{
+		printf("cmd->simp_cmd[%zu]: %s\n", i, cmd->simp_cmd[i]);
+		i++;
+	}
+	printf("cmd->infile: %s\n", cmd->infile);
+	printf("cmd->outfile: %s\n", cmd->outfile);
+	printf("cmd->in_fd: %d\n", cmd->in_fd);
+	printf("cmd->out_fd: %d\n", cmd->out_fd);
+	printf("cmd->cmd_nbr: %d\n", cmd->cmd_nbr);
+	//printf("cmd->cmd_path: %s\n", cmd->cmd_path);
+}

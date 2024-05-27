@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 14:31:51 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:18:06 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,17 @@ bool	is_valid_input(t_lexer *lex);
 int		count_cmds(t_list **list);
 int		count_cmds(t_list **list);
 int		get_cmds(t_executor *exec, t_list **list);
+void	ft_print_cmd(t_cmd *cmd);
 
 //executor.c
+
+//executor_single.c
+int	execute_input(t_minishell *ms);
+int	single_execution(t_executor *exec);
+void	single_child_proc(t_executor *exec, t_cmd *cmd);
+void	execute_cmd(t_executor *exec, t_cmd *cmd);
+void	exit_with_error(char *error_message, t_executor *exec);
+void	close_free_and_exit(t_executor *exec, int fd1, int fd2);
 
 //executor_utils.c
 char	**get_paths(t_executor *exec);

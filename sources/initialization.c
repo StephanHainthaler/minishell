@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 14:33:48 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/27 09:09:29 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,15 +66,15 @@ int	initialize_executor(t_minishell *ms)
 int	initialize_executor_2(t_minishell *ms)
 {
 	ms->exec->cpids = (pid_t *)malloc(ms->exec->num_of_cmds * sizeof(pid_t));
-	if (ms->exec->cpids = NULL)
+	if (ms->exec->cpids == NULL)
 		return (1);
 	ms->exec->pipes = (int **)malloc(ms->exec->num_of_pipes * sizeof(int *));
-	if (ms->exec->pipes = NULL)
+	if (ms->exec->pipes == NULL)
 		return (free(ms->exec->cpids), 1);
 	if (is_path_set(ms->envp) == true)
 	{
 		ms->exec->paths = get_paths(ms->exec);
-		if (ms->exec->paths = NULL)
+		if (ms->exec->paths == NULL)
 			return (free(ms->exec->cpids), free(ms->exec->pipes), 1);
 	}
 	return (0);
