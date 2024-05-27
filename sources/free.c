@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 14:39:27 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/27 13:57:11 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,13 @@ void	free_executor(t_executor *exec)
 {
 	if (exec == NULL)
 		return ;
+	if (exec->paths != NULL)
+		ft_free_strarr(exec->paths);
+	if (exec->cpids != NULL)
+		free(exec->cpids);
+	if (exec->pipes != NULL)
+		free(exec->pipes);
 	free_cmds(exec->cmds, exec->num_of_cmds);
-	//	exec->paths = NULL;
-	//	exec->pipes = NULL;
-	//	exec->cpids = NULL;
-	//	exec->envp = ms->envp;
 	free(exec);
 }
 
@@ -48,8 +50,6 @@ void	free_cmds(t_cmd **cmds, int	num_of_cmds)
 		return ;
 	while (i < num_of_cmds)
 	{
-		if (cmds[i]->simp_cmd != NULL)
-			ft_free_strarr(cmds[i]->simp_cmd);
 		if (cmds[i]->cmd_path != NULL)
 			free(cmds[i]->cmd_path);
 		if (cmds[i]->infile != NULL)
@@ -60,6 +60,12 @@ void	free_cmds(t_cmd **cmds, int	num_of_cmds)
 			close(cmds[i]->in_fd);
 		if (cmds[i]->out_fd != 1 && cmds[i]->out_fd != -1)
 			close(cmds[i]->out_fd);
+		printf("Free test: 0\n");
+		if (cmds[i]->simp_cmd != NULL)
+		{
+			printf("Free test: 1\n");
+			ft_free_strarr(cmds[i]->simp_cmd);
+		}
 		free(cmds[i]);
 		i++;
 	}

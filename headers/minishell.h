@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/24 16:14:38 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/27 13:55:25 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_minishell
 int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
 int		initialize_lexer(t_minishell *ms);
 int		initialize_executor(t_minishell *ms);
+int		initialize_executor_2(t_minishell *ms);
 t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr);
 
 //lexer.c
@@ -111,6 +112,23 @@ int		parse_input(t_minishell *ms);
 bool	is_valid_input(t_lexer *lex);
 int		count_cmds(t_list **list);
 int		get_cmds(t_executor *exec, t_list **list);
+void	ft_print_cmd(t_cmd *cmd);
+
+//executor.c
+
+//executor_single.c
+int	execute_input(t_minishell *ms);
+int	single_execution(t_executor *exec);
+void	single_child_proc(t_executor *exec, t_cmd *cmd);
+void	execute_cmd(t_executor *exec, t_cmd *cmd);
+void	exit_with_error(char *error_message, t_executor *exec);
+void	close_free_and_exit(t_executor *exec, int fd1, int fd2);
+
+//executor_utils.c
+char	**get_paths(t_executor *exec);
+char	*get_cmd_path(t_executor *exec, t_cmd *cmd);
+int		get_fd(char *file, bool is_in_fd);
+bool	is_path_set(char *envp[]);
 
 //free.c
 void	free_minishell(t_minishell *ms);

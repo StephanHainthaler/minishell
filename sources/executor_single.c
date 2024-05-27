@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/22 12:52:49 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/23 14:47:49 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,30 @@
 
 int	execute_input(t_minishell *ms)
 {
-	if (initialize_executor(ms) == 1)
+	if (initialize_executor_2(ms) == 1)
 		return (1);
-	ms->exec->is_path_set = is_path_set(ms->exec->envp);
-	if (ms->exec->is_path_set == true)
+	if (ms->exec->num_of_cmds == 1)
 	{
-		ms->exec->paths = get_paths(ms->exec);
-		if (ms->exec->paths == NULL)
-			exit_with_error("malloc error", ms->exec);
+		if (single_execution(ms->exec) == 1)
+			return (1);
 	}
-	// if (ms->exec->num_of_cmds > 1)
+	// else
+	// {
 	// 	if (piping(ms->exec) == 1)
 	// 		return (1);
-	// else
-	if (single_execution(ms->exec) == 1)
-		return (1);
+	// }
 	return (0);
 }
 
 int	single_execution(t_executor *exec)
 {
-	int		status;
+	int	status;
 
 	exec->cpids[0] = fork();
 	if (exec->cpids[0] == -1)
-		exit_with_error("fork error", exec);
+		return (1);
 	if (exec->cpids[0] == 0)
 		single_child_proc(exec, exec->cmds[0]);
-
-	//waitpid(exec->cpid1, NULL, 0);
 	waitpid(exec->cpids[0], &status, 0);
 	//free_exec(exec);
 	//change last cmd status in ms
@@ -72,7 +67,7 @@ void	single_child_proc(t_executor *exec, t_cmd *cmd)
 		}
 		close(cmd->out_fd);
 	}
-	if (exec->is_path_set == true)
+	if (exec->paths != NULL)
 	{
 		cmd->cmd_path = get_cmd_path(exec, 0);
 		if (cmd->cmd_path == NULL)
@@ -92,7 +87,8 @@ void	execute_cmd(t_executor *exec, t_cmd *cmd)
 	{
 		ft_putstr_fd(cmd->cmd_path, 2);
 		ft_putendl_fd(": command not found", 2);
-		//free_exec(exec);
+		ft_free_strarr(exec->envp);
+		free_executor(exec);
 		exit(127);
 	}
 }
