@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/27 13:40:43 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/27 15:31:44 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	free_lexer(t_lexer *lex)
 	if (lex->token_list != NULL)
 		ft_lstclear(&lex->token_list);
 	free(lex);
+	lex = NULL;
 }
 
 void	free_executor(t_executor *exec)
@@ -39,6 +40,7 @@ void	free_executor(t_executor *exec)
 		free(exec->pipes);
 	free_cmds(exec->cmds, exec->num_of_cmds);
 	free(exec);
+	exec = NULL;
 }
 
 void	free_cmds(t_cmd **cmds, int	num_of_cmds)
@@ -60,16 +62,14 @@ void	free_cmds(t_cmd **cmds, int	num_of_cmds)
 			close(cmds[i]->in_fd);
 		if (cmds[i]->out_fd != 1 && cmds[i]->out_fd != -1)
 			close(cmds[i]->out_fd);
-		printf("Free test: 0\n");
 		if (cmds[i]->simp_cmd != NULL)
-		{
-			printf("Free test: 1\n");
 			ft_free_strarr(cmds[i]->simp_cmd);
-		}
 		free(cmds[i]);
+		cmds[i] = NULL;
 		i++;
 	}
 	free(cmds);
+	cmds = NULL;
 }
 
 void	free_and_exit(t_minishell *ms)

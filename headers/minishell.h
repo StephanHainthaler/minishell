@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/27 10:18:06 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/27 16:14:14 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void	exit_with_error(char *error_message, t_executor *exec);
 void	close_free_and_exit(t_executor *exec, int fd1, int fd2);
 
 //executor_utils.c
-char	**get_paths(t_executor *exec);
+char	**get_paths(t_executor *exec, int *error_flag);
 char	*get_cmd_path(t_executor *exec, t_cmd *cmd);
 int		get_fd(char *file, bool is_in_fd);
 bool	is_path_set(char *envp[]);
