@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 13:47:48 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/28 11:30:37 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/28 12:03:57 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_free_strarr(char **strarr)
 		return ;
 	while (strarr[i] != NULL)
 	{
-		ft_free(strarr[i]);
+		free(strarr[i]);
 		i++;
 	}
 	free(strarr);
