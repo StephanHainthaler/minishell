@@ -1,33 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor_single.c                                  :+:      :+:    :+:   */
+/*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/28 11:21:41 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/28 14:18:16 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-
-
-int	single_execution(t_executor *exec)
+void	child_proc(t_executor *exec, t_cmd *cmd, int ends[])
 {
-	int	status;
-
-	exec->cpids[0] = fork();
-	if (exec->cpids[0] == -1)
-		return (1);
-	if (exec->cpids[0] == 0)
-		single_child_proc(exec, exec->cmds[0]);
-	waitpid(exec->cpids[0], &status, 0);
-	//free_exec(exec);
-	//change last cmd status in ms
-	//exit(WEXITSTATUS(status));
-	return (0);
+	if (cmd->in_fd == -1 || cmd->out_fd == -1)
+		exit_child(exec, ends[0], ends[1], 1);
+	if (handle_infile_outfile_dup(cmd) == 1)
+		exit_child(exec, ends[0], ends[1], 1);
+	if (dup2(ends[1], 1) == -1)
+	{
+		ft_putendl_fd("dup2 failed", 2);
+		exit_child(exec, ends[0], ends[1], 1);
+	}
+	close(ends[1]);
+	if (dup2(ends[0], 0) == -1)
+	{
+		ft_putendl_fd("dup2 failed", 2);
+		exit_child(exec, ends[0], -1, 1);
+	}
+	close(ends[0]);
+	if (exec->paths != NULL)
+	{
+		cmd->cmd_path = get_cmd_path(exec, exec->cmds[0]);
+		if (cmd->cmd_path == NULL)
+			exit_child(exec, -1, -1, 1);
+	}
+	execute_cmd(exec, exec->cmds[0]);
 }
 
 void	single_child_proc(t_executor *exec, t_cmd *cmd)
@@ -48,15 +57,13 @@ void	single_child_proc(t_executor *exec, t_cmd *cmd)
 	execute_cmd(exec, exec->cmds[0]);
 }
 
-void	execute_cmd(t_executor *exec, t_cmd *cmd)
+void	exit_child(t_executor *exec, int end1, int end2, int exit_status)
 {
-	if (cmd->cmd_path == NULL)
-		exit_child(exec, -1, -1, 127);
-	ft_putendl_fd("TEst", 1);
-	if (execve(cmd->cmd_path, cmd->simp_cmd, exec->envp) == -1)
-	{
-		ft_putstr_fd(cmd->cmd_path, 2);
-		ft_putendl_fd(": command not found", 2);
-		exit_child(exec, -1, -1, 127);
-	}
+	if (end1 != -1)
+		close(end1);
+	if (end2 != -1)
+		close(end2);
+	ft_free_strarr(exec->envp);
+	free_executor(exec);
+	exit(exit_status);
 }
