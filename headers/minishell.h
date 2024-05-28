@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/27 16:14:14 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/28 11:15:11 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,10 +112,14 @@ int		get_cmds(t_executor *exec, t_list **list);
 void	ft_print_cmd(t_cmd *cmd);
 
 //executor.c
+int		execute_input(t_minishell *ms);
+int		multiple_execution(t_executor *exec);
+void	child_proc(t_executor *exec, t_cmd *cmd, int ends[]);
+int		handle_infile_outfile_dup(t_cmd *cmd);
+void	exit_child(t_executor *exec, int end1, int end2, int exit_status);
 
 //executor_single.c
-int	execute_input(t_minishell *ms);
-int	single_execution(t_executor *exec);
+int		single_execution(t_executor *exec);
 void	single_child_proc(t_executor *exec, t_cmd *cmd);
 void	execute_cmd(t_executor *exec, t_cmd *cmd);
 void	exit_with_error(char *error_message, t_executor *exec);
