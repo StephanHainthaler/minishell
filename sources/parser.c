@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/27 14:21:40 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/28 14:15:50 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,9 @@ int		get_cmds(t_executor *exec, t_list **list)
 		}
 		//if (APPEND)
 		if (current->type == HERE_DOC)
+		{
+			current = current->next;
+		}
 			//NULL CHECK
 		current = current->next;
 	}
