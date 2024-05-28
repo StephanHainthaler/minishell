@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/28 14:05:08 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/28 16:10:58 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,17 +115,21 @@ int		get_cmds(t_executor *exec, t_list **list);
 void	ft_print_cmd(t_cmd *cmd);
 
 //executor.c
+int		execute_input(t_minishell *ms);
+int		multiple_execution(t_executor *exec);
+void	child_proc(t_executor *exec, t_cmd *cmd, int ends[]);
+int		handle_infile_outfile_dup(t_cmd *cmd);
+void	exit_child(t_executor *exec, int end1, int end2, int exit_status);
 
 //executor_single.c
-int	execute_input(t_minishell *ms);
-int	single_execution(t_executor *exec);
+int		single_execution(t_executor *exec);
 void	single_child_proc(t_executor *exec, t_cmd *cmd);
 void	execute_cmd(t_executor *exec, t_cmd *cmd);
 void	exit_with_error(char *error_message, t_executor *exec);
 void	close_free_and_exit(t_executor *exec, int fd1, int fd2);
 
 //executor_utils.c
-char	**get_paths(t_executor *exec);
+char	**get_paths(t_executor *exec, int *error_flag);
 char	*get_cmd_path(t_executor *exec, t_cmd *cmd);
 int		get_fd(char *file, bool is_in_fd);
 bool	is_path_set(char *envp[]);

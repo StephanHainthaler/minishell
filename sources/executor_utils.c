@@ -6,13 +6,13 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:40:11 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 13:53:49 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/28 09:13:17 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-char	**get_paths(t_executor *exec)
+char	**get_paths(t_executor *exec, int *error_flag)
 {
 	char	**paths;
 	char	*path_str;
@@ -21,19 +21,21 @@ char	**get_paths(t_executor *exec)
 	i = 0;
 	while (exec->envp[i] != NULL)
 	{
-		if (ft_strnstr(exec->envp[i], "PATH=", 5) == NULL)
+		if (ft_strncmp(exec->envp[i], "PATH=", 5) != 0)
 			i++;
 		else
 		{
-			path_str = ft_strnstr(exec->envp[i], "PATH=", 5);
-			ft_strlcpy(path_str, path_str + 5, ft_strlen(path_str) - 4);
+			path_str = ft_strdup(exec->envp[i] + 5);
+			if (path_str == NULL)
+				return (*error_flag = 1 , NULL);
 			paths = ft_split(path_str, ':');
 			if (paths == NULL)
-				return (NULL);
-			return (paths);
+				return (*error_flag = 1, free(path_str), NULL);
+			free(path_str);
+			return (*error_flag = 0, paths);
 		}
 	}
-	return (NULL);
+	return (*error_flag = 0, NULL);
 }
 
 char	*get_cmd_path(t_executor *exec, t_cmd *cmd)

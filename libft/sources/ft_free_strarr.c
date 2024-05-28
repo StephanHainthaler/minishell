@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free_strarr.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 13:47:48 by shaintha          #+#    #+#             */
-/*   Updated: 2023/12/14 13:47:54 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/28 11:30:37 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_free_strarr(char **strarr)
 		return ;
 	while (strarr[i] != NULL)
 	{
-		free(strarr[i]);
+		ft_free(strarr[i]);
 		i++;
 	}
 	free(strarr);

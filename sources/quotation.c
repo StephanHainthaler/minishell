@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:46:31 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 14:04:59 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/28 16:16:41 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	check_for_dequotation(t_list **token_list)
 					current_node->attr, 0, 0);
 				if (current_node->attr == NULL)
 					return (1);
+				current_node->was_in_quotes = true;
 			}
 		}
 		current_node = current_node->next;
