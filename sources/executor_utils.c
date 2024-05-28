@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:40:11 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/27 16:14:03 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/28 09:13:17 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	**get_paths(t_executor *exec, int *error_flag)
 			if (paths == NULL)
 				return (*error_flag = 1, free(path_str), NULL);
 			free(path_str);
-			return (paths);
+			return (*error_flag = 0, paths);
 		}
 	}
 	return (*error_flag = 0, NULL);
@@ -46,19 +46,13 @@ char	*get_cmd_path(t_executor *exec, t_cmd *cmd)
 	i = 0;
 	while (exec->paths[i] != NULL)
 	{
-		printf("Child: Path finding\n");
 		temp = ft_strjoin(exec->paths[i], "/");
 		if (temp == NULL)
 			return (NULL);
-		printf("Child: temp = %s\n", temp);
-		printf("Child: Joing\n");
-		printf("Child: simp_cmd[0] = %s\n", cmd->simp_cmd[0]);
 		cmd->cmd_path = ft_strjoin(temp, cmd->simp_cmd[0]);
 		if (cmd->cmd_path == NULL)
 			return (ft_free(temp), free_executor(exec), NULL);
-		printf("Child: Free temp\n");
 		ft_free(temp);
-		printf("Child: Check for access\n");
 		if (access(cmd->cmd_path, F_OK | X_OK) == 0)
 			return (cmd->cmd_path);
 		ft_free(cmd->cmd_path);

@@ -6,11 +6,134 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/27 09:12:56 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/28 09:13:03 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+char	*get_cmd_path(t_executor *exec, t_cmd *cmd)
+{
+	char	*temp;
+	int		i;
+
+	i = 0;
+	while (exec->paths[i] != NULL)
+	{
+		printf("Child: Path finding\n");
+		temp = ft_strjoin(exec->paths[i], "/");
+		if (temp == NULL)
+			return (NULL);
+		printf("Child: temp = %s\n", temp);
+		printf("Child: Joing\n");
+		printf("Child: simp_cmd[0] = %s\n", cmd->simp_cmd[0]);
+		cmd->cmd_path = ft_strjoin(temp, cmd->simp_cmd[0]);
+		if (cmd->cmd_path == NULL)
+			return (ft_free(temp), free_executor(exec), NULL);
+		printf("Child: Free temp\n");
+		ft_free(temp);
+		printf("Child: Check for access\n");
+		if (access(cmd->cmd_path, F_OK | X_OK) == 0)
+			return (cmd->cmd_path);
+		ft_free(cmd->cmd_path);
+		i++;
+	}
+	return (cmd->simp_cmd[0]);
+}
+
+int	execute_input(t_minishell *ms)
+{
+	if (initialize_executor_2(ms) == 1)
+		return (1);
+	if (ms->exec->num_of_cmds == 1)
+	{
+		printf("Start execution\n");
+		if (single_execution(ms->exec) == 1)
+			return (1);
+	}
+	// else
+	// {
+	// 	if (piping(ms->exec) == 1)
+	// 		return (1);
+	// }
+	return (0);
+}
+
+int	single_execution(t_executor *exec)
+{
+	int	status;
+
+	printf("Forking:\n");
+	exec->cpids[0] = fork();
+	if (exec->cpids[0] == -1)
+		return (1);
+	if (exec->cpids[0] == 0)
+		single_child_proc(exec, exec->cmds[0]);
+	printf("Parent: Waiting\n");
+	waitpid(exec->cpids[0], &status, 0);
+	//free_exec(exec);
+	//change last cmd status in ms
+	//exit(WEXITSTATUS(status));
+	return (0);
+}
+
+void	single_child_proc(t_executor *exec, t_cmd *cmd)
+{	
+	printf("Child: Start\n");
+	if (cmd->infile != NULL)
+	{
+		printf("Child: infile_fd dup\n");
+		if (dup2(cmd->in_fd, 0) == -1)
+		{
+			ft_putendl_fd("dup2 failed", 2);
+			//free();
+			exit(1);
+		}
+		close(cmd->in_fd);
+	}
+	if (cmd->outfile != NULL)
+	{
+		printf("Child: outfile_fd dup\n");
+		if (dup2(cmd->out_fd, 1) == -1)
+		{
+			ft_putendl_fd("dup2 failed", 2);
+			//free();
+			exit(1);
+		}
+		close(cmd->out_fd);
+	}
+	if (exec->paths != NULL)
+	{
+		printf("Child: Get the cmd_path\n");
+		cmd->cmd_path = get_cmd_path(exec, exec->cmds[0]);
+		if (cmd->cmd_path == NULL)
+			exit_with_error("malloc error", exec);
+		printf("Child: cmd_path = %s\n", cmd->cmd_path);
+	}
+	printf("Child: Enters execution function\n");
+	execute_cmd(exec, exec->cmds[0]);
+}
+
+void	execute_cmd(t_executor *exec, t_cmd *cmd)
+{
+	if (cmd->cmd_path == NULL)
+	{
+		printf("Child: path env does not exists\n");
+		ft_free_strarr(exec->envp);
+		free_executor(exec);
+		exit(127);
+	}
+	printf("Child: execute cmd\n");
+	if (execve(cmd->cmd_path, cmd->simp_cmd, exec->envp) == -1)
+	{
+		ft_putstr_fd(cmd->cmd_path, 2);
+		ft_putendl_fd(": command not found", 2);
+		ft_free_strarr(exec->envp);
+		free_executor(exec);
+		exit(127);
+	}
+}
+
 
 int	read_input(t_minishell *ms)
 {

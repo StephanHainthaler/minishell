@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:46:31 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/20 09:35:51 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/28 11:46:54 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	check_for_dequotation(t_list **token_list)
 					current_node->attr, 0, 0);
 				if (current_node->attr == NULL)
 					return (1);
+				current_node->was_in_quotes = true;
 			}
 		}
 		current_node = current_node->next;
