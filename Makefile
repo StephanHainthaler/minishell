@@ -6,7 +6,7 @@
 #    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/05/27 09:35:45 by shaintha         ###   ########.fr        #
+#    Updated: 2024/05/28 09:21:23 by shaintha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ $(SRC_DIR)/quotation.c \
 $(SRC_DIR)/initialization.c \
 $(SRC_DIR)/free.c \
 $(SRC_DIR)/parser.c \
+$(SRC_DIR)/executor.c \
 $(SRC_DIR)/executor_single.c \
 $(SRC_DIR)/executor_utils.c
 
