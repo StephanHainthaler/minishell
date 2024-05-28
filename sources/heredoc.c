@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:02:54 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/28 14:41:51 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/28 14:45:35 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@ void	parse_heredoc(t_minishell *ms)
 	while (ft_strncmp(ms->lex->input, delim, ft_strlen(delim)) == 0)
 	{
 		line = readline("heredoc>");
-		
+		full_input = ft_split(line, '\n');
 	}
 }
