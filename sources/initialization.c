@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/28 16:13:39 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/29 14:32:35 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,8 @@ int	initialize_executor_2(t_minishell *ms)
 	ms->exec->pipes = (int **)malloc(ms->exec->num_of_pipes * sizeof(int *));
 	if (ms->exec->pipes == NULL)
 		return (free(ms->exec->cpids), 1);
-	printf("Path is found = %d\n", is_path_set(ms->envp));
 	if (is_path_set(ms->envp) == true)
 	{
-		printf("Got paths\n");
 		ms->exec->paths = get_paths(ms->exec, &error_flag);
 		if (ms->exec->paths == NULL && error_flag == 1)
 			return (free(ms->exec->cpids), free(ms->exec->pipes), 1);

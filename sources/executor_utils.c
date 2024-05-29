@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:40:11 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/28 09:13:17 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/28 14:04:29 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*get_cmd_path(t_executor *exec, t_cmd *cmd)
 		ft_free(cmd->cmd_path);
 		i++;
 	}
-	return (cmd->simp_cmd[0]);
+	return (ft_strdup(cmd->simp_cmd[0]));
 }
 
 int	get_fd(char *file, bool is_in_fd)
@@ -94,4 +94,27 @@ bool	is_path_set(char *envp[])
 			return (true);
 	}
 	return (false);
+}
+
+int	handle_infile_outfile_dup(t_cmd *cmd)
+{
+	if (cmd->infile != NULL)
+	{
+		if (dup2(cmd->in_fd, 0) == -1)
+		{
+			ft_putendl_fd("infile dup2 failed", 2);
+			return (1);
+		}
+		close(cmd->in_fd);
+	}
+	if (cmd->outfile != NULL)
+	{
+		if (dup2(cmd->out_fd, 1) == -1)
+		{
+			ft_putendl_fd("dup2 failed", 2);
+			return (1);
+		}
+		close(cmd->out_fd);
+	}
+	return (0);
 }
