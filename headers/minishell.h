@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/29 09:03:10 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/29 09:06:30 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ int		get_fd(char *file, bool is_in_fd);
 bool	is_path_set(char *envp[]);
 
 //builtins_1.c
-
+int		handle_builtin(char **simp_cmd, char **envp);
 
 //free.c
 void	free_minishell(t_minishell *ms);
