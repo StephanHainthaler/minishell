@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
+#    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/05/28 16:10:21 by juitz            ###   ########.fr        #
+#    Updated: 2024/05/29 09:02:49 by shaintha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,8 @@ $(SRC_DIR)/free.c \
 $(SRC_DIR)/parser.c \
 $(SRC_DIR)/executor.c \
 $(SRC_DIR)/executor_single.c \
-$(SRC_DIR)/executor_utils.c
+$(SRC_DIR)/executor_utils.c \
+$(SRC_DIR)/builtins_1.c
 
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
