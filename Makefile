@@ -6,7 +6,7 @@
 #    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/05/28 14:09:38 by shaintha         ###   ########.fr        #
+#    Updated: 2024/05/29 11:20:41 by shaintha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ VFLAGS := --suppressions=./supp.supp \
 --suppressions=./supp.supp \
 --trace-children=yes \
 --track-origins=yes
+#--track-fds=yes
 
 SRC_DIR := sources
 OBJ_DIR := objects
