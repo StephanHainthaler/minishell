@@ -6,7 +6,7 @@
 #    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/05/29 14:43:31 by juitz            ###   ########.fr        #
+#    Updated: 2024/05/29 14:45:54 by juitz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ MAIN_DIR := main
 
 SRCS := $(SRC_DIR)/main.c \
 $(SRC_DIR)/lexer.c \
+$(SRC_DIR)/input_checks.c \
 $(SRC_DIR)/expansion.c \
 $(SRC_DIR)/quotation.c \
 $(SRC_DIR)/initialization.c \
@@ -40,7 +41,6 @@ $(SRC_DIR)/executor_utils.c \
 $(SRC_DIR)/free.c \
 $(SRC_DIR)/executor.c \
 $(SRC_DIR)/child.c \
-$(SRC_DIR)/executor_utils.c \
 $(SRC_DIR)/builtins_1.c
 
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))

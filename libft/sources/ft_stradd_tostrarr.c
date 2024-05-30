@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 10:53:43 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/28 16:11:52 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/30 17:57:35 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,10 @@ char	**ft_stradd_tostrarr(char **strarr, char *str)
 	new_strarr = (char **)malloc((arr_size + 1 + 1) * sizeof(char *));
 	if (new_strarr == NULL)
 		return (NULL);
-	ft_putstr_fd("test0\n", 1);
 	i = 0;
 	while (i < arr_size)
 	{
-		ft_putstr_fd(strarr[i], 1);
 		new_strarr[i] = ft_strdup(strarr[i]);
-		//ft_putstr_fd(new_strarr[i], 1);
 		if (new_strarr[i] == NULL)
 			return (ft_free_strarr(new_strarr), NULL);
 		i++;
@@ -39,7 +36,6 @@ char	**ft_stradd_tostrarr(char **strarr, char *str)
 	new_strarr[i] = NULL;
 	return (ft_free_strarr(strarr), new_strarr);
 }
-
 // int	main(void)
 // {
 // 	char	**split;

@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/29 14:32:35 by juitz            ###   ########.fr       */
+/*   Updated: 2024/05/30 15:05:09 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	initialize_lexer(t_minishell *ms)
 	if (ms->lex == NULL)
 		return (1);
 	ms->lex->token_list = NULL;
+	ms->lex->here_doc = NULL;
 	ms->lex->input = NULL;
 	ms->lex->i = 0;
 	ms->lex->envp = ms->envp;
