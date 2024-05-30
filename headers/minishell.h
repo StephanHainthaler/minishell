@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/28 15:05:38 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/30 15:40:39 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_executor
 	int		num_of_pipes;
 	char	**paths;
 	int		**pipes;
+	int		*ends;
 	pid_t	*cpids;
 	int		exit_status;
 	char	**envp;
@@ -80,7 +81,7 @@ typedef struct s_minishell
 int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
 int		initialize_lexer(t_minishell *ms);
 int		initialize_executor(t_minishell *ms);
-int		initialize_executor_2(t_minishell *ms);
+int		initialize_executor_2(t_minishell *ms, int i);
 t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr);
 
 //lexer.c
@@ -134,10 +135,10 @@ void	exit_child(t_executor *exec, int end1, int end2, int exit_status);
 int		handle_builtin(char **simp_cmd, char **envp);
 
 //free.c
-void	free_minishell(t_minishell *ms);
 void	free_lexer(t_lexer *lex);
 void	free_executor(t_executor *exec);
 void	free_cmds(t_cmd **cmds, int	num_of_cmds);
+void	free_pipes(int **pipes, int num_of_pipes);
 void	free_and_exit(t_minishell *ms);
 
 #endif
