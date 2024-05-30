@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:40:11 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/28 14:04:29 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:36:50 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	**get_paths(t_executor *exec, int *error_flag)
 		{
 			path_str = ft_strdup(exec->envp[i] + 5);
 			if (path_str == NULL)
-				return (*error_flag = 1 , NULL);
+				return (*error_flag = 1, NULL);
 			paths = ft_split(path_str, ':');
 			if (paths == NULL)
 				return (*error_flag = 1, free(path_str), NULL);
@@ -111,7 +111,7 @@ int	handle_infile_outfile_dup(t_cmd *cmd)
 	{
 		if (dup2(cmd->out_fd, 1) == -1)
 		{
-			ft_putendl_fd("dup2 failed", 2);
+			ft_putendl_fd("outfile dup2 failed", 2);
 			return (1);
 		}
 		close(cmd->out_fd);

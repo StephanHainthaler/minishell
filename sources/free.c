@@ -6,17 +6,11 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/28 12:03:19 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/30 15:42:38 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-
-void	free_minishell(t_minishell *ms)
-{
-	if (ms->envp != NULL)
-		ft_free_strarr(ms->envp);
-}
 
 void	free_lexer(t_lexer *lex)
 {
@@ -37,7 +31,7 @@ void	free_executor(t_executor *exec)
 	if (exec->cpids != NULL)
 		free(exec->cpids);
 	if (exec->pipes != NULL)
-		free(exec->pipes);
+		free_pipes(exec->pipes, exec->num_of_pipes);
 	free_cmds(exec->cmds, exec->num_of_cmds);
 	free(exec);
 	exec = NULL;
@@ -72,10 +66,32 @@ void	free_cmds(t_cmd **cmds, int	num_of_cmds)
 	cmds = NULL;
 }
 
+void	free_pipes(int **pipes, int num_of_pipes)
+{
+	int	i;
+
+	if (pipes == NULL)
+		return ;
+	i = 0;
+	while (i < num_of_pipes)
+	{
+		if (pipes[i][0] != -1)
+			close(pipes[i][0]);
+		if (pipes[i][1] != -1)
+			close(pipes[i][1]);
+		ft_free(pipes[i]);
+		pipes[i] = NULL;
+		i++;	
+	}
+	free(pipes);
+	pipes = NULL;
+}
+
 void	free_and_exit(t_minishell *ms)
 {
-	free_lexer(ms->lex);
-	free_minishell(ms);
+	if (ms->envp != NULL)
+		ft_free_strarr(ms->envp);
+	free_executor(ms->exec);
 	rl_clear_history();
 	exit(0);
 }

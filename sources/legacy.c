@@ -6,11 +6,41 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/28 09:13:03 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/05/29 09:31:47 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+int	multiple_execution(t_executor *exec)
+{
+	int	i;
+	int	status;
+	int	ends[2];
+
+	i = 0;
+	while (i < exec->num_of_pipes)
+	{
+		if (pipe(ends) == -1)
+			return (1);
+		exec->cpids[i] = fork();
+		if (exec->cpids[i] == -1)
+			return (close(ends[0]), close(ends[1]), 1);
+		if (exec->cpids[i] == 0)
+			child_proc(exec, exec->cmds[i], ends);
+		exec->cpids[i + 1] = fork();
+		if (exec->cpids[i + 1] == -1)
+			return (close(ends[0]), close(ends[1]), 1);
+		if (exec->cpids[i + 1] == 0)
+			child_proc(exec, exec->cmds[i + 1], ends);
+		close(ends[0]);
+		close(ends[1]);
+		waitpid(exec->cpids[i], NULL, 0);
+		waitpid(exec->cpids[i + 1], &status, 0);
+		i++;
+	}
+	return (0);
+}
 
 char	*get_cmd_path(t_executor *exec, t_cmd *cmd)
 {
@@ -133,7 +163,6 @@ void	execute_cmd(t_executor *exec, t_cmd *cmd)
 		exit(127);
 	}
 }
-
 
 int	read_input(t_minishell *ms)
 {
