@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 12:12:06 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/30 18:16:23 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/10 13:59:54 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	heredoc(t_lexer *lex)
 			add_history(hd_input->tmp);
 			
 			if (ft_strncmp(hd_input->tmp, delim, ft_strlen(delim) == 0))
-				return(free(lex->here_doc->tmp), free(delim)
+				return(free(lex->here_doc->tmp), free(delim))
 		}
 	}
 }
