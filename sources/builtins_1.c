@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/10 17:02:42 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/10 17:39:01 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	handle_builtin(char **simp_cmd, char **envp)
 {
 	if (ft_strncmp(simp_cmd[0], "echo", ft_strlen(simp_cmd[0])) == 0)
-		return (scuffed_echo(), 0);
+		return (scuffed_echo(simp_cmd), 0);
 	// if (ft_strncmp(simp_cmd[0], "cd", ft_strlen(simp_cmd[0])) == 0)
 	// 	return (0); //return (cd(), 0);
 	// if (ft_strncmp(simp_cmd[0], "pwd", ft_strlen(simp_cmd[0])) == 0)
