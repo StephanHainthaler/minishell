@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/11 15:41:34 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/11 15:43:16 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void scuffed_cd(char **simp_cmd)
 	else if (ft_strarrlen(simp_cmd) == 2)
 	{
 		if (chdir(simp_cmd[1]) == -1)
-			ft_error("cd: no such file or directory");
+			ft_error("cd: no such file or directory\n");
 	}
 	else
 		ft_putstr_fd("cd: too many arguments\n", 2);
