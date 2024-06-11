@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/10 17:31:36 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/11 15:33:05 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ t_list	*get_word_token(t_lexer *lex);
 t_list	*get_non_word_token(t_lexer *lex);
 
 //input_checks.c
-bool is_valid_input(t_lexer *lex);
+bool	is_valid_input(t_lexer *lex);
 
 //expansion.c
 int		check_for_expansion(t_list **token_list, char **envp);
@@ -136,8 +136,7 @@ void	exit_child(t_executor *exec, int end1, int end2, int exit_status);
 
 //builtins.c
 int		handle_builtin(char **simp_cmd, char **envp);
-char	*scuffed_echo(char **simp_cmd);
-
+void	scuffed_echo(char **simp_cmd);
 //free.c
 void	free_minishell(t_minishell *ms);
 void	free_lexer(t_lexer *lex);
