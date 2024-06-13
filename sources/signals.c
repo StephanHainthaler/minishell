@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:41:38 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/16 17:17:23 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/13 14:05:20 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ft_handle_signal(int signal, siginfo_t *info, void *context)
 		return ;
 }
 
-int	signals(t_minishell *ms)
+int	signals()
 {
 	sigemptyset(&ms->block_mask);
 	ms->sa_signal.sa_mask = ms->block_mask;
