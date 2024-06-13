@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/13 10:07:49 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/13 14:26:12 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ int	execute_input(t_minishell *ms)
 		return (1);
 	if (ms->exec->num_of_cmds == 1)
 	{
-		if (ms->exec->cmds[0]->in_fd != -1 && ms->exec->cmds[0]->out_fd != -1
-			&& ft_strncmp(ms->exec->cmds[0]->simp_cmd[0], "exit",
-			ft_strlen(ms->exec->cmds[0]->simp_cmd[0])) == 0)
-			free_and_exit(ms);
+		if (ms->exec->cmds[0]->in_fd == -1 || ms->exec->cmds[0]->out_fd == -1)
+			return (1);
+		if (handle_builtins_non_pipable(ms) == 0)
+			return (printf("End of cmd\n"), 0);
 		if (single_execution(ms->exec) == 1)
 			return (1);
 	}
@@ -34,9 +34,10 @@ int	execute_input(t_minishell *ms)
 	return (0);
 }
 
-int	single_execution(t_executor *exec)
+int	single_execution(t_executor *exec) //t_minishell *ms
 {
 	int	status;
+	//exit_status;
 
 	exec->cpids[0] = fork();
 	if (exec->cpids[0] == -1)

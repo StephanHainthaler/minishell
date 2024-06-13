@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/30 15:42:38 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:18:10 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	free_pipes(int **pipes, int num_of_pipes)
 	pipes = NULL;
 }
 
-void	free_and_exit(t_minishell *ms)
+void	free_and_exit(t_minishell *ms) //int exit_code
 {
 	if (ms->envp != NULL)
 		ft_free_strarr(ms->envp);

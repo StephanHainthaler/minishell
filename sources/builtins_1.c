@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/13 10:25:52 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/13 14:17:57 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,31 @@ int	handle_builtin(char **simp_cmd, t_executor *exec)
 		return (0);
 	else
 		return (1);
+}
+
+int	handle_builtins_non_pipable(t_minishell *ms)
+{
+	char **simp_cmd;
+
+	simp_cmd = ms->exec->cmds[0]->simp_cmd;
+	if (ft_strncmp(simp_cmd[0], "cd", ft_strlen(simp_cmd[0])) == 0)
+		return (scuffed_cd(simp_cmd), 0);
+	if (ft_strncmp(simp_cmd[0], "export", ft_strlen(simp_cmd[0])) == 0)
+	{
+		ms->envp = scuffed_export(simp_cmd, ms->envp);
+		if (ms->envp == NULL)
+			free_and_exit(ms);
+		return (0);
+	}
+	if (ft_strncmp(simp_cmd[0], "unset", ft_strlen(simp_cmd[0])) == 0)
+	{
+		if (scuffed_unset(simp_cmd, ms->envp) == 1)
+			free_and_exit(ms);
+		return (0);
+	}
+	if (ft_strncmp(simp_cmd[0], "exit", ft_strlen(simp_cmd[0])) == 0)
+		free_and_exit(ms);
+	return (1);
 }
 
 void	scuffed_echo(char **simp_cmd)
@@ -72,35 +97,30 @@ void	scuffed_pwd(char **simp_cmd)
 	else
 		ft_putendl_fd("pwd: too many arguments", 2);
 }
-void	scuffed_export(char **simp_cmd, char **envp)
+
+char	**scuffed_export(char **simp_cmd, char **envp)
 {
-	printf("Scuffed export\n");
 	int	i;
-	
+
 	if (ft_strarrlen(simp_cmd) == 1)
-	{
-		sort_strarray(envp);
-		return ;
-	}
+		return (sort_strarray(envp), envp);
 	i = 0;
 	while (envp[i] != NULL)
 	{
 		if (ft_strncmp(simp_cmd[1], envp[i], ft_strlen(simp_cmd[1])) == 0)
 		{
-			printf("Found %s\n", simp_cmd[1]);
 			//replace on envp[i]
-			return ;
+			return (envp);
 		}
 		i++;
 	}
-	//create a new one at the end of envp aka ft_stradd_tostrarr
-	printf("New env %s\n", simp_cmd[1]);
 	envp = ft_stradd_tostrarr(envp, simp_cmd[1]);
-	//NULL CHECK
-	ft_putstrarr_fd(envp, 1);
+	if (envp == NULL)
+		return (NULL);
+	return (envp);
 }
 
-void	scuffed_unset(char **simp_cmd, char **envp)
+int	scuffed_unset(char **simp_cmd, char **envp)
 {
 	int i;
 
@@ -116,4 +136,5 @@ void	scuffed_unset(char **simp_cmd, char **envp)
 		}
 		i++;
 	}
+	return (0);
 }
