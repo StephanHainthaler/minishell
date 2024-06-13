@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/13 19:20:02 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/13 19:36:12 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,11 +137,12 @@ void	exit_child(t_executor *exec, int end1, int end2, int exit_status);
 
 //builtins.c
 int		handle_builtin(char **simp_cmd, t_executor *exec);
+int		handle_builtins_non_pipable(t_minishell *ms);
 void	scuffed_echo(char **simp_cmd);
 void	scuffed_cd(char **simp_cmd);
 void	scuffed_pwd(char **simp_cmd);
-void	scuffed_export(char **simp_cmd, char **envp);
-void	scuffed_unset(char **simp_cmd, char **envp);
+char	**scuffed_export(char **simp_cmd, char **envp);
+int		scuffed_unset(char **simp_cmd, char **envp);
 
 //builtins_utils.c
 void	sort_strarray(char **strarray);

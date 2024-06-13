@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/13 19:24:59 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/13 19:28:55 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	parse_input(t_minishell *ms)
 		return (1);
 	if (get_cmds(ms->exec, &ms->lex->token_list) == 1)
 		return (free_executor(ms->exec), 1);
-	i = 0;
+	// i = 0;
 	// while (i < ms->exec->num_of_cmds)
 	// 	ft_print_cmd(ms->exec->cmds[i++]);
 	// printf("\n");
