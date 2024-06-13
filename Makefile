@@ -6,7 +6,7 @@
 #    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/05/29 11:20:41 by shaintha         ###   ########.fr        #
+#    Updated: 2024/06/13 10:05:27 by shaintha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,9 @@ $(SRC_DIR)/free.c \
 $(SRC_DIR)/parser.c \
 $(SRC_DIR)/executor.c \
 $(SRC_DIR)/executor_utils.c \
-$(SRC_DIR)/child.c
+$(SRC_DIR)/child.c \
+$(SRC_DIR)/builtins_1.c \
+$(SRC_DIR)/builtins_utils.c
 
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 

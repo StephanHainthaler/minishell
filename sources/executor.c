@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/10 12:35:55 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/13 10:07:49 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	execute_cmd(t_executor *exec, t_cmd *cmd)
 {
 	if (cmd->cmd_path == NULL)
 		exit_child(exec, -1, -1, 127);
-	if (handle_builtin(cmd->simp_cmd, exec->envp) == 0)
+	if (handle_builtin(cmd->simp_cmd, exec) == 0)
 		exit_child(exec, -1, -1, 0);
 	if (execve(cmd->cmd_path, cmd->simp_cmd, exec->envp) == -1)
 	{
@@ -96,22 +96,3 @@ void	execute_cmd(t_executor *exec, t_cmd *cmd)
 	}
 }
 
-int	handle_builtin(char **simp_cmd, char **envp)
-{
-	// if (ft_strncmp(simp_cmd[0], "echo", ft_strlen(simp_cmd[0])) == 0)
-	// 	return (0); //return (echo(), 0);
-	// if (ft_strncmp(simp_cmd[0], "cd", ft_strlen(simp_cmd[0])) == 0)
-	// 	return (0); //return (cd(), 0);
-	// if (ft_strncmp(simp_cmd[0], "pwd", ft_strlen(simp_cmd[0])) == 0)
-	// 	return (0); //return (pwd(), 0);
-	// if (ft_strncmp(simp_cmd[0], "export", ft_strlen(simp_cmd[0])) == 0)
-	// 	return (0); //return (export(), 0);
-	// if (ft_strncmp(simp_cmd[0], "unset", ft_strlen(simp_cmd[0])) == 0)
-	// 	return (0); //return (unset(), 0);
-	if (ft_strncmp(simp_cmd[0], "env", ft_strlen(simp_cmd[0])) == 0)
-		return (ft_putstrarr_fd(envp, 1), 0);
-	if (ft_strncmp(simp_cmd[0], "exit", ft_strlen(simp_cmd[0])) == 0)
-		return (0);
-	else
-		return (1);
-}
