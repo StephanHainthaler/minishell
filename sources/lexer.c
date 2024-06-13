@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/30 15:13:18 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/13 19:23:44 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ int	read_input(t_minishell *ms)
 			break ;
 	}
 	add_history(ms->lex->input);
-	if (ft_strncmp(ms->lex->input, "exit", 4) == 0)
-		free_and_exit(ms);
 	if (tokenize_input(ms->lex) == 1)
 		return (1);
 	if (check_for_expansion(&ms->lex->token_list, ms->envp) == 1)

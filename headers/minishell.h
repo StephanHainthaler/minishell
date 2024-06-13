@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/13 09:18:07 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/13 19:20:02 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct s_executor
 	int		num_of_pipes;
 	char	**paths;
 	int		**pipes;
+	int		*ends;
 	pid_t	*cpids;
 	int		exit_status;
 	char	**envp;
@@ -81,7 +82,7 @@ typedef struct s_minishell
 int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
 int		initialize_lexer(t_minishell *ms);
 int		initialize_executor(t_minishell *ms);
-int		initialize_executor_2(t_minishell *ms);
+int		initialize_executor_2(t_minishell *ms, int i);
 t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr);
 
 //lexer.c
@@ -127,7 +128,7 @@ char	**get_paths(t_executor *exec, int *error_flag);
 char	*get_cmd_path(t_executor *exec, t_cmd *cmd);
 int		get_fd(char *file, bool is_in_fd);
 bool	is_path_set(char *envp[]);
-int		handle_infile_outfile_dup(t_cmd *cmd);
+int		handle_redirection(t_cmd *cmd);
 
 //child.c
 void	child_proc(t_executor *exec, t_cmd *cmd, int ends[]);
@@ -146,10 +147,10 @@ void	scuffed_unset(char **simp_cmd, char **envp);
 void	sort_strarray(char **strarray);
 
 //free.c
-void	free_minishell(t_minishell *ms);
 void	free_lexer(t_lexer *lex);
 void	free_executor(t_executor *exec);
 void	free_cmds(t_cmd **cmds, int	num_of_cmds);
+void	free_pipes(int **pipes, int num_of_pipes);
 void	free_and_exit(t_minishell *ms);
 
 #endif

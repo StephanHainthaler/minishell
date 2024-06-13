@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/30 15:05:09 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/13 19:22:17 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	initialize_lexer(t_minishell *ms)
 int	initialize_executor(t_minishell *ms)
 {
 	int	i;
-	
+
 	ms->exec = (t_executor *)malloc(sizeof(t_executor));
 	if (ms->exec == NULL)
 		return (1);
@@ -64,7 +64,7 @@ int	initialize_executor(t_minishell *ms)
 	return (0);
 }
 
-int	initialize_executor_2(t_minishell *ms)
+int	initialize_executor_2(t_minishell *ms, int i)
 {
 	int	error_flag;
 
@@ -75,11 +75,20 @@ int	initialize_executor_2(t_minishell *ms)
 	ms->exec->pipes = (int **)malloc(ms->exec->num_of_pipes * sizeof(int *));
 	if (ms->exec->pipes == NULL)
 		return (free(ms->exec->cpids), 1);
+	while (i < ms->exec->num_of_pipes)
+	{
+		ms->exec->pipes[i] = (int *)malloc(2 * sizeof(int));
+		if (ms->exec->pipes[i] == NULL)
+			return (free_pipes(ms->exec->pipes, i), 1);
+		ms->exec->pipes[i][0] = -1;
+		ms->exec->pipes[i][1] = -1;
+		i++;
+	}
 	if (is_path_set(ms->envp) == true)
 	{
 		ms->exec->paths = get_paths(ms->exec, &error_flag);
 		if (ms->exec->paths == NULL && error_flag == 1)
-			return (free(ms->exec->cpids), free(ms->exec->pipes), 1);
+			return (free(ms->exec->cpids), free_pipes(ms->exec->pipes, i), 1);
 	}
 	return (0);
 }

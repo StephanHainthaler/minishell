@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:40:11 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/29 14:43:13 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/13 19:21:28 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	**get_paths(t_executor *exec, int *error_flag)
 		{
 			path_str = ft_strdup(exec->envp[i] + 5);
 			if (path_str == NULL)
-				return (*error_flag = 1 , NULL);
+				return (*error_flag = 1, NULL);
 			paths = ft_split(path_str, ':');
 			if (paths == NULL)
 				return (*error_flag = 1, free(path_str), NULL);
@@ -96,7 +96,7 @@ bool	is_path_set(char *envp[])
 	return (false);
 }
 
-int	handle_infile_outfile_dup(t_cmd *cmd)
+int	handle_redirection(t_cmd *cmd)
 {
 	if (cmd->infile != NULL)
 	{
@@ -111,7 +111,7 @@ int	handle_infile_outfile_dup(t_cmd *cmd)
 	{
 		if (dup2(cmd->out_fd, 1) == -1)
 		{
-			ft_putendl_fd("dup2 failed", 2);
+			ft_putendl_fd("outfile dup2 failed", 2);
 			return (1);
 		}
 		close(cmd->out_fd);

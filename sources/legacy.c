@@ -6,11 +6,41 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/28 16:14:32 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/13 19:25:08 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+int	multiple_execution(t_executor *exec)
+{
+	int	i;
+	int	status;
+	int	ends[2];
+
+	i = 0;
+	while (i < exec->num_of_pipes)
+	{
+		if (pipe(ends) == -1)
+			return (1);
+		exec->cpids[i] = fork();
+		if (exec->cpids[i] == -1)
+			return (close(ends[0]), close(ends[1]), 1);
+		if (exec->cpids[i] == 0)
+			child_proc(exec, exec->cmds[i], ends);
+		exec->cpids[i + 1] = fork();
+		if (exec->cpids[i + 1] == -1)
+			return (close(ends[0]), close(ends[1]), 1);
+		if (exec->cpids[i + 1] == 0)
+			child_proc(exec, exec->cmds[i + 1], ends);
+		close(ends[0]);
+		close(ends[1]);
+		waitpid(exec->cpids[i], NULL, 0);
+		waitpid(exec->cpids[i + 1], &status, 0);
+		i++;
+	}
+	return (0);
+}
 
 char	**store_input_in_struct(t_minishell *ms)
 {
@@ -50,6 +80,124 @@ char **parse_tokens_to_struct(t_minishell *ms)
 }
 
 t_simp_cmd *parse_tokens_to_struct(t_minishell *ms)
+	i = 0;
+	while (exec->paths[i] != NULL)
+	{
+		printf("Child: Path finding\n");
+		temp = ft_strjoin(exec->paths[i], "/");
+		if (temp == NULL)
+			return (NULL);
+		printf("Child: temp = %s\n", temp);
+		printf("Child: Joing\n");
+		printf("Child: simp_cmd[0] = %s\n", cmd->simp_cmd[0]);
+		cmd->cmd_path = ft_strjoin(temp, cmd->simp_cmd[0]);
+		if (cmd->cmd_path == NULL)
+			return (ft_free(temp), free_executor(exec), NULL);
+		printf("Child: Free temp\n");
+		ft_free(temp);
+		printf("Child: Check for access\n");
+		if (access(cmd->cmd_path, F_OK | X_OK) == 0)
+			return (cmd->cmd_path);
+		ft_free(cmd->cmd_path);
+		i++;
+	}
+	return (cmd->simp_cmd[0]);
+}
+
+int	execute_input(t_minishell *ms)
+{
+	if (initialize_executor_2(ms) == 1)
+		return (1);
+	if (ms->exec->num_of_cmds == 1)
+	{
+		printf("Start execution\n");
+		if (single_execution(ms->exec) == 1)
+			return (1);
+	}
+	// else
+	// {
+	// 	if (piping(ms->exec) == 1)
+	// 		return (1);
+	// }
+	return (0);
+}
+
+int	single_execution(t_executor *exec)
+{
+	int	status;
+
+	printf("Forking:\n");
+	exec->cpids[0] = fork();
+	if (exec->cpids[0] == -1)
+		return (1);
+	if (exec->cpids[0] == 0)
+		single_child_proc(exec, exec->cmds[0]);
+	printf("Parent: Waiting\n");
+	waitpid(exec->cpids[0], &status, 0);
+	//free_exec(exec);
+	//change last cmd status in ms
+	//exit(WEXITSTATUS(status));
+	return (0);
+}
+
+void	single_child_proc(t_executor *exec, t_cmd *cmd)
+{	
+	printf("Child: Start\n");
+	if (cmd->infile != NULL)
+	{
+		printf("Child: infile_fd dup\n");
+		if (dup2(cmd->in_fd, 0) == -1)
+		{
+			ft_putendl_fd("dup2 failed", 2);
+			//free();
+			exit(1);
+		}
+		close(cmd->in_fd);
+	}
+	if (cmd->outfile != NULL)
+	{
+		printf("Child: outfile_fd dup\n");
+		if (dup2(cmd->out_fd, 1) == -1)
+		{
+			ft_putendl_fd("dup2 failed", 2);
+			//free();
+			exit(1);
+		}
+		close(cmd->out_fd);
+	}
+	if (exec->paths != NULL)
+	{
+		printf("Child: Get the cmd_path\n");
+		cmd->cmd_path = get_cmd_path(exec, exec->cmds[0]);
+		if (cmd->cmd_path == NULL)
+			exit_with_error("malloc error", exec);
+		printf("Child: cmd_path = %s\n", cmd->cmd_path);
+	}
+	printf("Child: Enters execution function\n");
+	execute_cmd(exec, exec->cmds[0]);
+}
+
+void	execute_cmd(t_executor *exec, t_cmd *cmd)
+{
+	if (cmd->cmd_path == NULL)
+	{
+		printf("Child: path env does not exists\n");
+		ft_free_strarr(exec->envp);
+		free_executor(exec);
+		exit(127);
+	}
+	printf("Child: execute cmd\n");
+	if (execve(cmd->cmd_path, cmd->simp_cmd, exec->envp) == -1)
+	{
+		ft_putstr_fd(cmd->cmd_path, 2);
+		ft_putendl_fd(": command not found", 2);
+		ft_free_strarr(exec->envp);
+		free_executor(exec);
+		exit(127);
+	}
+}
+
+int	read_input(t_minishell *ms)
 {
 	t_list	*current;
 	int		i;

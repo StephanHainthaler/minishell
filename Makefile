@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
+#    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/06/13 09:24:58 by shaintha         ###   ########.fr        #
+#    Updated: 2024/06/13 19:11:03 by juitz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ VFLAGS := --suppressions=./supp.supp \
 --suppressions=./supp.supp \
 --trace-children=yes \
 --track-origins=yes
+#--track-fds=yes
 
 SRC_DIR := sources
 OBJ_DIR := objects
@@ -38,8 +39,6 @@ $(SRC_DIR)/quotation.c \
 $(SRC_DIR)/initialization.c \
 $(SRC_DIR)/parser.c \
 $(SRC_DIR)/executor_utils.c \
-$(SRC_DIR)/free.c \
-$(SRC_DIR)/executor.c \
 $(SRC_DIR)/child.c \
 $(SRC_DIR)/builtins_1.c \
 $(SRC_DIR)/builtins_utils.c
