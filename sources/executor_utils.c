@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:40:11 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/29 12:36:50 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/10 12:44:27 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ bool	is_path_set(char *envp[])
 	return (false);
 }
 
-int	handle_infile_outfile_dup(t_cmd *cmd)
+int	handle_redirection(t_cmd *cmd)
 {
 	if (cmd->infile != NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/28 14:18:16 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/10 12:43:22 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	child_proc(t_executor *exec, t_cmd *cmd, int ends[])
 {
 	if (cmd->in_fd == -1 || cmd->out_fd == -1)
 		exit_child(exec, ends[0], ends[1], 1);
-	if (handle_infile_outfile_dup(cmd) == 1)
+	if (handle_redirection(cmd) == 1)
 		exit_child(exec, ends[0], ends[1], 1);
 	if (dup2(ends[1], 1) == -1)
 	{
@@ -43,7 +43,7 @@ void	single_child_proc(t_executor *exec, t_cmd *cmd)
 {	
 	if (cmd->in_fd == -1 || cmd->out_fd == -1)
 		exit_child(exec, -1, -1, 1);
-	if (handle_infile_outfile_dup(cmd) == 1)
+	if (handle_redirection(cmd) == 1)
 		exit_child(exec, -1, -1, 1);
 	if (exec->paths != NULL)
 	{

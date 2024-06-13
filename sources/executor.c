@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/29 12:33:38 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/10 12:35:55 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	multiple_execution(t_executor *exec)
 	i = 0;
 	while (i < exec->num_of_pipes)
 	{
-		printf("Pipe number %d\n", i);
+		printf("Pipe number %d\n", i + 1);
 		if (pipe(exec->pipes[i]) == -1)
 			return (1);
 		exec->cpids[i] = fork();
