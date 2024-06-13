@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/12 16:38:05 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/13 09:18:07 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ void	single_child_proc(t_executor *exec, t_cmd *cmd);
 void	exit_child(t_executor *exec, int end1, int end2, int exit_status);
 
 //builtins.c
-int		handle_builtin(char **simp_cmd, t_executor exec);
+int		handle_builtin(char **simp_cmd, t_executor *exec);
 void	scuffed_echo(char **simp_cmd);
 void	scuffed_cd(char **simp_cmd);
 void	scuffed_pwd(char **simp_cmd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/29 14:43:47 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/13 09:15:46 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	execute_cmd(t_executor *exec, t_cmd *cmd)
 {
 	if (cmd->cmd_path == NULL)
 		exit_child(exec, -1, -1, 127);
-	if (handle_builtin(cmd->simp_cmd, exec->envp) == 0)
+	if (handle_builtin(cmd->simp_cmd, exec) == 0)
 		exit_child(exec, -1, -1, 0);
 	if (execve(cmd->cmd_path, cmd->simp_cmd, exec->envp) == -1)
 	{

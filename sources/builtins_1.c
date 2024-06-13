@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/12 16:38:24 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/13 09:32:47 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 #include <string.h>
 
-int	handle_builtin(char **simp_cmd, t_executor exec)
+int	handle_builtin(char **simp_cmd, t_executor *exec)
 {
 	if (ft_strncmp(simp_cmd[0], "echo", ft_strlen(simp_cmd[0])) == 0)
 		return (scuffed_echo(simp_cmd), 0);
@@ -22,11 +22,11 @@ int	handle_builtin(char **simp_cmd, t_executor exec)
 	if (ft_strncmp(simp_cmd[0], "pwd", ft_strlen(simp_cmd[0])) == 0)
 		return (scuffed_pwd(simp_cmd), 0);
 	if (ft_strncmp(simp_cmd[0], "export", ft_strlen(simp_cmd[0])) == 0)
-		return (scuffed_export(simp_cmd, exec.envp), 0);
+		return (scuffed_export(simp_cmd, exec->envp), 0);
 	if (ft_strncmp(simp_cmd[0], "unset", ft_strlen(simp_cmd[0])) == 0)
-		return (scuffed_unset(simp_cmd, exec.envp), 0);
+		return (scuffed_unset(simp_cmd, exec->envp), 0);
 	if (ft_strncmp(simp_cmd[0], "env", ft_strlen(simp_cmd[0])) == 0)
-		return (ft_putstrarr_fd(exec.envp, 1), 0);
+		return (ft_putstrarr_fd(exec->envp, 1), 0);
 	if (ft_strncmp(simp_cmd[0], "exit", ft_strlen(simp_cmd[0])) == 0)
 		return (0);
 	else
@@ -75,23 +75,28 @@ void	scuffed_pwd(char **simp_cmd)
 void	scuffed_export(char **simp_cmd, char **envp)
 {
 	if (ft_strarrlen(simp_cmd) == 1)
-		sort_strarray(simp_cmd);
-	else if //variable == set
-		//free old_var;
-		ft_stradd_tostrarr(exec.envp, simp_cmd[1]);
-	else if //variable == unset
-		ft_stradd_tostrarr(exec.envp, simp_cmd[1]);
+		sort_strarray(envp);
+	// else if //variable == set
+	// 	//free old_var;
+	// 	ft_stradd_tostrarr(exec.envp, simp_cmd[1]);
+	// else if //variable == unset
+	// 	ft_stradd_tostrarr(exec.envp, simp_cmd[1]);
 }
 
 void	scuffed_unset(char **simp_cmd, char **envp)
 {
 	int i;
 
+	printf("Suffed unset\n");
 	i = 0;
-	while (envp != NULL)
+	while (envp[i] != NULL)
 	{
-		if (strncmp(simp_cmd[1], envp[i], ft_strlen(envp[i])) == 0)
+		if (strncmp(simp_cmd[1], envp[i], ft_strlen(simp_cmd[1])) == 0)
+		{
+			printf("Found to delete %s\n", envp[i]);
+			free(envp[i]);
 			envp[i] = NULL;
+		}
 		i++;
 	}
 }

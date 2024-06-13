@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/05/28 16:10:00 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/13 09:26:13 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ int	parse_input(t_minishell *ms)
 	if (get_cmds(ms->exec, &ms->lex->token_list) == 1)
 		return (free_executor(ms->exec), 1);
 	i = 0;
-	while (i < ms->exec->num_of_cmds)
-		ft_print_cmd(ms->exec->cmds[i++]);
-	printf("\n");
+	// while (i < ms->exec->num_of_cmds)
+	// 	ft_print_cmd(ms->exec->cmds[i++]);
+	// printf("\n");
 	return (0);
 }
 
