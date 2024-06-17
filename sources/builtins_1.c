@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/13 19:26:32 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/17 14:19:59 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ void	scuffed_echo(char **simp_cmd)
 	i = 1;
 	while (simp_cmd[i])
 	{
+		if (ft_strncmp(simp_cmd[1], "-n", ft_strlen(simp_cmd[1])) == 0)
+			i++;
 		ft_putstr_fd(simp_cmd[i], 1);
 		if (simp_cmd[i + 1])
 			ft_putstr_fd(" ", 1);
