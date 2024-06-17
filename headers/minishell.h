@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/20 09:32:55 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/17 12:36:31 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,37 +44,46 @@ typedef struct s_lexer
 	char	**envp;
 }			t_lexer;
 
+typedef struct s_cmd
+{
+    char	**simp_cmd;
+    char	*cmd_path;
+    char	*infile;
+    char	*outfile;
+    int		in_fd;
+    int		out_fd;
+    int		cmd_nbr;
+}            t_cmd;
+
 typedef struct s_executor
 {
-	char	**simp_cmd;
+	t_cmd	**cmds;
+	int		num_of_cmds;
+	int		num_of_pipes;
 	char	**paths;
-	char	*cmd_path;
-	bool	is_path_set;
+	int		**pipes;
+	int		*ends;
+	pid_t	*cpids;
+	int		exit_status;
 	char	**envp;
-	// char	*infile;
-	// char	*outfile;
-	// int		fd_infile;
-	// int		fd_outfile;
-	// char	**cmds;
-	// char	**split_cmd;
-	// bool	is_path_set;
-	// int		pipe;
-	// pid_t	cpid1;
-	// pid_t	cpid2;
-	// char	**envp;
 }			t_executor;
 
 typedef struct s_minishell
 {
-	t_lexer	*lex;
-	int		argc;
-	char	**argv;
-	char	**envp;
-}			t_minishell;
+	t_lexer		*lex;
+	t_executor	*exec;
+	int			last_exit_code;
+	int			argc;
+	char		**argv;
+	char		**envp;
+}				t_minishell;
 
 //initialization.c 
 int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
 int		initialize_lexer(t_minishell *ms);
+int		initialize_executor(t_minishell *ms);
+int		initialize_executor_2(t_minishell *ms, int i);
+t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr);
 
 //lexer.c
 int		read_input(t_minishell *ms);
@@ -84,10 +93,11 @@ t_list	*get_word_token(t_lexer *lex);
 t_list	*get_non_word_token(t_lexer *lex);
 
 //expansion.c
-int		check_for_expansion(t_list **token_list, char **envp);
-char	*handle_expansion(t_list *node, char **envp, int *i);
+int		check_for_expansion(t_list **token_list, char **envp, int ec);
+char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
 char	*handle_invalid_expansion(char *str, int len, int pos);
+char	*handle_exit_code_expansion(t_list *node, int exit_code, int *i);
 int		get_envname_len(t_list *node, int *i);
 
 //quotation.c
@@ -97,9 +107,50 @@ char	*handle_dequotation(char *to_trim, int i, int j);
 int		get_dequoted_strlen(char *str);
 void	handle_quotes_in_expansion(t_list *node, char quote);
 
+//parser.c
+int		parse_input(t_minishell *ms);
+bool	is_valid_input(t_lexer *lex);
+int		count_cmds(t_list **list);
+int		count_cmds(t_list **list);
+int		get_cmds(t_executor *exec, t_list **list);
+void	ft_print_cmd(t_cmd *cmd);
+
+//executor.c
+int		execute_input(t_minishell *ms);
+int		single_execution(t_executor *exec);
+int		multiple_execution(t_executor *exec);
+void	execute_cmd(t_executor *exec, t_cmd *cmd);
+
+//executor_utils.c
+char	**get_paths(t_executor *exec, int *error_flag);
+char	*get_cmd_path(t_executor *exec, t_cmd *cmd);
+int		get_fd(char *file, bool is_in_fd, bool is_append);
+bool	is_path_set(char *envp[]);
+int		handle_redirection(t_cmd *cmd);
+
+//child.c
+void	child_proc(t_executor *exec, t_cmd *cmd, int ends[]);
+void	single_child_proc(t_executor *exec, t_cmd *cmd);
+void	exit_child(t_executor *exec, int end1, int end2, int exit_status);
+
+//builtins_1.c
+int		handle_builtin(char **simp_cmd, t_executor *exec);
+int		handle_builtins_non_pipable(t_minishell *ms);
+void	scuffed_echo(char **simp_cmd);
+void	scuffed_cd(char **simp_cmd);
+void	scuffed_pwd(char **simp_cmd);
+char	**scuffed_export(char **simp_cmd, char **envp);
+int		scuffed_unset(char **simp_cmd, char **envp);
+
+//builtins_utils.c
+void	sort_strarray(char **strarray);
+bool	ft_are_str_indentical(char *str1, char *str2);
+
 //free.c
 void	free_lexer(t_lexer *lex);
-void	free_minishell(t_minishell *ms);
+void	free_executor(t_executor *exec);
+void	free_cmds(t_cmd **cmds, int	num_of_cmds);
+void	free_pipes(int **pipes, int num_of_pipes);
 void	free_and_exit(t_minishell *ms);
 
 #endif

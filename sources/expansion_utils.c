@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_strarr.c                                   :+:      :+:    :+:   */
+/*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/14 13:47:48 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/28 12:03:57 by shaintha         ###   ########.fr       */
+/*   Created: 2024/06/17 14:01:04 by shaintha          #+#    #+#             */
+/*   Updated: 2024/06/17 14:01:22 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+#include "../headers/minishell.h"
 
-void	ft_free_strarr(char **strarr)
+int	get_envname_len(t_list *node, int *i)
 {
-	int	i;
+	int	len;
 
-	i = 0;
-	if (strarr == NULL)
-		return ;
-	while (strarr[i] != NULL)
+	len = 0;
+	while (node->attr[*i] != '\0' && ft_isspace(node->attr[*i]) == false
+		&& node->attr[*i] != '\'' && node->attr[*i] != '"')
 	{
-		free(strarr[i]);
-		i++;
+		if (node->attr[*i + 1] == '$')
+		{
+			len++;
+			break ;
+		}
+		*i = *i + 1;
+		len++;
 	}
-	free(strarr);
-	strarr = NULL;
+	return (len);
 }

@@ -6,76 +6,96 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/14 14:35:56 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/17 12:02:37 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-char	**get_paths(t_executor *exec)
+int	execute_input(t_minishell *ms)
 {
-	char	**paths;
-	char	*path_str;
-	int		i;
-
-	i = 0;
-	while (exec->envp[i] != NULL)
+	if (initialize_executor_2(ms, 0) == 1)
+		return (1);
+	if (ms->exec->num_of_cmds == 1)
 	{
-		if (ft_strnstr(exec->envp[i], "PATH=", 5) == NULL)
-			i++;
-		else
-		{
-			path_str = ft_strnstr(exec->envp[i], "PATH=", 5);
-			ft_strlcpy(path_str, path_str + 5, ft_strlen(path_str) - 4);
-			paths = ft_split(path_str, ':');
-			if (paths == NULL)
-				return (NULL);
-			return (paths);
-		}
+		if (ms->exec->cmds[0]->in_fd == -1 || ms->exec->cmds[0]->out_fd == -1)
+			return (1);
+		if (handle_builtins_non_pipable(ms) == 0)
+			return (printf("End of cmd:3\n"), 0);
+		if (single_execution(ms->exec) == 1)
+			return (1);
 	}
-	return (NULL);
+	else
+	{
+		printf("Test multi_pipes\n");
+		if (multiple_execution(ms->exec) == 1)
+			return (1);
+	}
+	ms->last_exit_code = ms->exec->exit_status;
+	return (0);
 }
 
-char	*get_cmd_path(t_executor *exec, int cmd_nbr)
+int	single_execution(t_executor *exec) //t_minishell *ms
 {
-	char	*temp;
-	int		i;
+	int	status;
 
-	// exec->split_cmd = ft_split(exec->cmds[cmd_nbr], ' ');
-	// if (exec->split_cmd == NULL)
-	// 	return (NULL);
+	exec->cpids[0] = fork();
+	if (exec->cpids[0] == -1)
+		return (1);
+	if (exec->cpids[0] == 0)
+		single_child_proc(exec, exec->cmds[0]);
+	waitpid(exec->cpids[0], &status, 0);
+	//if (WIFEXITED(status))
+	exec->exit_status = WEXITSTATUS(status);
+	//free_exec(exec);
+	//change last cmd status in ms
+	//exit(WEXITSTATUS(status));
+	return (0);
+}
 
-    //get simp_cmd form julian
-    //need to simp_cmd[0] for this function instead of split_cmd[0]
+int	multiple_execution(t_executor *exec)
+{
+	int	i;
+	int	status;
+
 	i = 0;
-	while (exec->paths[i] != NULL)
+	while (i < exec->num_of_pipes)
 	{
-		temp = ft_strjoin(exec->paths[i], "/");
-		if (temp == NULL)
-			return (NULL);
-		exec->cmd_path = ft_strjoin(temp, exec->split_cmd[0]);
-		if (exec->cmd_path == NULL)
-			return (ft_free(temp), free_exec(exec), NULL);
-		ft_free(temp);
-		if (access(exec->cmd_path, F_OK | X_OK) == 0)
-			return (exec->cmd_path);
-		ft_free(exec->cmd_path);
+		printf("Pipe number %d\n", i + 1);
+		if (pipe(exec->pipes[i]) == -1)
+			return (1);
+		exec->cpids[i] = fork();
+		if (exec->cpids[i] == -1)
+			return (close(exec->pipes[i][0]), close(exec->pipes[i][1]), 1);
+		if (exec->cpids[i] == 0)
+			child_proc(exec, exec->cmds[i], exec->pipes[i]);
+		exec->cpids[i + 1] = fork();
+		if (exec->cpids[i + 1] == -1)
+			return (close(exec->pipes[i][0]), close(exec->pipes[i][1]), 1);
+		if (exec->cpids[i + 1] == 0)
+			child_proc(exec, exec->cmds[i + 1], exec->pipes[i]);
+		close(exec->pipes[i][0]);
+		close(exec->pipes[i][1]);
+		printf("Waiting...\n");
+		waitpid(exec->cpids[i], NULL, 0);
+		waitpid(exec->cpids[i + 1], &status, 0);
+		printf("End Waiting\n");
 		i++;
 	}
-	return (exec->split_cmd[0]);
+	return (0);
 }
 
-bool	is_path_set(char *envp[])
+void	execute_cmd(t_executor *exec, t_cmd *cmd)
 {
-	int i;
-
-	i = 0;
-	while (envp[i] != NULL)
+	if (cmd->cmd_path == NULL)
+		exit_child(exec, -1, -1, 127);
+	if (handle_builtin(cmd->simp_cmd, exec) == 0)
+		exit_child(exec, -1, -1, 0);
+	if (execve(cmd->cmd_path, cmd->simp_cmd, exec->envp) == -1)
 	{
-		if (ft_strnstr(envp[i], "PATH=", 5) == NULL)
-			i++;
-		else
-			return (true);
+		ft_putstr_fd(cmd->cmd_path, 2);
+		ft_putendl_fd(": command not found", 2);
+		exit_child(exec, -1, -1, 127);
 	}
-	return (false);
 }
+
