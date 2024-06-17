@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/13 19:36:12 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/17 14:27:16 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_minishell
 {
 	t_lexer		*lex;
 	t_executor	*exec;
+	int			last_exit_code;
 	int			argc;
 	char		**argv;
 	char		**envp;
@@ -96,10 +97,11 @@ t_list	*get_non_word_token(t_lexer *lex);
 bool	is_valid_input(t_lexer *lex);
 
 //expansion.c
-int		check_for_expansion(t_list **token_list, char **envp);
-char	*handle_expansion(t_list *node, char **envp, int *i);
+int		check_for_expansion(t_list **token_list, char **envp, int ec);
+char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
 char	*handle_invalid_expansion(char *str, int len, int pos);
+char	*handle_exit_code_expansion(t_list *node, int exit_code, int *i);
 int		get_envname_len(t_list *node, int *i);
 
 //quotation.c
@@ -126,7 +128,7 @@ void	execute_cmd(t_executor *exec, t_cmd *cmd);
 //executor_utils.c
 char	**get_paths(t_executor *exec, int *error_flag);
 char	*get_cmd_path(t_executor *exec, t_cmd *cmd);
-int		get_fd(char *file, bool is_in_fd);
+int		get_fd(char *file, bool is_in_fd, bool is_append);
 bool	is_path_set(char *envp[]);
 int		handle_redirection(t_cmd *cmd);
 
@@ -146,6 +148,7 @@ int		scuffed_unset(char **simp_cmd, char **envp);
 
 //builtins_utils.c
 void	sort_strarray(char **strarray);
+bool	ft_are_str_indentical(char *str1, char *str2);
 
 //free.c
 void	free_lexer(t_lexer *lex);

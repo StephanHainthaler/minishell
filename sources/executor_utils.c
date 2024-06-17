@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:40:11 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/13 19:21:28 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/17 14:27:30 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,19 @@ char	*get_cmd_path(t_executor *exec, t_cmd *cmd)
 	return (ft_strdup(cmd->simp_cmd[0]));
 }
 
-int	get_fd(char *file, bool is_in_fd)
+int	get_fd(char *file, bool is_in_fd, bool is_append)
 {
 	int	fd;
 
 	if (is_in_fd == true)
 		fd = open(file, O_RDONLY, 0777);
 	else
-		fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0777);
+	{
+		if (is_append == false)
+			fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0777);
+		else
+			fd = open(file, O_WRONLY | O_APPEND | O_CREAT, 0777);
+	}
 	if (fd == -1)
 	{
 		ft_putstr_fd("exec: ", 2);

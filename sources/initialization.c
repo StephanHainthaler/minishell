@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/13 19:22:17 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/17 14:28:10 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[])
 		return (1);
 	ms->lex = NULL;
 	ms->exec = NULL;
+	ms->last_exit_code = 0;
 	return (0);
 }
 

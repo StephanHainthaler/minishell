@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 11:52:49 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/30 15:07:53 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/17 14:26:26 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_list
 	bool			in_squotes;
 	bool			in_dquotes;
 	bool			was_in_quotes;
+	int				last_exit_code;
 	struct s_list	*next;
 }					t_list;
 

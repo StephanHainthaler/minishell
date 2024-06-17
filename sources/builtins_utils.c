@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 13:46:46 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/13 09:39:12 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/17 10:58:06 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,13 @@ void	sort_strarray(char **strarray)
 		i++;
 	}
 	ft_putstrarr_fd(strarray, 1);
+}
+
+bool	ft_are_str_indentical(char *str1, char *str2)
+{
+	if (ft_strlen(str1) != ft_strlen(str2))
+		return (false);
+	if (ft_strncmp(str1, str2, ft_strlen(str1)) != 0)
+		return (false);
+	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/13 19:28:55 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/17 14:29:13 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int		get_cmds(t_executor *exec, t_list **list)
 			if (exec->cmds[i]->infile != NULL)
 				free(exec->cmds[i]->infile);
 			exec->cmds[i]->infile = ft_strdup(current->attr);
-			exec->cmds[i]->in_fd = get_fd(exec->cmds[i]->infile, true);
+			exec->cmds[i]->in_fd = get_fd(exec->cmds[i]->infile, true, false);
 		}
 		if (current->type == RE_OUT)
 		{
@@ -56,14 +56,21 @@ int		get_cmds(t_executor *exec, t_list **list)
 			if (exec->cmds[i]->outfile != NULL)
 				free(exec->cmds[i]->outfile);
 			exec->cmds[i]->outfile = ft_strdup(current->attr);
-			exec->cmds[i]->out_fd = get_fd(exec->cmds[i]->outfile, false);
+			exec->cmds[i]->out_fd = get_fd(exec->cmds[i]->outfile, false, false);
+		}
+		if (current->type == APPEND)
+		{
+			current = current->next;
+			if (exec->cmds[i]->outfile != NULL)
+				free(exec->cmds[i]->outfile);
+			exec->cmds[i]->outfile = ft_strdup(current->attr);
+			exec->cmds[i]->out_fd = get_fd(exec->cmds[i]->outfile, false, true);
 		}
 		if (current->type == PIPE)
 		{
 			exec->cmds[i]->cmd_nbr = i;
 			i++;
 		}
-		//of (APPEND)
 		//if (current->type == HERE_DOC)
 			//NULL CHECK
 		current = current->next;

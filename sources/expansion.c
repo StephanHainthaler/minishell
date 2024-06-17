@@ -6,13 +6,13 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:44:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/23 14:03:14 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/17 14:28:04 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int	check_for_expansion(t_list **token_list, char **envp)
+int	check_for_expansion(t_list **token_list, char **envp, int ec)
 {
 	t_list	*cur_node;
 	int		i;
@@ -29,7 +29,7 @@ int	check_for_expansion(t_list **token_list, char **envp)
 					handle_quotes_in_expansion(cur_node, cur_node->attr[i]);
 				if (cur_node->attr[i] == '$' && cur_node->in_squotes == false)
 				{
-					cur_node->attr = handle_expansion(cur_node, envp, &i);
+					cur_node->attr = handle_expansion(cur_node, envp, ec, &i);
 					if (cur_node->attr == NULL)
 						return (1);
 				}
@@ -41,15 +41,19 @@ int	check_for_expansion(t_list **token_list, char **envp)
 	return (0);
 }
 
-char	*handle_expansion(t_list *node, char **envp, int *i)
+char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i)
 {
 	int		len;
 	int		pos;
 	int		j;
 
+	if (node->attr == NULL)
+		return (NULL);
+	if (node->attr[*i + 1] == '?')
+		return (node->attr = handle_exit_code_expansion(node, exit_code, i));
 	if (ft_isspace(node->attr[*i + 1]) == true || node->attr[*i + 1] == '\0'
-		|| node->attr[*i + 1] == '?' || node->attr[*i + 1] == '$'
-		|| node->attr[*i + 1] == '"' || node->attr[*i + 1] == '\'')
+		|| node->attr[*i + 1] == '$' || node->attr[*i + 1] == '"'
+		|| node->attr[*i + 1] == '\'')
 		return (node->attr);
 	pos = *i;
 	len = get_envname_len(node, i);
@@ -115,21 +119,31 @@ char	*handle_invalid_expansion(char *str, int len, int pos)
 	return (new_str);
 }
 
-int	get_envname_len(t_list *node, int *i)
+char	*handle_exit_code_expansion(t_list *node, int exit_code, int *i)
 {
-	int	len;
+	char	*exp_str;
+	char	*exp_var;
+	int		j;
+	int		k;
+	int		l;
 
-	len = 0;
-	while (node->attr[*i] != '\0' && ft_isspace(node->attr[*i]) == false
-		&& node->attr[*i] != '\'' && node->attr[*i] != '"')
-	{
-		if (node->attr[*i + 1] == '$')
-		{
-			len++;
-			break ;
-		}
-		*i = *i + 1;
-		len++;
-	}
-	return (len);
+	exp_var = ft_itoa(exit_code);
+	if (exp_var == NULL)
+		return (NULL);
+	exp_str = (char *)malloc(((ft_strlen(node->attr) - 2 + \
+		ft_strlen(exp_var) + 1) * sizeof(char)));
+	if (exp_str == NULL)
+		return (free(exp_var), NULL);
+	j = 0;
+	k = 0;
+	while (j != *i)
+		exp_str[k++] = node->attr[j++];
+	l = 0;
+	while (exp_var[l] != '\0')
+		exp_str[k++] = exp_var[l++];
+	j = j + 2;
+	while (node->attr[j] != '\0')
+		exp_str[k++] = node->attr[j++];
+	exp_str[k] = '\0';
+	return (free(node->attr), free(exp_var), exp_str);
 }
