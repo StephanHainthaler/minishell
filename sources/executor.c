@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/13 14:26:12 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/17 12:02:37 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	execute_input(t_minishell *ms)
 		if (ms->exec->cmds[0]->in_fd == -1 || ms->exec->cmds[0]->out_fd == -1)
 			return (1);
 		if (handle_builtins_non_pipable(ms) == 0)
-			return (printf("End of cmd\n"), 0);
+			return (printf("End of cmd:3\n"), 0);
 		if (single_execution(ms->exec) == 1)
 			return (1);
 	}
@@ -31,13 +31,13 @@ int	execute_input(t_minishell *ms)
 		if (multiple_execution(ms->exec) == 1)
 			return (1);
 	}
+	ms->last_exit_code = ms->exec->exit_status;
 	return (0);
 }
 
 int	single_execution(t_executor *exec) //t_minishell *ms
 {
 	int	status;
-	//exit_status;
 
 	exec->cpids[0] = fork();
 	if (exec->cpids[0] == -1)
@@ -45,6 +45,8 @@ int	single_execution(t_executor *exec) //t_minishell *ms
 	if (exec->cpids[0] == 0)
 		single_child_proc(exec, exec->cmds[0]);
 	waitpid(exec->cpids[0], &status, 0);
+	//if (WIFEXITED(status))
+	exec->exit_status = WEXITSTATUS(status);
 	//free_exec(exec);
 	//change last cmd status in ms
 	//exit(WEXITSTATUS(status));

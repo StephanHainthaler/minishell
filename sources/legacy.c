@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/29 09:31:47 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/17 09:50:43 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,7 @@ char	*handle_expansion(t_list *node, char **envp, int *i)
 	handle_invalid_expansion(node->attr, len));
 }
 
-int	check_for_expansion(t_list **token_list, char **envp)
+int	check_for_expansion(t_list **token_list, char **envp, int exit_code)
 {
 	t_list	*current_node;
 

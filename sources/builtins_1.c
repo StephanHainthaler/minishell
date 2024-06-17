@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/13 14:17:57 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/17 11:00:43 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 
 int	handle_builtin(char **simp_cmd, t_executor *exec)
 {
-	if (ft_strncmp(simp_cmd[0], "echo", ft_strlen(simp_cmd[0])) == 0)
+	if (ft_are_str_indentical(simp_cmd[0], "echo") == true)
 		return (scuffed_echo(simp_cmd), 0);
-	if (ft_strncmp(simp_cmd[0], "cd", ft_strlen(simp_cmd[0])) == 0)
+	if (ft_are_str_indentical(simp_cmd[0], "cd") == true)
 		return (scuffed_cd(simp_cmd), 0);
-	if (ft_strncmp(simp_cmd[0], "pwd", ft_strlen(simp_cmd[0])) == 0)
+	if (ft_are_str_indentical(simp_cmd[0], "pwd") == true)
 		return (scuffed_pwd(simp_cmd), 0);
-	if (ft_strncmp(simp_cmd[0], "export", ft_strlen(simp_cmd[0])) == 0)
+	if (ft_are_str_indentical(simp_cmd[0], "export") == true)
 		return (scuffed_export(simp_cmd, exec->envp), 0);
-	if (ft_strncmp(simp_cmd[0], "unset", ft_strlen(simp_cmd[0])) == 0)
+	if (ft_are_str_indentical(simp_cmd[0], "unset") == true)
 		return (scuffed_unset(simp_cmd, exec->envp), 0);
-	if (ft_strncmp(simp_cmd[0], "env", ft_strlen(simp_cmd[0])) == 0)
+	if (ft_are_str_indentical(simp_cmd[0], "env") == true)
 		return (ft_putstrarr_fd(exec->envp, 1), 0);
-	if (ft_strncmp(simp_cmd[0], "exit", ft_strlen(simp_cmd[0])) == 0)
+	if (ft_are_str_indentical(simp_cmd[0], "exit") == true)
 		return (0);
 	else
 		return (1);
@@ -38,22 +38,22 @@ int	handle_builtins_non_pipable(t_minishell *ms)
 	char **simp_cmd;
 
 	simp_cmd = ms->exec->cmds[0]->simp_cmd;
-	if (ft_strncmp(simp_cmd[0], "cd", ft_strlen(simp_cmd[0])) == 0)
+	if (ft_are_str_indentical(simp_cmd[0], "cd") == true)
 		return (scuffed_cd(simp_cmd), 0);
-	if (ft_strncmp(simp_cmd[0], "export", ft_strlen(simp_cmd[0])) == 0)
+	if (ft_are_str_indentical(simp_cmd[0], "export") == true)
 	{
 		ms->envp = scuffed_export(simp_cmd, ms->envp);
 		if (ms->envp == NULL)
 			free_and_exit(ms);
 		return (0);
 	}
-	if (ft_strncmp(simp_cmd[0], "unset", ft_strlen(simp_cmd[0])) == 0)
+	if (ft_are_str_indentical(simp_cmd[0], "unset") == true)
 	{
 		if (scuffed_unset(simp_cmd, ms->envp) == 1)
 			free_and_exit(ms);
 		return (0);
 	}
-	if (ft_strncmp(simp_cmd[0], "exit", ft_strlen(simp_cmd[0])) == 0)
+	if (ft_are_str_indentical(simp_cmd[0], "exit") == true)
 		free_and_exit(ms);
 	return (1);
 }
@@ -102,6 +102,7 @@ char	**scuffed_export(char **simp_cmd, char **envp)
 {
 	int	i;
 
+	printf("FUCK\n");
 	if (ft_strarrlen(simp_cmd) == 1)
 		return (sort_strarray(envp), envp);
 	i = 0;

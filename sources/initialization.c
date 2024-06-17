@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/29 10:08:39 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/17 09:53:57 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[])
 		return (1);
 	ms->lex = NULL;
 	ms->exec = NULL;
+	ms->last_exit_code = 0;
 	return (0);
 }
 

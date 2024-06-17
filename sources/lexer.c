@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/30 09:05:52 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/17 09:50:29 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	read_input(t_minishell *ms)
 	add_history(ms->lex->input);
 	if (tokenize_input(ms->lex) == 1)
 		return (1);
-	if (check_for_expansion(&ms->lex->token_list, ms->envp) == 1)
+	if (check_for_expansion(&ms->lex->token_list, ms->envp, ms->last_exit_code) == 1)
 		return (1);
 	if (check_for_dequotation(&ms->lex->token_list) == 1)
 		return (1);
