@@ -6,19 +6,25 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 12:12:06 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/10 13:59:54 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/18 14:28:22 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 #include <readline/history.h>
 
-void	heredoc(t_lexer *lex)
-{
-	char *delim;
-	t_list	*current;
-	t_list	*hd_input;
+#include <fcntl.h>
+#include <unistd.h>
 
+int	ft_heredoc(t_lexer *lex, t_list *hd_input)
+{
+	char	*delim;
+	int		tmp_fd;
+	int		tmp_fd_cpy;
+	int		stdin_cpy;	
+	t_list	*current;
+
+	hd_input = NULL;
 	current = lex->token_list;
 	if (current->type == HERE_DOC)
 	{
@@ -27,13 +33,26 @@ void	heredoc(t_lexer *lex)
 		while (1)
 		{
 			hd_input->tmp = readline("heredoc>");
+			if (hd_input->tmp == NULL)
+				return (1);
 			if (delim[0] == '\'' || delim[0] == '\"')
-				handle_expansion(hd_input, lex->envp, &lex->i);
+				handle_expansion(hd_input, lex->envp, 0, &lex->i);
 			ft_lstadd_back(&lex->here_doc, hd_input);
-			add_history(hd_input->tmp);
-			
-			if (ft_strncmp(hd_input->tmp, delim, ft_strlen(delim) == 0))
-				return(free(lex->here_doc->tmp), free(delim))
+			//add_history(hd_input->tmp);
+			if (ft_strncmp(hd_input->tmp, delim, ft_strlen(delim) != 0))
+			{
+				tmp_fd = open("temp_file.txt", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+				write(tmp_fd, hd_input->tmp, strlen(hd_input->tmp));
+				close(tmp_fd);
+				stdin_cpy = dup(STDIN_FILENO);
+				tmp_fd_cpy = open("temp_file.txt", O_RDONLY);
+				dup2(tmp_fd_cpy, STDIN_FILENO);
+				close(tmp_fd_cpy);
+				dup2(stdin_cpy, STDIN_FILENO);
+				close(stdin_cpy);
+				if (ft_strncmp(hd_input->tmp, delim, ft_strlen(delim) == 0))
+					return(free(lex->here_doc->tmp), free(delim), 0);
+			}
 		}
 	}
 }

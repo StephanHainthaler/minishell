@@ -6,7 +6,7 @@
 #    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/06/17 14:26:07 by juitz            ###   ########.fr        #
+#    Updated: 2024/06/18 13:00:11 by juitz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,10 @@ $(SRC_DIR)/expansion.c \
 $(SRC_DIR)/expansion_utils.c \
 $(SRC_DIR)/quotation.c \
 $(SRC_DIR)/initialization.c \
+$(SRC_DIR)/free.c \
 $(SRC_DIR)/parser.c \
+$(SRC_DIR)/heredoc_lists.c \
+$(SRC_DIR)/executor.c \
 $(SRC_DIR)/executor_utils.c \
 $(SRC_DIR)/child.c \
 $(SRC_DIR)/builtins_1.c \
