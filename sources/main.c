@@ -20,10 +20,7 @@ int	main_loop(t_minishell *ms, int error_check)
 		if (error_check == 1)
 			return (free_lexer(ms->lex), rl_clear_history(), 1);
 		if (error_check == 2)
-		{
-			free_lexer(ms->lex);
 			continue ;
-		}
 		error_check = parse_input(ms);
 		if (error_check == 1)
 			return (free_lexer(ms->lex), rl_clear_history(), 1);

@@ -32,7 +32,7 @@ int	read_input(t_minishell *ms)
 	if (error_check == 1)
 		return (1);
 	if (error_check == 2)
-		return (2);
+		return (free_lexer(ms->lex), 2);
 	if (check_for_expansion(&ms->lex->token_list, ms->envp, ms->last_exit_code) == 1)
 		return (1);
 	if (check_for_dequotation(&ms->lex->token_list) == 1)
