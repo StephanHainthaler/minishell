@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/18 14:29:56 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/18 14:31:18 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int		get_cmds(t_executor *exec, t_list **list)
 	int i;
 
 	i = 0;
+	hd_input = NULL;
 	current = *list;
 	while (current)
 	{
@@ -76,7 +77,8 @@ int		get_cmds(t_executor *exec, t_list **list)
 		if (current->type == HERE_DOC)
 		{
 			current = current->next;
-			ft_heredoc(&lex, hd_input)
+			ft_heredoc(&lex, hd_input);
+		}
 	}
 	return (0);
 }

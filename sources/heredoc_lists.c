@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 12:12:06 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/18 14:28:22 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/18 14:37:37 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-int	ft_heredoc(t_lexer *lex, t_list *hd_input)
+void	ft_heredoc(t_lexer *lex, t_list *hd_input)
 {
 	char	*delim;
 	int		tmp_fd;
@@ -34,11 +34,10 @@ int	ft_heredoc(t_lexer *lex, t_list *hd_input)
 		{
 			hd_input->tmp = readline("heredoc>");
 			if (hd_input->tmp == NULL)
-				return (1);
+				return ;
 			if (delim[0] == '\'' || delim[0] == '\"')
 				handle_expansion(hd_input, lex->envp, 0, &lex->i);
 			ft_lstadd_back(&lex->here_doc, hd_input);
-			//add_history(hd_input->tmp);
 			if (ft_strncmp(hd_input->tmp, delim, ft_strlen(delim) != 0))
 			{
 				tmp_fd = open("temp_file.txt", O_CREAT | O_WRONLY | O_TRUNC, 0644);
@@ -51,7 +50,7 @@ int	ft_heredoc(t_lexer *lex, t_list *hd_input)
 				dup2(stdin_cpy, STDIN_FILENO);
 				close(stdin_cpy);
 				if (ft_strncmp(hd_input->tmp, delim, ft_strlen(delim) == 0))
-					return(free(lex->here_doc->tmp), free(delim), 0);
+					return(free(lex->here_doc->tmp), free(delim));
 			}
 		}
 	}
