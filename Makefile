@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
+#    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/06/17 14:01:50 by shaintha         ###   ########.fr        #
+#    Updated: 2024/06/18 15:03:05 by juitz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ MAIN_DIR := main
 
 SRCS := $(SRC_DIR)/main.c \
 $(SRC_DIR)/lexer.c \
+$(SRC_DIR)/input_checks.c \
 $(SRC_DIR)/expansion.c \
 $(SRC_DIR)/expansion_utils.c \
 $(SRC_DIR)/quotation.c \

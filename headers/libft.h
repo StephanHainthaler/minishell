@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 11:52:49 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/17 09:26:53 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/18 15:10:59 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,6 @@ void	ft_lstdelone(t_list **lst, t_list *node);
 void	ft_lstclear(t_list **lst);
 void	ft_free(void *ptr);
 void	ft_free_strarr(char **strarr);
+void	ft_error(char *str);
 
 #endif

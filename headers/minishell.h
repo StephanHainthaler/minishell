@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/17 12:36:31 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/18 15:07:20 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,9 @@ int		initialize_lexer(t_minishell *ms);
 int		initialize_executor(t_minishell *ms);
 int		initialize_executor_2(t_minishell *ms, int i);
 t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr);
+
+//checks.c
+bool is_valid_input(t_lexer *lex);
 
 //lexer.c
 int		read_input(t_minishell *ms);
