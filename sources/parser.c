@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/18 14:31:18 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/18 18:18:17 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		get_cmds(t_executor *exec, t_list **list)
 {
 	t_list	*current;
 	t_list	*hd_input;
-	t_lexer	lex;
+	//t_lexer	lex;
 	int i;
 
 	i = 0;
@@ -74,11 +74,11 @@ int		get_cmds(t_executor *exec, t_list **list)
 			exec->cmds[i]->cmd_nbr = i;
 			i++;
 		}
-		if (current->type == HERE_DOC)
-		{
-			current = current->next;
-			ft_heredoc(&lex, hd_input);
-		}
+		// if (current->type == HERE_DOC)
+		// {
+		// 	current = current->next;
+		// 	ft_heredoc(&lex, hd_input);
+		// }
 	}
 	return (0);
 }
