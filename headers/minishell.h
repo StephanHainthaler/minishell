@@ -89,7 +89,7 @@ t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr);
 int		read_input(t_minishell *ms);
 int		tokenize_input(t_lexer *lex);
 bool	is_token(char c);
-t_list	*get_word_token(t_lexer *lex);
+t_list	*get_word_token(t_lexer *lex, int *error);
 t_list	*get_non_word_token(t_lexer *lex);
 
 //expansion.c
