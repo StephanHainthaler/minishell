@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 11:52:49 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/17 09:26:53 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/19 09:07:07 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	*ft_calloc(size_t nmemb, size_t n);
 char	*ft_strdup(const char *src);
 char	**ft_strarrdup(char **src);
 char	**ft_stradd_tostrarr(char **strarr, char *str);
+char	**ft_strdel_fromstrarr(char **strarr, char *str);
 char	*ft_substr(char const *str, unsigned int start, size_t len);
 char	*ft_strjoin(char const *str1, char const *str2);
 char	*ft_strjoin_gnl(char *str1, char *str2);
