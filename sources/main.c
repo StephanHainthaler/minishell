@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/13 12:22:36 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/19 08:25:26 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,6 @@ int	main(int argc, char *argv[], char *env[])
 	error_check = 0;
 	if (main_loop(&ms, error_check) == 1)
 		return (ft_free_strarr(ms.envp), 1);
+	ft_free_strarr(ms.envp);
 	return (0);
 }

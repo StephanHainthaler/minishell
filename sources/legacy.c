@@ -6,11 +6,50 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/17 09:50:43 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/19 13:38:24 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+int	multiple_execution(t_executor *exec)
+{
+	int	i;
+	int	status;
+
+	i = 0;
+	while (i < exec->num_of_pipes)
+	{
+		printf("Pipe number %d\n", i + 1);
+		if (pipe(exec->pipes[i]) == -1)
+			return (1);
+		i++;
+	}
+	i = 0;
+	while (i < exec->num_of_pipes)
+	{
+		exec->cpids[i] = fork();
+		if (exec->cpids[i] == -1)
+			return (close(exec->pipes[i][0]), close(exec->pipes[i][1]), 1);
+		if (exec->cpids[i] == 0)
+			child_proc(exec, exec->cmds[i], exec->pipes[i]);
+		close(exec->pipes[i][0]);
+		close(exec->pipes[i][1]);
+		printf("Waiting...\n");
+		waitpid(exec->cpids[i], NULL, 0);
+		i++;
+	}
+	exec->cpids[i] = fork();
+	if (exec->cpids[i] == -1)
+		return (close(exec->pipes[i][0]), close(exec->pipes[i][1]), 1);
+	if (exec->cpids[i] == 0)
+		child_proc(exec, exec->cmds[i], exec->pipes[i]);
+	close(exec->pipes[exec->num_of_pipes - 1][0]);
+	close(exec->pipes[exec->num_of_pipes - 1][1]);
+	waitpid(exec->cpids[exec->num_of_pipes - 1], &status, 0);
+	printf("End Waiting\n");
+	return (0);
+}
 
 int	main(int argc, char *argv[], char *env[])
 {

@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/17 12:02:37 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/19 14:10:52 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	execute_input(t_minishell *ms)
 {
 	if (initialize_executor_2(ms, 0) == 1)
 		return (1);
+	if (ms->exec->cmds[0]->simp_cmd == NULL)
+		return (0);
 	if (ms->exec->num_of_cmds == 1)
 	{
 		if (ms->exec->cmds[0]->in_fd == -1 || ms->exec->cmds[0]->out_fd == -1)
@@ -99,3 +101,21 @@ void	execute_cmd(t_executor *exec, t_cmd *cmd)
 	}
 }
 
+void	close_all_pipes(t_executor *exec)
+{
+	int	i;
+
+	i = 0;
+	while (i < exec->num_of_pipes)
+	{
+		if (exec->pipes[i][0] != -1)
+			close(exec->pipes[i][0]);
+		if (exec->pipes[i][1] != -1)
+			close(exec->pipes[i][1]);
+		if (exec->cmds[i]->in_fd != -1 && exec->cmds[i]->in_fd != 0)
+			close(exec->cmds[i]->in_fd);
+		if (exec->cmds[i]->out_fd != -1 && exec->cmds[i]->out_fd != 1)
+			close(exec->cmds[i]->out_fd);
+		i++;
+	}
+}
