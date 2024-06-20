@@ -6,40 +6,21 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 09:04:11 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/19 10:49:03 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/20 10:44:30 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/libft.h"
 
-static int	get_index_position(char **strarr, char *str)
-{
-	int	pos;
-
-	pos = 0;
-	while (pos < (int)ft_strarrlen(strarr))
-	{
-		//if (ft_strnstr(strarr[pos], str, ft_strlen(str)) != NULL)
-		if (ft_strncmp(strarr[pos], str, ft_strlen(str)) == 0)
-			return (pos);
-		pos++;
-	}
-	pos = -1;
-	return (pos);
-}
-
-char	**ft_strdel_fromstrarr(char **strarr, char *str)
+char	**ft_strdel_fromstrarr(char **strarr, int pos)
 {
 	char	**new_strarr;
-	int		pos;
 	int		i;
 	int		j;
 
-	pos = get_index_position(strarr, str);
-	ft_putnbr_fd(pos, 1);
-	if (pos == -1)
+	if (pos < 0)
 		return (strarr);
-	new_strarr = (char **)malloc((ft_strarrlen(strarr)) * sizeof(char *));
+	new_strarr = (char **)malloc((ft_strarrlen(strarr) - 1 + 1) * sizeof(char *));
 	if (new_strarr == NULL)
 		return (NULL);
 	i = 0;
@@ -55,7 +36,8 @@ char	**ft_strdel_fromstrarr(char **strarr, char *str)
 		if (new_strarr[j - 1] == NULL)
 			return (ft_free_strarr(new_strarr), NULL);
 	}
-	return (new_strarr[j] = NULL, ft_free_strarr(strarr), new_strarr);
+	new_strarr[j] = NULL;
+	return (ft_free_strarr(strarr), new_strarr);
 }
 
 // int	main(void)

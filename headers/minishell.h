@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/19 09:13:08 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/20 10:13:05 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,10 @@ char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
 char	*handle_invalid_expansion(char *str, int len, int pos);
 char	*handle_exit_code_expansion(t_list *node, int exit_code, int *i);
+
+//expansion_utils.c
 int		get_envname_len(t_list *node, int *i);
+bool	check_for_env(char *str1, char *str2, int len);
 
 //quotation.c
 int		check_for_dequotation(t_list **token_list);

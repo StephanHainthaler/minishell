@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/19 08:25:26 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/20 09:41:07 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,11 @@ int	main_loop(t_minishell *ms, int error_check)
 		if (error_check == 2)
 			continue ;
 		free_lexer(ms->lex);
-		if (execute_input(ms) == 1)
+		error_check = execute_input(ms);
+		if (error_check == 1)
 			return (free_executor(ms->exec), 1);
+		if (error_check == 2)
+			continue ;
 		free_executor(ms->exec);
 	}
 	return (0);

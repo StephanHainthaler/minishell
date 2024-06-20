@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/19 10:50:45 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/20 10:45:51 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,9 +138,9 @@ char	**ft_unset(char **simp_cmd, char **envp)
 	// while (i < (int)ft_strarrlen(simp_cmd))
 	// {
 		printf("%s\n", simp_cmd[1]);
-		envp = ft_strdel_fromstrarr(envp, simp_cmd[1]);
-		if (envp == NULL)
-			return (NULL);
+		// envp = ft_strdel_fromstrarr(envp, simp_cmd[1]);
+		// if (envp == NULL)
+		// 	return (NULL);
 	// 	i++;
 	// }
 	return (envp);
