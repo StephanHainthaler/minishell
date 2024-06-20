@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/20 10:45:51 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:07:03 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,39 +109,55 @@ void	ft_pwd(char **simp_cmd)
 char	**ft_export(char **simp_cmd, char **envp)
 {
 	int	i;
+	int	j;
 
 	if (ft_strarrlen(simp_cmd) == 1)
 		return (sort_strarray(envp), envp);
-	i = 0;
-	while (envp[i] != NULL)
+	i = 1;
+	while (i < (int)ft_strarrlen(envp))
 	{
-		if (ft_strncmp(simp_cmd[1], envp[i], ft_strlen(simp_cmd[1])) == 0)
+		j = 0;
+		while (envp[j] != NULL)
 		{
-			//replace on envp[i]
-			return (envp);
+			if (check_for_env(envp[j++], simp_cmd[i], ft_strlen(simp_cmd[i])) == true)
+			{
+				envp = ft_strreplace_instrarr(envp, simp_cmd[i], j);
+				if (envp[j] == NULL)
+					return (NULL);
+			}
+			i++;
 		}
-		i++;
+		envp = ft_stradd_tostrarr(envp, simp_cmd[i]);
+		if (envp == NULL)
+			return (NULL);
 	}
-	envp = ft_stradd_tostrarr(envp, simp_cmd[1]);
-	if (envp == NULL)
-		return (NULL);
 	return (envp);
 }
 
 char	**ft_unset(char **simp_cmd, char **envp)
 {
-	int i;
+	char	**new_envp;
+	bool	is_new;
+	int		i;
+	int		pos;
 
-	if (ft_strarrlen(simp_cmd) == 1)
-		return (envp);
+	is_new = false;
 	i = 1;
-	// while (i < (int)ft_strarrlen(simp_cmd))
-	// {
-		printf("%s\n", simp_cmd[1]);
-		// envp = ft_strdel_fromstrarr(envp, simp_cmd[1]);
-		// if (envp == NULL)
-		// 	return (NULL);
-	// 	i++;
-	// }
-	return (envp);
+	while (i < (int)ft_strarrlen(simp_cmd))
+	{
+		pos = 0;
+		while (envp[pos] != NULL)
+		{
+			if (check_for_env(envp[pos++], simp_cmd[i], ft_strlen(simp_cmd[i])) == false)
+				continue ;
+			new_envp = ft_strdel_fromstrarr(envp, pos - 1);
+			if (new_envp == NULL)
+				return (ft_free_strarr(new_envp), NULL);
+			is_new = true;
+		}
+		i++;
+	}
+	if (is_new == false)
+		return (envp);
+	return (new_envp);
 }

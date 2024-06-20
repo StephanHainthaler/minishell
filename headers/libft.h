@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 11:52:49 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/20 10:45:32 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:07:30 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ char	*ft_strdup(const char *src);
 char	**ft_strarrdup(char **src);
 char	**ft_stradd_tostrarr(char **strarr, char *str);
 char	**ft_strdel_fromstrarr(char **strarr, int pos);
+char	**ft_strreplace_instrarr(char **strarr, char *new_str, int pos);
 char	*ft_substr(char const *str, unsigned int start, size_t len);
 char	*ft_strjoin(char const *str1, char const *str2);
 char	*ft_strjoin_gnl(char *str1, char *str2);

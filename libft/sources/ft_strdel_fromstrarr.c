@@ -6,11 +6,31 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 09:04:11 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/20 10:44:30 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:02:28 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/libft.h"
+
+char	**ft_strreplace_instrarr(char **strarr, char *new_str, int pos)
+{
+	int		i;
+
+	if (pos < 0 || new_str == NULL)
+		return (strarr);
+	i = 0;
+	while (i < (int)ft_strarrlen(strarr))
+	{
+		if (i == pos)
+		{
+			ft_free(strarr[pos]);
+			strarr[pos] = ft_strdup(new_str);
+			if (strarr[pos] == NULL)
+				return (NULL);
+		}
+	}
+	return (strarr);
+}
 
 char	**ft_strdel_fromstrarr(char **strarr, int pos)
 {
