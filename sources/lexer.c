@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/17 14:29:04 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/20 14:42:21 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 int	read_input(t_minishell *ms)
 {
+	int	error_check;
+
+	error_check = 0;
 	if (initialize_lexer(ms) == 1)
 		return (1);
 	while (true)
@@ -25,8 +28,11 @@ int	read_input(t_minishell *ms)
 			break ;
 	}
 	add_history(ms->lex->input);
-	if (tokenize_input(ms->lex) == 1)
+	error_check = tokenize_input(ms->lex);
+	if (error_check == 1)
 		return (1);
+	if (error_check == 2)
+		return (free_lexer(ms->lex), 2);
 	if (check_for_expansion(&ms->lex->token_list, ms->envp, ms->last_exit_code) == 1)
 		return (1);
 	if (check_for_dequotation(&ms->lex->token_list) == 1)
@@ -39,7 +45,9 @@ int	read_input(t_minishell *ms)
 int	tokenize_input(t_lexer *lex)
 {
 	t_list	*new_token;
+	int		parse_error;
 
+	parse_error = 0;
 	while (lex->input[lex->i] != '\0')
 	{
 		while (ft_isspace(lex->input[lex->i]) == true)
@@ -49,11 +57,13 @@ int	tokenize_input(t_lexer *lex)
 		if (is_token(lex->input[lex->i]) == true)
 			new_token = get_non_word_token(lex);
 		else
-			new_token = get_word_token(lex);
+			new_token = get_word_token(lex, &parse_error);
 		if (new_token == NULL)
 		{
 			if (lex->token_list != NULL)
 				ft_lstclear(&lex->token_list);
+			if (parse_error == 1)
+				return (ft_putendl_fd("Expecting quotation closure", 2), 2);
 			return (ft_putendl_fd("Error: Malloc Error", 2), 1);
 		}
 		ft_lstadd_back(&lex->token_list, new_token);
@@ -68,7 +78,7 @@ bool	is_token(char c)
 	return (false);
 }
 
-t_list	*get_word_token(t_lexer *lex)
+t_list	*get_word_token(t_lexer *lex, int *error)
 {
 	t_list	*new_token;
 	char	*attr;
@@ -81,7 +91,7 @@ t_list	*get_word_token(t_lexer *lex)
 		if (lex->input[lex->i] == '\'' || lex->input[lex->i] == '\"')
 		{
 			if (handle_quotes(lex, lex->input[lex->i], &len) == 1)
-				return (NULL);
+				return (*error = 1, NULL);
 		}
 		if (ft_isspace(lex->input[lex->i]) == true
 			|| is_token(lex->input[lex->i]) == true)

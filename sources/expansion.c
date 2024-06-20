@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:44:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/17 14:28:04 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/20 14:40:17 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i)
 	j = 0;
 	while (envp[j] != NULL)
 	{
-		if (ft_strncmp(envp[j], node->attr + pos + 1, len - 1) == 0)
+		if (check_for_env(envp[j], node->attr + pos + 1, len - 1) == true)
 			return (*i = pos - 1,
 				handle_valid_expansion(node->attr, envp[j], len, pos));
 		j++;

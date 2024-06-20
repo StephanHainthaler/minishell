@@ -6,7 +6,7 @@
 #    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/12 09:25:55 by shaintha          #+#    #+#              #
-#    Updated: 2024/05/23 14:01:01 by juitz            ###   ########.fr        #
+#    Updated: 2024/06/20 14:39:28 by juitz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ SRCS :=  $(SRC_DIR)/ft_atoi.c \
 		$(SRC_DIR)/ft_split.c \
 		$(SRC_DIR)/ft_strarrdup.c \
 		$(SRC_DIR)/ft_stradd_tostrarr.c \
+		$(SRC_DIR)/ft_strdel_fromstrarr.c \
 		$(SRC_DIR)/ft_strarrlen.c \
 		$(SRC_DIR)/ft_strchr.c \
 		$(SRC_DIR)/ft_strdup.c \

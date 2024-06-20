@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/18 14:32:07 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/20 14:38:59 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr);
 int		read_input(t_minishell *ms);
 int		tokenize_input(t_lexer *lex);
 bool	is_token(char c);
-t_list	*get_word_token(t_lexer *lex);
+t_list	*get_word_token(t_lexer *lex, int *error);
 t_list	*get_non_word_token(t_lexer *lex);
 
 //input_checks.c
@@ -102,7 +102,10 @@ char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
 char	*handle_invalid_expansion(char *str, int len, int pos);
 char	*handle_exit_code_expansion(t_list *node, int exit_code, int *i);
+
+//expansion_utils.c
 int		get_envname_len(t_list *node, int *i);
+bool	check_for_env(char *str1, char *str2, int len);
 
 //quotation.c
 int		check_for_dequotation(t_list **token_list);
@@ -142,11 +145,11 @@ void	exit_child(t_executor *exec, int end1, int end2, int exit_status);
 //builtins.c
 int		handle_builtin(char **simp_cmd, t_executor *exec);
 int		handle_builtins_non_pipable(t_minishell *ms);
-void	scuffed_echo(char **simp_cmd);
-void	scuffed_cd(char **simp_cmd);
-void	scuffed_pwd(char **simp_cmd);
-char	**scuffed_export(char **simp_cmd, char **envp);
-int		scuffed_unset(char **simp_cmd, char **envp);
+void	ft_echo(char **simp_cmd);
+void	ft_cd(char **simp_cmd);
+void	ft_pwd(char **simp_cmd);
+char	**ft_export(char **simp_cmd, char **envp);
+char	**ft_unset(char **simp_cmd, char **envp);
 
 //builtins_utils.c
 void	sort_strarray(char **strarray);

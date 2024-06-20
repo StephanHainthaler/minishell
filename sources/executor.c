@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/17 14:27:36 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/20 14:40:09 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@ int	execute_input(t_minishell *ms)
 {
 	if (initialize_executor_2(ms, 0) == 1)
 		return (1);
+	if (ms->exec->cmds[0]->simp_cmd == NULL)
+		return (0);
 	if (ms->exec->num_of_cmds == 1)
 	{
 		if (ms->exec->cmds[0]->in_fd == -1 || ms->exec->cmds[0]->out_fd == -1)
-			return (1);
+			return (free_executor(ms->exec), 2);
 		if (handle_builtins_non_pipable(ms) == 0)
 			return (printf("End of cmd:3\n"), 0);
 		if (single_execution(ms->exec) == 1)
@@ -99,3 +101,21 @@ void	execute_cmd(t_executor *exec, t_cmd *cmd)
 	}
 }
 
+void	close_all_pipes(t_executor *exec)
+{
+	int	i;
+
+	i = 0;
+	while (i < exec->num_of_pipes)
+	{
+		if (exec->pipes[i][0] != -1)
+			close(exec->pipes[i][0]);
+		if (exec->pipes[i][1] != -1)
+			close(exec->pipes[i][1]);
+		if (exec->cmds[i]->in_fd != -1 && exec->cmds[i]->in_fd != 0)
+			close(exec->cmds[i]->in_fd);
+		if (exec->cmds[i]->out_fd != -1 && exec->cmds[i]->out_fd != 1)
+			close(exec->cmds[i]->out_fd);
+		i++;
+	}
+}

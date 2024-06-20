@@ -6,11 +6,79 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/17 14:28:19 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/20 14:41:18 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+int	multiple_execution(t_executor *exec)
+{
+	int	i;
+	int	status;
+
+	i = 0;
+	while (i < exec->num_of_pipes)
+	{
+		printf("Pipe number %d\n", i + 1);
+		if (pipe(exec->pipes[i]) == -1)
+			return (1);
+		i++;
+	}
+	i = 0;
+	while (i < exec->num_of_pipes)
+	{
+		exec->cpids[i] = fork();
+		if (exec->cpids[i] == -1)
+			return (close(exec->pipes[i][0]), close(exec->pipes[i][1]), 1);
+		if (exec->cpids[i] == 0)
+			child_proc(exec, exec->cmds[i], exec->pipes[i]);
+		close(exec->pipes[i][0]);
+		close(exec->pipes[i][1]);
+		printf("Waiting...\n");
+		waitpid(exec->cpids[i], NULL, 0);
+		i++;
+	}
+	exec->cpids[i] = fork();
+	if (exec->cpids[i] == -1)
+		return (close(exec->pipes[i][0]), close(exec->pipes[i][1]), 1);
+	if (exec->cpids[i] == 0)
+		child_proc(exec, exec->cmds[i], exec->pipes[i]);
+	close(exec->pipes[exec->num_of_pipes - 1][0]);
+	close(exec->pipes[exec->num_of_pipes - 1][1]);
+	waitpid(exec->cpids[exec->num_of_pipes - 1], &status, 0);
+	printf("End Waiting\n");
+	return (0);
+}
+
+int	main(int argc, char *argv[], char *env[])
+{
+	t_minishell	ms;
+	
+	if (argc != 1)
+		return (1);
+	if (initialize_minishell(&ms, argc, argv, env) == 1)
+		return (1);
+	while (true)
+	{
+		error_check = read_input(&ms);
+		if (error_check == 1)
+			return (free_lexer(ms.lex), ft_free_strarr(ms.envp), rl_clear_history(), 1);
+		if (error_check == 2)
+		{
+			free_lexer(ms.lex);
+			continue ;
+		}
+		if (parse_input(&ms) == 1)
+			return (free_lexer(ms.lex), free_executor(ms.exec), ft_free_strarr(ms.envp), rl_clear_history(), 1);
+		//same check as above but we have no lines :c
+		free_lexer(ms.lex);
+		if (execute_input(&ms) == 1)
+			return (free_executor(ms.exec), ft_free_strarr(ms.envp), 1);
+		free_executor(ms.exec);
+	}
+	return (0);
+}
 
 int	multiple_execution(t_executor *exec)
 {
