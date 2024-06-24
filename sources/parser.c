@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/20 10:48:57 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:35:22 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ bool is_valid_input(t_lexer *lex)
 			has_wrd = true;
 		if (current->type == PIPE)
 			has_wrd = false;
-		if (current->type == PIPE && has_wrd == false)
+		if (current->type != PIPE && has_wrd == false)
 			return (ft_putendl_fd("command has no word", 2), false);
 		if (current->type == RE_IN && current->next != NULL && current->next->type != WORD)
 			return (ft_putendl_fd("parse error near `<'", 2), false);
