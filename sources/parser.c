@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/20 10:48:57 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:10:25 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int	parse_input(t_minishell *ms)
 
 	if (initialize_executor(ms) == 1)
 		return (1);
-	if (is_valid_input(ms->lex) == false)
-		return (free_lexer(ms->lex), free_executor(ms->exec), 2);
+	// if (is_valid_input(ms->lex) == false)
+	// 	return (free_lexer(ms->lex), free_executor(ms->exec), 2);
 	if (get_cmds(ms->exec, &ms->lex->token_list) == 1)
 		return (free_executor(ms->exec), 1);
 	// i = 0;

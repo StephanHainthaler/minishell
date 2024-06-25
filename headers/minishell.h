@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/20 10:13:05 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:20:48 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void	ft_print_cmd(t_cmd *cmd);
 //executor.c
 int		execute_input(t_minishell *ms);
 int		single_execution(t_executor *exec);
-int		multiple_execution(t_executor *exec);
+int		multiple_execution(t_executor *exec, int i);
 void	execute_cmd(t_executor *exec, t_cmd *cmd);
 
 //executor_utils.c
@@ -148,6 +148,7 @@ char	**ft_unset(char **simp_cmd, char **envp);
 //builtins_utils.c
 void	sort_strarray(char **strarray);
 bool	ft_are_str_indentical(char *str1, char *str2);
+bool	is_replacable(char *str1, char *str2);
 
 //free.c
 void	free_lexer(t_lexer *lex);

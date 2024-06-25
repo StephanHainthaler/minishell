@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 09:04:11 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/20 15:02:28 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/24 12:57:34 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,14 @@ char	**ft_strreplace_instrarr(char **strarr, char *new_str, int pos)
 	{
 		if (i == pos)
 		{
+			ft_putendl_fd(strarr[pos], 1);
 			ft_free(strarr[pos]);
 			strarr[pos] = ft_strdup(new_str);
 			if (strarr[pos] == NULL)
 				return (NULL);
+			return (strarr);
 		}
+		i++;
 	}
 	return (strarr);
 }

@@ -6,11 +6,34 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/19 13:38:24 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/25 13:34:11 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+int	multiple_execution(t_executor *exec, int i)
+{
+	pid_t	cpid;
+	int		ends[2];
+	int		status;
+	
+	if (pipe(ends) == -1)
+		return (ft_putendl_fd("pipe error", 2), 1);
+	cpid = fork();
+	if (cpid == -1)
+		return (ft_putendl_fd("fork error", 2), close(ends[0]), close(ends[1]), 1);
+	if (cpid == 0)
+		child_proc(exec, exec->cmds[i], ends);
+	printf("Waiting...\n");
+	waitpid(cpid, &status, 0);
+	printf("End Wait\n");
+	if (dup2(ends[0], 0) == -1)
+		return (-1);
+	close(ends[0]);
+	close(ends[1]);
+	return (0);
+}
 
 int	multiple_execution(t_executor *exec)
 {
