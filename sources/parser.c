@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/24 16:57:10 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/25 16:10:52 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,15 @@ int		get_cmds(t_executor *exec, t_list **list)
 		}
 		if (current->type == HERE_DOC)
 		{
+			i = exec->cmds[cmd_nbr];
 			current = current->next;
-			
-		
+			if (exec->cmds[i]->heredoc != NULL)
+				free(exec->cmds[i]->heredoc);
+			exec->cmds[i]->delim = ft_strdup(current->attr);
+			if ((cmd[i].delim[0] == '\'') || (cmd[i].delim[0] == '\"'))
+				//handle_expansion
+			//handle_heredoc;
+		}
 		current = current->next;
 	}
 	return (0);

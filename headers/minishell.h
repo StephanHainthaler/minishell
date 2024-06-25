@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/24 16:42:24 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/25 16:18:22 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ typedef struct s_cmd
     char	*cmd_path;
     char	*infile;
     char	*outfile;
+	char	**heredoc;
+	char	*delim;
     int		in_fd;
     int		out_fd;
     int		cmd_nbr;
