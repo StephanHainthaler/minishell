@@ -57,6 +57,8 @@ int		get_cmds(t_executor *exec, t_list **list)
 			current = current->next;
 			if (exec->cmds[i]->outfile != NULL)
 				free(exec->cmds[i]->outfile);
+			if (exec->cmds[i]->out_fd != -1)
+				close(exec->cmds[i]->out_fd);
 			exec->cmds[i]->outfile = ft_strdup(current->attr);
 			exec->cmds[i]->out_fd = get_fd(exec->cmds[i]->outfile, false, false);
 		}
@@ -65,15 +67,25 @@ int		get_cmds(t_executor *exec, t_list **list)
 			current = current->next;
 			if (exec->cmds[i]->outfile != NULL)
 				free(exec->cmds[i]->outfile);
+			if (exec->cmds[i]->out_fd != -1)
+				close(exec->cmds[i]->out_fd);
 			exec->cmds[i]->outfile = ft_strdup(current->attr);
 			exec->cmds[i]->out_fd = get_fd(exec->cmds[i]->outfile, false, true);
+		}
+		if (current->type == HERE_DOC)
+		{
+			current = current->next;
+			if (exec->cmds[i]->here_doc != NULL)
+				free(exec->cmds[i]->here_doc)
+			exec->cmds[i]->here_doc = ft_strdup(current->attr);
+
+			
 		}
 		if (current->type == PIPE)
 		{
 			exec->cmds[i]->cmd_nbr = i;
 			i++;
 		}
-		//if (current->type == HERE_DOC)
 			//NULL CHECK
 		current = current->next;
 	}
@@ -147,4 +159,14 @@ bool is_valid_input(t_lexer *lex)
 		return (ft_putendl_fd("command has no word", 2), false);
 	lex->token_list = head;
 	return (true);
+}
+
+char *read_here_doc(char *delimiter)
+{
+	char	*here_doc_str;
+
+	while (true)
+	{
+		readline(">")
+	}
 }

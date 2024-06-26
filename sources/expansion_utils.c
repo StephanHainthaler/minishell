@@ -39,3 +39,66 @@ bool	check_for_env(char *str1, char *str2, int len)
 		return (true);
 	return (false);
 }
+
+// char	*expand_str(char *to_expand, char **envp, int exit_code)
+// {
+// 	int	len;
+// 	int	pos;
+// 	int i;
+// 	int	j;
+
+// 	if (ft_strchr(to_expand, '$') == NULL)
+// 		return (NULL);
+// 	i = 0;
+// 	while (to_expand[i] != '\0')
+// 	{
+// 		if (to_expand[i] == '\'' || to_expand[i] == '"')
+// 			i++;
+// 		if (to_expand[*i + 1] == '?')
+// 		{
+// 			to_expand = handle_exit_code_expansion(to_expand, exit_code, i);
+// 		}
+// 	}
+// }
+
+// void	handle_quotes_in_expansion_2(char quote, bool in_squotes, bool in_dquotes)
+// {	
+// 	if (quote == '\'')
+// 	{
+// 		if (node->in_dquotes == false)
+// 			node->in_squotes = !(node->in_squotes);
+// 	}
+// 	if (quote == '"')
+// 	{
+// 		if (node->in_squotes == false)
+// 			node->in_dquotes = !(node->in_dquotes);
+// 	}
+// }
+
+// bool	is_str_expandable(char *str)
+// {
+// 	int		i;
+// 	bool	in_sqoutes;
+// 	bool	in_dqoutes;
+
+// 	in_sqoutes = false;
+// 	in_dqoutes = false;
+// 	i = 0;
+// 	while (str[i] != '\0')
+// 	{
+// 		if (str[i] == '\'')
+// 		{
+// 			if (in_dquotes == false)
+// 			in_squotes = !(in_squotes);
+// 		}
+// 		if (str[i] == '"')
+// 		{
+// 			if (in_squotes == false)
+// 				in_dquotes = !(in_dquotes);
+// 		}
+// 		if (str[i] == '$' && in_squotes == false)
+// 			return (true);
+// 		i++;
+// 	}
+// 	return (false);
+// }

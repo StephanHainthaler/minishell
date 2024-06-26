@@ -50,6 +50,7 @@ typedef struct s_cmd
     char	*cmd_path;
     char	*infile;
     char	*outfile;
+	char	*here_doc;
     int		in_fd;
     int		out_fd;
     int		cmd_nbr;
@@ -97,11 +98,12 @@ int		check_for_expansion(t_list **token_list, char **envp, int ec);
 char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
 char	*handle_invalid_expansion(char *str, int len, int pos);
-char	*handle_exit_code_expansion(t_list *node, int exit_code, int *i);
+char	*handle_exit_code_expansion(char *to_expand, int exit_code, int *i);
 
 //expansion_utils.c
 int		get_envname_len(t_list *node, int *i);
 bool	check_for_env(char *str1, char *str2, int len);
+bool	is_str_expandable(char *str);
 
 //quotation.c
 int		check_for_dequotation(t_list **token_list);

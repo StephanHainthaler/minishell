@@ -50,7 +50,7 @@ char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i)
 	if (node->attr == NULL)
 		return (NULL);
 	if (node->attr[*i + 1] == '?')
-		return (node->attr = handle_exit_code_expansion(node, exit_code, i));
+		return (node->attr = handle_exit_code_expansion(node->attr, exit_code, i));
 	if (ft_isspace(node->attr[*i + 1]) == true || node->attr[*i + 1] == '\0'
 		|| node->attr[*i + 1] == '$' || node->attr[*i + 1] == '"'
 		|| node->attr[*i + 1] == '\'')
@@ -119,7 +119,7 @@ char	*handle_invalid_expansion(char *str, int len, int pos)
 	return (new_str);
 }
 
-char	*handle_exit_code_expansion(t_list *node, int exit_code, int *i)
+char	*handle_exit_code_expansion(char *to_expand, int exit_code, int *i)
 {
 	char	*exp_str;
 	char	*exp_var;
@@ -130,20 +130,20 @@ char	*handle_exit_code_expansion(t_list *node, int exit_code, int *i)
 	exp_var = ft_itoa(exit_code);
 	if (exp_var == NULL)
 		return (NULL);
-	exp_str = (char *)malloc(((ft_strlen(node->attr) - 2 + \
+	exp_str = (char *)malloc(((ft_strlen(to_expand) - 2 + \
 		ft_strlen(exp_var) + 1) * sizeof(char)));
 	if (exp_str == NULL)
 		return (free(exp_var), NULL);
 	j = 0;
 	k = 0;
 	while (j != *i)
-		exp_str[k++] = node->attr[j++];
+		exp_str[k++] = to_expand[j++];
 	l = 0;
 	while (exp_var[l] != '\0')
 		exp_str[k++] = exp_var[l++];
 	j = j + 2;
-	while (node->attr[j] != '\0')
-		exp_str[k++] = node->attr[j++];
+	while (to_expand[j] != '\0')
+		exp_str[k++] = to_expand[j++];
 	exp_str[k] = '\0';
-	return (free(node->attr), free(exp_var), exp_str);
+	return (free(to_expand), free(exp_var), exp_str);
 }

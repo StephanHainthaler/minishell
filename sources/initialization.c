@@ -102,6 +102,7 @@ t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr)
 	cmd->cmd_path = NULL;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
+	cmd->here_doc = NULL;
 	cmd->in_fd = 0;
 	cmd->out_fd = 1;
 	cmd->cmd_nbr = cmd_nbr;
