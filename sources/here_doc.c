@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:24:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/27 14:00:24 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/27 14:01:32 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int handle_here_doc(int here_doc_fd, char *delim)
 		if (!(ft_strchr(delim, '\'') || ft_strchr(delim, '"')))
 			//handle_expansion()
         ft_putendl_fd(temp_str, here_doc_fd);
-        free(temp_str);
+		free(temp_str);
 	}
     return (0);
 }
