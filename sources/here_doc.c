@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:24:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/27 13:43:24 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/27 14:00:24 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int handle_here_doc(int here_doc_fd, char *delimiter)
+int handle_here_doc(int here_doc_fd, char *delim)
 {
     char    *temp_str;
 
@@ -21,9 +21,11 @@ int handle_here_doc(int here_doc_fd, char *delimiter)
 		temp_str = readline("> ");
 		if (temp_str == NULL)
 			return (1);
-        if (ft_strnstr(temp_str, delimiter, ft_strlen(delimiter)) != NULL \
-            && ft_strlen(temp_str) == ft_strlen(delimiter))
+        if (ft_strnstr(temp_str, delim, ft_strlen(delim)) != NULL \
+            && ft_strlen(temp_str) == ft_strlen(delim))
 			break ;
+		if (!(ft_strchr(delim, '\'') || ft_strchr(delim, '"')))
+			//handle_expansion()
         ft_putendl_fd(temp_str, here_doc_fd);
         free(temp_str);
 	}
