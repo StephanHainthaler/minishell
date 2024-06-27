@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/27 16:11:01 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/27 16:13:57 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int		get_cmds(t_executor *exec, t_list **list);
 void	ft_print_cmd(t_cmd *cmd);
 
 //here_doc.c
-int handle_here_doc(int here_doc_fd, char *delim);
+int		handle_here_doc(int here_doc_fd, char *delim);
 
 //executor.c
 int		execute_input(t_minishell *ms);

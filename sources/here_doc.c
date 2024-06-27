@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:24:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/27 14:01:32 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/27 16:42:20 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int handle_here_doc(int here_doc_fd, char *delim)
         if (ft_strnstr(temp_str, delim, ft_strlen(delim)) != NULL \
             && ft_strlen(temp_str) == ft_strlen(delim))
 			break ;
-		if (!(ft_strchr(delim, '\'') || ft_strchr(delim, '"')))
+		if (ft_strchr(delim, '\'') == NULL && ft_strchr(delim, '"') == NULL)
+			printf("expand\n");
 			//handle_expansion()
         ft_putendl_fd(temp_str, here_doc_fd);
 		free(temp_str);
@@ -32,19 +33,19 @@ int handle_here_doc(int here_doc_fd, char *delim)
     return (0);
 }
 
-char    *expand_here_doc(char *to_expand, char **envp, int exit_code)
-{
-    int i;
+// char    *expand_here_doc(char *to_expand, char **envp, int exit_code)
+// {
+//     int i;
 
-    if (ft_strchr(to_expand, '$') == NULL)
-	    return (to_expand);
-    i = 0;
+//     if (ft_strchr(to_expand, '$') == NULL)
+// 	    return (to_expand);
+//     i = 0;
     // 		if (to_expand[*i + 1] == '?')
 // 		{
 // 			to_expand = handle_exit_code_expansion(to_expand, exit_code, i);
 // 		}
     
-}
+//}
 
 
 // char	*expand_str(char *to_expand, char **envp, int exit_code)
