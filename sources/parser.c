@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/27 12:27:28 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/27 13:25:32 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int		get_cmds(t_executor *exec, t_list **list)
 			current = current->next;
 			if (exec->cmds[i]->infile != NULL)
 				free(exec->cmds[i]->infile);
-			if (exec->cmds[i]->in_fd != -1)
+			if (exec->cmds[i]->in_fd != -1 && exec->cmds[i]->in_fd != 0)
 				close(exec->cmds[i]->in_fd);
 			exec->cmds[i]->has_here_doc = false;
 			exec->cmds[i]->infile = ft_strdup(current->attr);
@@ -80,14 +80,22 @@ int		get_cmds(t_executor *exec, t_list **list)
 			current = current->next;
 			if (exec->cmds[i]->infile != NULL)
 				free(exec->cmds[i]->infile);
-			// if (exec->cmds[i]->in_fd != -1)
-			// 	close(exec->cmds[i]->in_fd);
+			if (exec->cmds[i]->in_fd != -1 && exec->cmds[i]->in_fd != 0)
+			{
+				close(exec->cmds[i]->in_fd);
+				unlink("temp");
+			}
 			exec->cmds[i]->has_here_doc = true;
 			exec->cmds[i]->infile = ft_strdup("temp");
+			//NULL CHECK
 			exec->cmds[i]->in_fd = open("temp", O_RDWR | O_APPEND | O_CREAT, 0777); //read also?
     		if (exec->cmds[i]->in_fd == -1)
 				return (1);
 			if (handle_here_doc(exec->cmds[i]->in_fd, current->attr) == -1)
+				return (1);
+			close(exec->cmds[i]->in_fd);
+			exec->cmds[i]->in_fd = open("temp", O_RDONLY, 0777);
+			if (exec->cmds[i]->in_fd == -1)
 				return (1);
 		}
 		if (current->type == PIPE)

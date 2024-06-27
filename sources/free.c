@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/27 10:57:15 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/27 13:30:27 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	free_lexer(t_lexer *lex)
 		return ;
 	if (lex->token_list != NULL)
 		ft_lstclear(&lex->token_list);
+	if (lex->input != NULL)
+		free(lex->input);
 	free(lex);
 	lex = NULL;
 }
