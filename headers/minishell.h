@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/25 10:20:48 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/27 10:14:39 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ typedef struct s_cmd
     char	*cmd_path;
     char	*infile;
     char	*outfile;
-	char	*here_doc;
     int		in_fd;
     int		out_fd;
     int		cmd_nbr;
-}            t_cmd;
+	bool	has_here_doc;
+}			t_cmd;
 
 typedef struct s_executor
 {
@@ -119,6 +119,9 @@ int		count_cmds(t_list **list);
 int		count_cmds(t_list **list);
 int		get_cmds(t_executor *exec, t_list **list);
 void	ft_print_cmd(t_cmd *cmd);
+
+//here_doc.c
+int		get_here_doc_fd(char *delimiter);
 
 //executor.c
 int		execute_input(t_minishell *ms);

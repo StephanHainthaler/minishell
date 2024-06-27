@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/25 10:10:25 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/27 10:51:24 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ int		get_cmds(t_executor *exec, t_list **list)
 			current = current->next;
 			if (exec->cmds[i]->infile != NULL)
 				free(exec->cmds[i]->infile);
+			if (exec->cmds[i]->in_fd != -1)
+				close(exec->cmds[i]->in_fd);
+			exec->cmds[i]->has_here_doc = false;
 			exec->cmds[i]->infile = ft_strdup(current->attr);
 			exec->cmds[i]->in_fd = get_fd(exec->cmds[i]->infile, true, false);
 		}
@@ -75,11 +78,15 @@ int		get_cmds(t_executor *exec, t_list **list)
 		if (current->type == HERE_DOC)
 		{
 			current = current->next;
-			if (exec->cmds[i]->here_doc != NULL)
-				free(exec->cmds[i]->here_doc)
-			exec->cmds[i]->here_doc = ft_strdup(current->attr);
-
-			
+			if (exec->cmds[i]->infile != NULL)
+				free(exec->cmds[i]->infile);
+			if (exec->cmds[i]->in_fd != -1)
+				close(exec->cmds[i]->in_fd);
+			exec->cmds[i]->has_here_doc = true;
+			exec->cmds[i]->infile = ft_strdup("temp");
+			exec->cmds[i]->in_fd = get_here_doc_fd(current->attr);
+			if (exec->cmds[i]->in_fd == -1)
+				return (1);
 		}
 		if (current->type == PIPE)
 		{
@@ -159,14 +166,4 @@ bool is_valid_input(t_lexer *lex)
 		return (ft_putendl_fd("command has no word", 2), false);
 	lex->token_list = head;
 	return (true);
-}
-
-char *read_here_doc(char *delimiter)
-{
-	char	*here_doc_str;
-
-	while (true)
-	{
-		readline(">")
-	}
 }
