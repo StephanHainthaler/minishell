@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc..c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 12:12:06 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/25 16:41:46 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/27 09:17:31 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ void	ft_heredoc(t_cmd *cmd)
 	
 	i = cmd->cmd_nbr;
 	
-	while (1)
+	while (true)
 	{
-		*cmd[i].heredoc = readline("heredoc>");
+		*cmd[i].heredoc = readline("> ");
 		if (cmd[i].heredoc == NULL)
 			return ;
 		if (ft_strncmp(cmd[i].delim, *cmd[i].heredoc, ft_strlen(cmd[i].delim)) != 0)
