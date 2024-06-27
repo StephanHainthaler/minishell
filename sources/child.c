@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/10 12:43:22 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:34:57 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@ void	child_proc(t_executor *exec, t_cmd *cmd, int ends[])
 		exit_child(exec, ends[0], ends[1], 1);
 	if (dup2(ends[1], 1) == -1)
 	{
-		ft_putendl_fd("dup2 failed", 2);
+		ft_putendl_fd("child 1dup2 failed", 2);
 		exit_child(exec, ends[0], ends[1], 1);
 	}
 	close(ends[1]);
-	if (dup2(ends[0], 0) == -1)
-	{
-		ft_putendl_fd("dup2 failed", 2);
-		exit_child(exec, ends[0], -1, 1);
-	}
+	// if (dup2(ends[0], 0) == -1)
+	// {
+	// 	ft_putendl_fd("child 2dup2 failed", 2);
+	// 	exit_child(exec, ends[0], -1, 1);
+	// }
 	close(ends[0]);
 	if (exec->paths != NULL)
 	{
@@ -36,7 +36,8 @@ void	child_proc(t_executor *exec, t_cmd *cmd, int ends[])
 		if (cmd->cmd_path == NULL)
 			exit_child(exec, -1, -1, 1);
 	}
-	execute_cmd(exec, exec->cmds[0]);
+	//printf("%s\n", cmd->simp_cmd[0]);
+	execute_cmd(exec, cmd);
 }
 
 void	single_child_proc(t_executor *exec, t_cmd *cmd)

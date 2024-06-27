@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/20 09:43:59 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/25 14:30:24 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 int	execute_input(t_minishell *ms)
 {
+	//int	status;
+	int	i;
+
 	if (initialize_executor_2(ms, 0) == 1)
 		return (1);
 	if (ms->exec->cmds[0]->simp_cmd == NULL)
@@ -29,9 +32,16 @@ int	execute_input(t_minishell *ms)
 	}
 	else
 	{
-		printf("Test multi_pipes\n");
-		if (multiple_execution(ms->exec) == 1)
-			return (1);
+		i = 0;
+		while (i < ms->exec->num_of_cmds)
+		{
+			if (multiple_execution(ms->exec, i) == 1)
+			{
+				printf("Fail!");
+				return (1);
+			}
+			i++;
+		}
 	}
 	ms->last_exit_code = ms->exec->exit_status;
 	return (0);
@@ -41,6 +51,7 @@ int	single_execution(t_executor *exec) //t_minishell *ms
 {
 	int	status;
 
+	//printf("%s\n", exec->cmds[0]->cmd_path);
 	exec->cpids[0] = fork();
 	if (exec->cpids[0] == -1)
 		return (1);
@@ -55,7 +66,50 @@ int	single_execution(t_executor *exec) //t_minishell *ms
 	return (0);
 }
 
-int	multiple_execution(t_executor *exec)
+
+int	multiple_execution(t_executor *exec, int i)
+{
+	int		cpid;
+	int		ends[2];
+	int		status;
+	
+	if (pipe(ends) == -1)
+		return (ft_putendl_fd("pipe error", 2), 1);
+	//printf("%s\n", exec->cmds[i]->cmd_path);
+	ft_putstrarr_fd(exec->cmds[i]->simp_cmd, 1);
+	cpid = fork();
+	if (cpid == -1)
+		return (ft_putendl_fd("fork error", 2), close(ends[0]), close(ends[1]), 1);
+	if (cpid == 0)
+	{
+		// if ((dup2(ends[1], 1) == -1 || close(ends[0]) == -1 || close(ends[1]) == -1))
+        //     return (ft_putendl_fd("FATAL child error 1", 2), 1);
+		// if (exec->paths != NULL)
+		// {
+		// 	exec->cmds[i]->cmd_path = get_cmd_path(exec, exec->cmds[i]);
+		// 	if (exec->cmds[i]->cmd_path == NULL)
+		// 		return (ft_putendl_fd("FATAL child error 2", 2), 1);
+		// }
+		// execve(exec->cmds[i]->cmd_path, exec->cmds[i]->simp_cmd, exec->envp);
+		// return (ft_putendl_fd("FATAL child error 3", 2), 1);
+		child_proc(exec, exec->cmds[i], ends);
+	}
+	printf("Waiting...\n");
+	waitpid(cpid, &status, 0);
+	printf("End Wait\n");
+	if (i == exec->num_of_cmds)
+	{
+		if (dup2(ends[1], 1) == -1)
+			return (ft_putendl_fd("FATAL dup2 error", 2), 1);
+	}
+	if (dup2(ends[0], 0) == -1)
+		return (ft_putendl_fd("FATAL dup2 error", 2), 1);
+	if (close(ends[0]) == -1 || close(ends[1]) == -1)
+        return (ft_putendl_fd("FATAL error", 2), 1);
+	return (exec->exit_status = WEXITSTATUS(status), 0);
+}
+
+int	multiple_execution_2(t_executor *exec)
 {
 	int	i;
 	int	status;

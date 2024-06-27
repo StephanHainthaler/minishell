@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/25 16:10:52 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/27 16:11:23 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ int		get_cmds(t_executor *exec, t_list **list)
 			current = current->next;
 			if (exec->cmds[i]->infile != NULL)
 				free(exec->cmds[i]->infile);
+			if (exec->cmds[i]->in_fd != -1 && exec->cmds[i]->in_fd != 0)
+				close(exec->cmds[i]->in_fd);
+			exec->cmds[i]->has_here_doc = false;
 			exec->cmds[i]->infile = ft_strdup(current->attr);
 			exec->cmds[i]->in_fd = get_fd(exec->cmds[i]->infile, true, false);
 		}
@@ -57,6 +60,8 @@ int		get_cmds(t_executor *exec, t_list **list)
 			current = current->next;
 			if (exec->cmds[i]->outfile != NULL)
 				free(exec->cmds[i]->outfile);
+			if (exec->cmds[i]->out_fd != -1)
+				close(exec->cmds[i]->out_fd);
 			exec->cmds[i]->outfile = ft_strdup(current->attr);
 			exec->cmds[i]->out_fd = get_fd(exec->cmds[i]->outfile, false, false);
 		}
@@ -65,25 +70,40 @@ int		get_cmds(t_executor *exec, t_list **list)
 			current = current->next;
 			if (exec->cmds[i]->outfile != NULL)
 				free(exec->cmds[i]->outfile);
+			if (exec->cmds[i]->out_fd != -1)
+				close(exec->cmds[i]->out_fd);
 			exec->cmds[i]->outfile = ft_strdup(current->attr);
 			exec->cmds[i]->out_fd = get_fd(exec->cmds[i]->outfile, false, true);
+		}
+		if (current->type == HERE_DOC)
+		{
+			current = current->next;
+			if (exec->cmds[i]->infile != NULL)
+				free(exec->cmds[i]->infile);
+			if (exec->cmds[i]->in_fd != -1 && exec->cmds[i]->in_fd != 0)
+			{
+				close(exec->cmds[i]->in_fd);
+				unlink("temp");
+			}
+			exec->cmds[i]->has_here_doc = true;
+			exec->cmds[i]->infile = ft_strdup("temp");
+			//NULL CHECK
+			exec->cmds[i]->in_fd = open("temp", O_RDWR | O_APPEND | O_CREAT, 0777); //read also?
+    		if (exec->cmds[i]->in_fd == -1)
+				return (1);
+			if (handle_here_doc(exec->cmds[i]->in_fd, current->attr) == -1)
+				return (1);
+			close(exec->cmds[i]->in_fd);
+			exec->cmds[i]->in_fd = open("temp", O_RDONLY, 0777);
+			if (exec->cmds[i]->in_fd == -1)
+				return (1);
 		}
 		if (current->type == PIPE)
 		{
 			exec->cmds[i]->cmd_nbr = i;
 			i++;
 		}
-		if (current->type == HERE_DOC)
-		{
-			i = exec->cmds[cmd_nbr];
-			current = current->next;
-			if (exec->cmds[i]->heredoc != NULL)
-				free(exec->cmds[i]->heredoc);
-			exec->cmds[i]->delim = ft_strdup(current->attr);
-			if ((cmd[i].delim[0] == '\'') || (cmd[i].delim[0] == '\"'))
-				//handle_expansion
-			//handle_heredoc;
-		}
+			//NULL CHECK
 		current = current->next;
 	}
 	return (0);

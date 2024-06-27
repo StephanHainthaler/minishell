@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/25 16:18:22 by juitz            ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/06/27 16:11:01 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -56,7 +57,8 @@ typedef struct s_cmd
     int		in_fd;
     int		out_fd;
     int		cmd_nbr;
-}            t_cmd;
+	bool	has_here_doc;
+}			t_cmd;
 
 typedef struct s_executor
 {
@@ -100,11 +102,12 @@ int		check_for_expansion(t_list **token_list, char **envp, int ec);
 char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
 char	*handle_invalid_expansion(char *str, int len, int pos);
-char	*handle_exit_code_expansion(t_list *node, int exit_code, int *i);
+char	*handle_exit_code_expansion(char *to_expand, int exit_code, int *i);
 
 //expansion_utils.c
 int		get_envname_len(t_list *node, int *i);
 bool	check_for_env(char *str1, char *str2, int len);
+bool	is_str_expandable(char *str);
 
 //quotation.c
 int		check_for_dequotation(t_list **token_list);
@@ -121,10 +124,13 @@ int		count_cmds(t_list **list);
 int		get_cmds(t_executor *exec, t_list **list);
 void	ft_print_cmd(t_cmd *cmd);
 
+//here_doc.c
+int handle_here_doc(int here_doc_fd, char *delim);
+
 //executor.c
 int		execute_input(t_minishell *ms);
 int		single_execution(t_executor *exec);
-int		multiple_execution(t_executor *exec);
+int		multiple_execution(t_executor *exec, int i);
 void	execute_cmd(t_executor *exec, t_cmd *cmd);
 
 //executor_utils.c
@@ -151,6 +157,7 @@ char	**ft_unset(char **simp_cmd, char **envp);
 //builtins_utils.c
 void	sort_strarray(char **strarray);
 bool	ft_are_str_indentical(char *str1, char *str2);
+bool	is_replacable(char *str1, char *str2);
 
 //free.c
 void	free_lexer(t_lexer *lex);

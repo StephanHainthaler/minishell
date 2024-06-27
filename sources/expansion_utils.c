@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 14:01:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/20 10:39:31 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/27 13:41:59 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool	check_for_env(char *str1, char *str2, int len)
 {
 	if (ft_strncmp(str1, str2, len) != 0)
 		return (false);
-	if (str1[len] == '=')
+	if (str1[len] == '=' || str1[len] == '\0')
 		return (true);
 	return (false);
 }

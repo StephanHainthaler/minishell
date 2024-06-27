@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/17 09:53:57 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/27 10:15:16 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,5 +105,6 @@ t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr)
 	cmd->in_fd = 0;
 	cmd->out_fd = 1;
 	cmd->cmd_nbr = cmd_nbr;
+	cmd->has_here_doc = false;
     return (cmd);
 }
