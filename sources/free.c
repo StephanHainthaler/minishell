@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/13 13:18:10 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/27 10:57:15 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	free_cmds(t_cmd **cmds, int	num_of_cmds)
 			close(cmds[i]->out_fd);
 		if (cmds[i]->simp_cmd != NULL)
 			ft_free_strarr(cmds[i]->simp_cmd);
+		if (cmds[i]->has_here_doc == true)
+			unlink("temp");
 		free(cmds[i]);
 		cmds[i] = NULL;
 		i++;

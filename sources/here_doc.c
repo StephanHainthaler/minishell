@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:24:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/27 10:50:02 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/27 10:55:02 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ int get_here_doc_fd(char *delimiter)
 
     while (true)
 	{
-		temp = readline("here_doc ");
-		// if (temp == NULL)
-		// 	return (1);
+		temp = readline("> ");
+		if (temp == NULL)
+			return (1);
 		if (ft_isspace_str(temp) == false)
 			break ;
 	}
