@@ -18,8 +18,8 @@ int	parse_input(t_minishell *ms)
 
 	if (initialize_executor(ms) == 1)
 		return (1);
-	if (is_valid_input(ms->lex) == false)
-		return (free_lexer(ms->lex), free_executor(ms->exec), 2);
+	// if (is_valid_input(ms->lex) == false)
+	// 	return (free_lexer(ms->lex), free_executor(ms->exec), 2);
 	if (get_cmds(ms->exec, &ms->lex->token_list) == 1)
 		return (free_executor(ms->exec), 1);
 	// i = 0;
