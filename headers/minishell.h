@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/28 13:32:21 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/28 13:46:35 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_executor
 	int		num_of_cmds;
 	int		num_of_pipes;
 	char	**paths;
+	bool	is_path_set;
 	int		**pipes;
 	int		*ends;
 	pid_t	*cpids;

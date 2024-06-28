@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/25 10:34:57 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/28 13:51:16 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ void	child_proc(t_executor *exec, t_cmd *cmd, int ends[])
 	}
 	close(ends[0]);
 	close(ends[1]);
-	if (exec->paths != NULL)
+	if (exec->is_path_set == true)
 	{
 		cmd->cmd_path = get_cmd_path(exec, cmd);
 		if (cmd->cmd_path == NULL)
 			exit_child(exec, -1, -1, 1);
 	}
 	execute_cmd(exec, cmd);
-	exit_child(exec, -1, -1, 1);
+	//exit_child(exec, -1, -1, 1);
 }
 
 void	child_proc2(t_executor *exec, t_cmd *cmd, int ends[])

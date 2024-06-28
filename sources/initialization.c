@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialization.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/27 10:15:16 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/28 13:47:17 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	initialize_executor(t_minishell *ms)
 			return (free_cmds(ms->exec->cmds, i), free(ms->exec), 1);
 		i++;
 	}
+	ms->exec->is_path_set = is_path_set(ms->envp);
 	ms->exec->paths = NULL;
 	ms->exec->pipes = NULL;
 	ms->exec->cpids = NULL;
