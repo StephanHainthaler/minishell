@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/27 16:13:57 by juitz            ###   ########.fr       */
+/*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
+/*   Updated: 2024/06/28 15:34:31 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	*handle_invalid_expansion(char *str, int len, int pos);
 char	*handle_exit_code_expansion(char *to_expand, int exit_code, int *i);
 
 //expansion_utils.c
-int		get_envname_len(t_list *node, int *i);
+int		get_envname_len(char *str, int *i);
 bool	check_for_env(char *str1, char *str2, int len);
 bool	is_str_expandable(char *str);
 
@@ -121,11 +121,19 @@ int		parse_input(t_minishell *ms);
 bool	is_valid_input(t_lexer *lex);
 int		count_cmds(t_list **list);
 int		count_cmds(t_list **list);
-int		get_cmds(t_executor *exec, t_list **list);
+int		get_cmds(t_executor *exec, t_list **list, int error_check, int i);
 void	ft_print_cmd(t_cmd *cmd);
 
+//parser_utils.c
+int		get_word(t_executor *exec, char *word, int i);
+int		get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i);
+int		get_infile_redir(t_executor *exec, char *infile, int i);
+int		get_here_doc(t_executor *exec, char *delim, int i);
+
 //here_doc.c
-int		handle_here_doc(int here_doc_fd, char *delim);
+int 	handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code);
+char	*check_for_here_doc_expansion(char *str, char **envp, int ec);
+char    *expand_here_doc(char *str, char **envp, int exit_code, int *i);
 
 //executor.c
 int		execute_input(t_minishell *ms);

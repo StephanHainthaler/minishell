@@ -6,13 +6,13 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:24:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/27 16:42:20 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/28 15:34:44 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int handle_here_doc(int here_doc_fd, char *delim)
+int handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code)
 {
     char    *temp_str;
 
@@ -24,89 +24,57 @@ int handle_here_doc(int here_doc_fd, char *delim)
         if (ft_strnstr(temp_str, delim, ft_strlen(delim)) != NULL \
             && ft_strlen(temp_str) == ft_strlen(delim))
 			break ;
-		if (ft_strchr(delim, '\'') == NULL && ft_strchr(delim, '"') == NULL)
-			printf("expand\n");
-			//handle_expansion()
+		if (!(ft_strchr(delim, '\'') || ft_strchr(delim, '"')))
+        {
+			temp_str = check_for_here_doc_expansion(temp_str, envp, exit_code);
+            if (temp_str == NULL)
+                return (1);
+        }
         ft_putendl_fd(temp_str, here_doc_fd);
 		free(temp_str);
 	}
     return (0);
 }
 
-// char    *expand_here_doc(char *to_expand, char **envp, int exit_code)
-// {
-//     int i;
+char	*check_for_here_doc_expansion(char *str, char **envp, int ec)
+{
+	int		i;
 
-//     if (ft_strchr(to_expand, '$') == NULL)
-// 	    return (to_expand);
-//     i = 0;
-    // 		if (to_expand[*i + 1] == '?')
-// 		{
-// 			to_expand = handle_exit_code_expansion(to_expand, exit_code, i);
-// 		}
-    
-//}
+    i = 0;
+	while (str[i] != '\0')
+	{
+			if (str[i] == '$')
+			{
+				str = expand_here_doc(str, envp, ec, &i);
+				if (str == NULL)
+					return (NULL);
+			}
+		i++;
+	}
+	return (str);
+}
 
+char    *expand_here_doc(char *str, char **envp, int exit_code, int *i)
+{
+    int		len;
+	int		pos;
+	int		j;
 
-// char	*expand_str(char *to_expand, char **envp, int exit_code)
-// {
-// 	int	len;
-// 	int	pos;
-// 	int i;
-// 	int	j;
-
-// 	if (ft_strchr(to_expand, '$') == NULL)
-// 		return (NULL);
-// 	i = 0;
-// 	while (to_expand[i] != '\0')
-// 	{
-// 		if (to_expand[i] == '\'' || to_expand[i] == '"')
-// 			i++;
-// 		if (to_expand[*i + 1] == '?')
-// 		{
-// 			to_expand = handle_exit_code_expansion(to_expand, exit_code, i);
-// 		}
-// 	}
-// }
-
-// void	handle_quotes_in_expansion_2(char quote, bool in_squotes, bool in_dquotes)
-// {	
-// 	if (quote == '\'')
-// 	{
-// 		if (node->in_dquotes == false)
-// 			node->in_squotes = !(node->in_squotes);
-// 	}
-// 	if (quote == '"')
-// 	{
-// 		if (node->in_squotes == false)
-// 			node->in_dquotes = !(node->in_dquotes);
-// 	}
-// }
-
-// bool	is_str_expandable(char *str)
-// {
-// 	int		i;
-// 	bool	in_sqoutes;
-// 	bool	in_dqoutes;
-
-// 	in_sqoutes = false;
-// 	in_dqoutes = false;
-// 	i = 0;
-// 	while (str[i] != '\0')
-// 	{
-// 		if (str[i] == '\'')
-// 		{
-// 			if (in_dquotes == false)
-// 			in_squotes = !(in_squotes);
-// 		}
-// 		if (str[i] == '"')
-// 		{
-// 			if (in_squotes == false)
-// 				in_dquotes = !(in_dquotes);
-// 		}
-// 		if (str[i] == '$' && in_squotes == false)
-// 			return (true);
-// 		i++;
-// 	}
-// 	return (false);
-// }
+	if (str[*i + 1] == '?')
+		return (str = handle_exit_code_expansion(str, exit_code, i));
+	if (ft_isspace(str[*i + 1]) == true || str[*i + 1] == '\0'
+		|| str[*i + 1] == '$' || str[*i + 1] == '"'
+		|| str[*i + 1] == '\'')
+		return (str);
+	pos = *i;
+	len = get_envname_len(str, i);
+	j = 0;
+	while (envp[j] != NULL)
+	{
+		if (check_for_env(envp[j], str + pos + 1, len - 1) == true)
+			return (*i = pos - 1,
+				handle_valid_expansion(str, envp[j], len, pos));
+		j++;
+	}
+	return (*i = pos - 1, handle_invalid_expansion(str, len, pos));
+}

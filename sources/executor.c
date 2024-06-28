@@ -29,13 +29,16 @@ int	execute_input(t_minishell *ms)
 			return (printf("End of cmd:3\n"), 0);
 		if (single_execution(ms->exec) == 1)
 			return (1);
+		ms->last_exit_code = ms->exec->exit_status;
 	}
 	else
 	{
 		i = 0;
 		while (i < ms->exec->num_of_cmds)
 		{
-			if (multiple_execution(ms->exec, i) == 1)
+			ms->last_exit_code = multiple_execution(ms->exec, i);
+			printf("%i\n", i);
+			if (ms->last_exit_code == -1)
 			{
 				printf("Fail!");
 				return (1);
@@ -43,7 +46,6 @@ int	execute_input(t_minishell *ms)
 			i++;
 		}
 	}
-	ms->last_exit_code = ms->exec->exit_status;
 	return (0);
 }
 
@@ -75,38 +77,27 @@ int	multiple_execution(t_executor *exec, int i)
 	
 	if (pipe(ends) == -1)
 		return (ft_putendl_fd("pipe error", 2), 1);
-	//printf("%s\n", exec->cmds[i]->cmd_path);
-	ft_putstrarr_fd(exec->cmds[i]->simp_cmd, 1);
+	//ft_putstrarr_fd(exec->cmds[i]->simp_cmd, 1);
 	cpid = fork();
 	if (cpid == -1)
 		return (ft_putendl_fd("fork error", 2), close(ends[0]), close(ends[1]), 1);
 	if (cpid == 0)
 	{
-		// if ((dup2(ends[1], 1) == -1 || close(ends[0]) == -1 || close(ends[1]) == -1))
-        //     return (ft_putendl_fd("FATAL child error 1", 2), 1);
-		// if (exec->paths != NULL)
-		// {
-		// 	exec->cmds[i]->cmd_path = get_cmd_path(exec, exec->cmds[i]);
-		// 	if (exec->cmds[i]->cmd_path == NULL)
-		// 		return (ft_putendl_fd("FATAL child error 2", 2), 1);
-		// }
-		// execve(exec->cmds[i]->cmd_path, exec->cmds[i]->simp_cmd, exec->envp);
-		// return (ft_putendl_fd("FATAL child error 3", 2), 1);
 		child_proc(exec, exec->cmds[i], ends);
 	}
-	printf("Waiting...\n");
+	//printf("Waiting...\n");
 	waitpid(cpid, &status, 0);
-	printf("End Wait\n");
-	if (i == exec->num_of_cmds)
-	{
-		if (dup2(ends[1], 1) == -1)
-			return (ft_putendl_fd("FATAL dup2 error", 2), 1);
-	}
+	//printf("End Wait\n");
+	// if (i == exec->num_of_cmds)
+	// {
+	// 	if (dup2(ends[1], 1) == -1)
+	// 		return (ft_putendl_fd("FATAL dup2 error", 2), 1);
+	// }
 	if (dup2(ends[0], 0) == -1)
 		return (ft_putendl_fd("FATAL dup2 error", 2), 1);
 	if (close(ends[0]) == -1 || close(ends[1]) == -1)
         return (ft_putendl_fd("FATAL error", 2), 1);
-	return (exec->exit_status = WEXITSTATUS(status), 0);
+	return (WEXITSTATUS(status));
 }
 
 int	multiple_execution_2(t_executor *exec)
