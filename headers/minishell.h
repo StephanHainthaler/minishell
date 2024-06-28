@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/28 10:19:29 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/28 13:32:21 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ void	handle_quotes_in_expansion(t_list *node, char quote);
 //parser.c
 int		parse_input(t_minishell *ms);
 bool	is_valid_input(t_lexer *lex);
-int		count_cmds(t_list **list);
 int		count_cmds(t_list **list);
 int		get_cmds(t_executor *exec, t_list **list, int error_check, int i);
 void	ft_print_cmd(t_cmd *cmd);

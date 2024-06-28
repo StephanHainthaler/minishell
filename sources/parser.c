@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/28 10:23:29 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/28 13:32:04 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,12 @@
 
 int	parse_input(t_minishell *ms)
 {
-	//int	i;
-
 	if (initialize_executor(ms) == 1)
 		return (1);
-	// if (is_valid_input(ms->lex) == false)
-	// 	return (free_lexer(ms->lex), free_executor(ms->exec), 2);
+	if (is_valid_input(ms->lex) == false)
+		return (free_lexer(ms->lex), free_executor(ms->exec), 2);
 	if (get_cmds(ms->exec, &ms->lex->token_list, 0 , 0) == 1)
 		return (free_executor(ms->exec), 1);
-	// i = 0;
-	// while (i < ms->exec->num_of_cmds)
-	// 	ft_print_cmd(ms->exec->cmds[i++]);
-	// printf("\n");
 	return (0);
 }
 
@@ -107,7 +101,7 @@ bool is_valid_input(t_lexer *lex)
 			has_wrd = true;
 		if (current->type == PIPE)
 			has_wrd = false;
-		if (current->type == PIPE && has_wrd == false)
+		if (current->type != PIPE && has_wrd == false)
 			return (ft_putendl_fd("command has no word", 2), false);
 		if (current->type == RE_IN && current->next != NULL && current->next->type != WORD)
 			return (ft_putendl_fd("parse error near `<'", 2), false);
