@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/28 15:47:41 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/28 17:32:42 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,21 +97,23 @@ bool is_valid_input(t_lexer *lex)
 {
 	t_list *head;
 	t_list *current;
-	bool	has_wrd;
+	//bool	has_wrd;
 	int		i;
 
 	i = 0;
 	head = lex->token_list;
 	current = lex->token_list;
-	has_wrd = false;
+	//has_wrd = false;
 	while (current != NULL)
 	{
 		if (current->type == PIPE && i == 0)
 			return (ft_putendl_fd("input can not start with `|'", 2), false);
-		if (current->type == WORD)
-			has_wrd = true;
-		if (current->type == PIPE)
-			has_wrd = false;
+		if (current->type == PIPE && current->next->type == PIPE)
+			return (ft_putendl_fd("sorry, no double pipes allowed in here", 2), false);
+		// if (current->type == WORD)
+		// 	has_wrd = true;
+		// if (current->type == PIPE)
+		// 	has_wrd = false;
 		// if (current->type != PIPE && has_wrd == false)
 		// 	return (ft_putendl_fd("command has no word", 2), false);
 		if (current->type == RE_IN && current->next != NULL && current->next->type != WORD)
@@ -127,8 +129,8 @@ bool is_valid_input(t_lexer *lex)
 		current = current->next;
 		i++;
 	}
-	if (has_wrd == false)
-		return (ft_putendl_fd("command has no word", 2), false);
+	// if (has_wrd == false)
+	// 	return (ft_putendl_fd("command has no word", 2), false);
 	lex->token_list = head;
 	return (true);
 }
