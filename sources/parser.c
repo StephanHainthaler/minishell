@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/28 10:10:28 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/28 10:23:29 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,7 @@ int		get_cmds(t_executor *exec, t_list **list, int error_check, int i)
 	while (cur)
 	{
 		if (cur->type == WORD)
-		{
-			exec->cmds[i]->simp_cmd = ft_stradd_tostrarr(exec->cmds[i]->simp_cmd, cur->attr);
-			if (exec->cmds[i]->simp_cmd == NULL)
-				return (1);
-		}
+			error_check = get_word(exec, cur->attr, i);
 		if (cur->type != WORD && cur->type != PIPE)
 		{
 			if (cur->type == RE_IN)
@@ -50,10 +46,10 @@ int		get_cmds(t_executor *exec, t_list **list, int error_check, int i)
 				error_check = get_outfile_redir(exec, cur->next->attr, cur->type, i);
 			if (cur->type == HERE_DOC)
 				error_check = get_here_doc(exec, cur->next->attr, i);
-			if (error_check == 1)
-				return (1);
 			cur = cur->next;
 		}
+		if (error_check == 1)
+			return (1);
 		if (cur->type == PIPE)
 			i++;
 		cur = cur->next;

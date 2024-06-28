@@ -6,11 +6,43 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/28 10:06:10 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/28 10:22:57 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+int		get_cmds(t_executor *exec, t_list **list, int error_check, int i)
+{
+	t_list	*cur;
+
+	cur = *list;
+	while (cur)
+	{
+		if (cur->type == WORD)
+		{
+			error_check = get_word(exec, cur->attr, i);
+			if (error_check == 1)
+				return (1);
+		}
+		if (cur->type != WORD && cur->type != PIPE)
+		{
+			if (cur->type == RE_IN)
+				error_check = get_infile_redir(exec, cur->next->attr, i);
+			if (cur->type == RE_OUT || cur->type == APPEND)
+				error_check = get_outfile_redir(exec, cur->next->attr, cur->type, i);
+			if (cur->type == HERE_DOC)
+				error_check = get_here_doc(exec, cur->next->attr, i);
+			if (error_check == 1)
+				return (1);
+			cur = cur->next;
+		}
+		if (cur->type == PIPE)
+			i++;
+		cur = cur->next;
+	}
+	return (0);
+}
 
 int		get_cmds(t_executor *exec, t_list **list)
 {

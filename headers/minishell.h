@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/28 10:08:52 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/28 10:19:29 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ int		get_cmds(t_executor *exec, t_list **list, int error_check, int i);
 void	ft_print_cmd(t_cmd *cmd);
 
 //parser_utils.c
+int		get_word(t_executor *exec, char *word, int i);
 int		get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i);
 int		get_infile_redir(t_executor *exec, char *infile, int i);
 int		get_here_doc(t_executor *exec, char *delim, int i);

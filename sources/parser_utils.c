@@ -6,11 +6,19 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 11:03:13 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/28 09:50:36 by codespace        ###   ########.fr       */
+/*   Updated: 2024/06/28 10:24:27 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+int	get_word(t_executor *exec, char *word, int i)
+{
+	exec->cmds[i]->simp_cmd = ft_stradd_tostrarr(exec->cmds[i]->simp_cmd, word);
+	if (exec->cmds[i]->simp_cmd == NULL)
+		return (1);
+	return (0);
+}
 
 int	get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i)
 {
