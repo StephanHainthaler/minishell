@@ -12,15 +12,15 @@
 
 #include "../headers/minishell.h"
 
-int	get_envname_len(t_list *node, int *i)
+int	get_envname_len(char *str, int *i)
 {
 	int	len;
 
 	len = 0;
-	while (node->attr[*i] != '\0' && ft_isspace(node->attr[*i]) == false
-		&& node->attr[*i] != '\'' && node->attr[*i] != '"')
+	while (str[*i] != '\0' && ft_isspace(str[*i]) == false
+		&& str[*i] != '\'' && str[*i] != '"')
 	{
-		if (node->attr[*i + 1] == '$')
+		if (str[*i + 1] == '$')
 		{
 			len++;
 			break ;

@@ -56,7 +56,7 @@ char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i)
 		|| node->attr[*i + 1] == '\'')
 		return (node->attr);
 	pos = *i;
-	len = get_envname_len(node, i);
+	len = get_envname_len(node->attr, i);
 	if (node->attr[*i] == '\'')
 	{
 		handle_quotes_in_expansion(node, node->attr[*i]);

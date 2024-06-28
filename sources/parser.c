@@ -91,7 +91,7 @@ int		get_cmds(t_executor *exec, t_list **list)
 			exec->cmds[i]->in_fd = open("temp", O_RDWR | O_APPEND | O_CREAT, 0777); //read also?
     		if (exec->cmds[i]->in_fd == -1)
 				return (1);
-			if (handle_here_doc(exec->cmds[i]->in_fd, current->attr) == -1)
+			if (handle_here_doc(exec->cmds[i]->in_fd, current->attr, exec->envp, exec->exit_status) == -1)
 				return (1);
 			close(exec->cmds[i]->in_fd);
 			exec->cmds[i]->in_fd = open("temp", O_RDONLY, 0777);

@@ -101,7 +101,7 @@ char	*handle_invalid_expansion(char *str, int len, int pos);
 char	*handle_exit_code_expansion(char *to_expand, int exit_code, int *i);
 
 //expansion_utils.c
-int		get_envname_len(t_list *node, int *i);
+int		get_envname_len(char *str, int *i);
 bool	check_for_env(char *str1, char *str2, int len);
 bool	is_str_expandable(char *str);
 
@@ -121,7 +121,9 @@ int		get_cmds(t_executor *exec, t_list **list);
 void	ft_print_cmd(t_cmd *cmd);
 
 //here_doc.c
-int handle_here_doc(int here_doc_fd, char *delim);
+int 	handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code);
+char	*check_for_here_doc_expansion(char *str, char **envp, int ec);
+char    *expand_here_doc(char *str, char **envp, int exit_code, int *i);
 
 //executor.c
 int		execute_input(t_minishell *ms);
