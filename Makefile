@@ -39,6 +39,7 @@ $(SRC_DIR)/quotation.c \
 $(SRC_DIR)/initialization.c \
 $(SRC_DIR)/free.c \
 $(SRC_DIR)/parser.c \
+$(SRC_DIR)/parser_utils.c \
 $(SRC_DIR)/here_doc.c \
 $(SRC_DIR)/executor.c \
 $(SRC_DIR)/executor_utils.c \

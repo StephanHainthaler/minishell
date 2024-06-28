@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/27 13:25:32 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/28 10:10:28 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	parse_input(t_minishell *ms)
 		return (1);
 	// if (is_valid_input(ms->lex) == false)
 	// 	return (free_lexer(ms->lex), free_executor(ms->exec), 2);
-	if (get_cmds(ms->exec, &ms->lex->token_list) == 1)
+	if (get_cmds(ms->exec, &ms->lex->token_list, 0 , 0) == 1)
 		return (free_executor(ms->exec), 1);
 	// i = 0;
 	// while (i < ms->exec->num_of_cmds)
@@ -29,85 +29,38 @@ int	parse_input(t_minishell *ms)
 	return (0);
 }
 
-int		get_cmds(t_executor *exec, t_list **list)
+int		get_cmds(t_executor *exec, t_list **list, int error_check, int i)
 {
-	t_list	*current;
-	int i;
+	t_list	*cur;
 
-	i = 0;
-	current = *list;
-	while (current)
+	cur = *list;
+	while (cur)
 	{
-		if (current->type == WORD)
+		if (cur->type == WORD)
 		{
-			exec->cmds[i]->simp_cmd = ft_stradd_tostrarr(exec->cmds[i]->simp_cmd, current->attr);
+			exec->cmds[i]->simp_cmd = ft_stradd_tostrarr(exec->cmds[i]->simp_cmd, cur->attr);
 			if (exec->cmds[i]->simp_cmd == NULL)
 				return (1);
 		}
-		if (current->type == RE_IN)
+		if (cur->type != WORD && cur->type != PIPE)
 		{
-			current = current->next;
-			if (exec->cmds[i]->infile != NULL)
-				free(exec->cmds[i]->infile);
-			if (exec->cmds[i]->in_fd != -1 && exec->cmds[i]->in_fd != 0)
-				close(exec->cmds[i]->in_fd);
-			exec->cmds[i]->has_here_doc = false;
-			exec->cmds[i]->infile = ft_strdup(current->attr);
-			exec->cmds[i]->in_fd = get_fd(exec->cmds[i]->infile, true, false);
-		}
-		if (current->type == RE_OUT)
-		{
-			current = current->next;
-			if (exec->cmds[i]->outfile != NULL)
-				free(exec->cmds[i]->outfile);
-			if (exec->cmds[i]->out_fd != -1)
-				close(exec->cmds[i]->out_fd);
-			exec->cmds[i]->outfile = ft_strdup(current->attr);
-			exec->cmds[i]->out_fd = get_fd(exec->cmds[i]->outfile, false, false);
-		}
-		if (current->type == APPEND)
-		{
-			current = current->next;
-			if (exec->cmds[i]->outfile != NULL)
-				free(exec->cmds[i]->outfile);
-			if (exec->cmds[i]->out_fd != -1)
-				close(exec->cmds[i]->out_fd);
-			exec->cmds[i]->outfile = ft_strdup(current->attr);
-			exec->cmds[i]->out_fd = get_fd(exec->cmds[i]->outfile, false, true);
-		}
-		if (current->type == HERE_DOC)
-		{
-			current = current->next;
-			if (exec->cmds[i]->infile != NULL)
-				free(exec->cmds[i]->infile);
-			if (exec->cmds[i]->in_fd != -1 && exec->cmds[i]->in_fd != 0)
-			{
-				close(exec->cmds[i]->in_fd);
-				unlink("temp");
-			}
-			exec->cmds[i]->has_here_doc = true;
-			exec->cmds[i]->infile = ft_strdup("temp");
-			//NULL CHECK
-			exec->cmds[i]->in_fd = open("temp", O_RDWR | O_APPEND | O_CREAT, 0777); //read also?
-    		if (exec->cmds[i]->in_fd == -1)
+			if (cur->type == RE_IN)
+				error_check = get_infile_redir(exec, cur->next->attr, i);
+			if (cur->type == RE_OUT || cur->type == APPEND)
+				error_check = get_outfile_redir(exec, cur->next->attr, cur->type, i);
+			if (cur->type == HERE_DOC)
+				error_check = get_here_doc(exec, cur->next->attr, i);
+			if (error_check == 1)
 				return (1);
-			if (handle_here_doc(exec->cmds[i]->in_fd, current->attr, exec->envp, exec->exit_status) == -1)
-				return (1);
-			close(exec->cmds[i]->in_fd);
-			exec->cmds[i]->in_fd = open("temp", O_RDONLY, 0777);
-			if (exec->cmds[i]->in_fd == -1)
-				return (1);
+			cur = cur->next;
 		}
-		if (current->type == PIPE)
-		{
-			exec->cmds[i]->cmd_nbr = i;
+		if (cur->type == PIPE)
 			i++;
-		}
-			//NULL CHECK
-		current = current->next;
+		cur = cur->next;
 	}
 	return (0);
 }
+
 
 int	count_cmds(t_list **list)
 {

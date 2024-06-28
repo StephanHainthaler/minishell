@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/27 14:00:43 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/28 10:08:52 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,13 @@ int		parse_input(t_minishell *ms);
 bool	is_valid_input(t_lexer *lex);
 int		count_cmds(t_list **list);
 int		count_cmds(t_list **list);
-int		get_cmds(t_executor *exec, t_list **list);
+int		get_cmds(t_executor *exec, t_list **list, int error_check, int i);
 void	ft_print_cmd(t_cmd *cmd);
+
+//parser_utils.c
+int		get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i);
+int		get_infile_redir(t_executor *exec, char *infile, int i);
+int		get_here_doc(t_executor *exec, char *delim, int i);
 
 //here_doc.c
 int 	handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code);

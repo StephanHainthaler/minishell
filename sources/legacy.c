@@ -3,14 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   legacy.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/25 13:34:11 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/06/28 10:06:10 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+int		get_cmds(t_executor *exec, t_list **list)
+{
+	t_list	*current;
+	int	error_check;
+	int i;
+
+	error_check = 0;
+	i = 0;
+	current = *list;
+	while (current)
+	{
+		if (current->type == WORD)
+		{
+			exec->cmds[i]->simp_cmd = ft_stradd_tostrarr(exec->cmds[i]->simp_cmd, current->attr);
+			if (exec->cmds[i]->simp_cmd == NULL)
+				return (1);
+		}
+		if (current->type == RE_IN)
+		{
+			current = current->next;
+			error_check = get_infile_redir(exec, current->attr, i);
+			if (error_check == 1)
+				return (1); 
+		}
+		if (current->type == RE_OUT || current->type == APPEND)
+		{
+			current = current->next;
+			error_check = get_outfile_redir(exec, current->attr, current->type, i);
+			if (error_check == 1)
+				return (1);
+		}
+		if (current->type == HERE_DOC)
+		{
+			current = current->next;
+			error_check = get_here_doc(exec, current->attr, i);
+			if (error_check == 1)
+				return (1);
+		}
+		if (current->type == PIPE)
+		{
+			exec->cmds[i]->cmd_nbr = i;
+			i++;
+		}
+		current = current->next;
+	}
+	return (0);
+}
 
 int	multiple_execution(t_executor *exec, int i)
 {
