@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/28 15:33:15 by juitz            ###   ########.fr       */
+/*   Updated: 2024/06/28 15:47:41 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int	parse_input(t_minishell *ms)
 
 	if (initialize_executor(ms) == 1)
 		return (1);
-	// if (is_valid_input(ms->lex) == false)
-	// 	return (free_lexer(ms->lex), free_executor(ms->exec), 2);
+	if (is_valid_input(ms->lex) == false)
+		return (free_lexer(ms->lex), free_executor(ms->exec), 2);
 	if (get_cmds(ms->exec, &ms->lex->token_list, 0 , 0) == 1)
 		return (free_executor(ms->exec), 1);
 	// i = 0;
@@ -98,18 +98,22 @@ bool is_valid_input(t_lexer *lex)
 	t_list *head;
 	t_list *current;
 	bool	has_wrd;
+	int		i;
 
+	i = 0;
 	head = lex->token_list;
 	current = lex->token_list;
 	has_wrd = false;
 	while (current != NULL)
 	{
+		if (current->type == PIPE && i == 0)
+			return (ft_putendl_fd("input can not start with `|'", 2), false);
 		if (current->type == WORD)
 			has_wrd = true;
 		if (current->type == PIPE)
 			has_wrd = false;
-		if (current->type != PIPE && has_wrd == false)
-			return (ft_putendl_fd("command has no word", 2), false);
+		// if (current->type != PIPE && has_wrd == false)
+		// 	return (ft_putendl_fd("command has no word", 2), false);
 		if (current->type == RE_IN && current->next != NULL && current->next->type != WORD)
 			return (ft_putendl_fd("parse error near `<'", 2), false);
 		if (current->type == RE_OUT && current->next != NULL && current->next->type != WORD)
@@ -121,6 +125,7 @@ bool is_valid_input(t_lexer *lex)
 		if (current->type != WORD && current->next == NULL)
 			return (ft_putendl_fd("word token required as last input", 2), false);
 		current = current->next;
+		i++;
 	}
 	if (has_wrd == false)
 		return (ft_putendl_fd("command has no word", 2), false);
