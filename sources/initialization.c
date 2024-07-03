@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialization.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/28 13:47:17 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/03 13:44:39 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr)
 	cmd->cmd_path = NULL;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
+	//cmd->here_doc = NULL;
 	cmd->in_fd = 0;
 	cmd->out_fd = 1;
 	cmd->cmd_nbr = cmd_nbr;

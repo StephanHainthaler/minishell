@@ -3,14 +3,124 @@
 /*                                                        :::      ::::::::   */
 /*   legacy.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/28 10:22:57 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/03 13:28:37 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+
+int	get_word(t_executor *exec, char *word, int i)
+{
+	exec->cmds[i]->simp_cmd = ft_stradd_tostrarr(exec->cmds[i]->simp_cmd, word);
+	if (exec->cmds[i]->simp_cmd == NULL)
+		return (1);
+	return (0);
+}
+
+int	get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i)
+{
+	if (exec->cmds[i]->outfile != NULL)
+		free(exec->cmds[i]->outfile);
+	if (exec->cmds[i]->out_fd != -1 && exec->cmds[i]->out_fd != 1)
+		close(exec->cmds[i]->out_fd);
+	exec->cmds[i]->outfile = ft_strdup(outfile);
+	if (exec->cmds[i]->outfile == NULL)
+		return (1);
+	if (type == RE_OUT)
+		exec->cmds[i]->out_fd = get_fd(exec->cmds[i]->outfile, false, false);
+	else
+		exec->cmds[i]->out_fd = get_fd(exec->cmds[i]->outfile, false, true);
+	return (0);
+}
+
+int	get_infile_redir(t_executor *exec, char *infile, int i)
+{
+	if (exec->cmds[i]->infile != NULL)
+		free(exec->cmds[i]->infile);
+	if (exec->cmds[i]->in_fd != -1 && exec->cmds[i]->in_fd != 0)
+		close(exec->cmds[i]->in_fd);
+	if (exec->cmds[i]->has_here_doc == true)
+		unlink(exec->cmds[i]->here_doc);
+	exec->cmds[i]->has_here_doc = false;
+	exec->cmds[i]->infile = ft_strdup(infile);
+	if (exec->cmds[i]->infile == NULL)
+		return (1);
+	exec->cmds[i]->in_fd = get_fd(exec->cmds[i]->infile, true, false);
+	return (0);
+}
+
+int	get_here_doc(t_executor *exec, char *delim, int i)
+{
+	if (exec->cmds[i]->infile != NULL)
+		free(exec->cmds[i]->infile);
+	if (exec->cmds[i]->in_fd != -1 && exec->cmds[i]->in_fd != 0)
+		close(exec->cmds[i]->in_fd);
+	if (exec->cmds[i]->here_doc == NULL)
+	{
+		exec->cmds[i]->here_doc = get_temp_name();
+		if (exec->cmds[i]->here_doc == NULL)
+			return (1);
+	}
+	if (exec->cmds[i]->has_here_doc == true)
+		unlink(exec->cmds[i]->here_doc);
+	exec->cmds[i]->has_here_doc = true;
+	exec->cmds[i]->infile = ft_strdup(exec->cmds[i]->here_doc);
+	if (exec->cmds[i]->infile == NULL)
+		return (1); 
+	exec->cmds[i]->in_fd = open(exec->cmds[i]->here_doc, O_WRONLY | O_APPEND | O_CREAT, 0777);
+    if (exec->cmds[i]->in_fd == -1)
+		return (1);
+	if (handle_here_doc(exec->cmds[i]->in_fd, delim, exec->envp, exec->exit_status) == -1)
+		return (1);
+	close(exec->cmds[i]->in_fd);
+	exec->cmds[i]->in_fd = open(exec->cmds[i]->here_doc, O_RDONLY, 0777);
+	if (exec->cmds[i]->in_fd == -1)
+		return (1);
+	return (0);
+}
+
+char    *get_temp_name(void)
+{
+	// char	*temp_name;
+	char    *temp_str;
+	// char    *temp_nbr;
+	int		fd_random;
+	// int     i;
+
+	//temp_str = ".temp";
+	fd_random = open("/dev/random", O_RDONLY, 0777);
+	temp_str = (char *)malloc((10 + 1) * sizeof(char));
+	if (temp_str == NULL)
+		return (NULL);
+	if (read(fd_random, temp_str, 10) == -1)
+		return (close(fd_random), free(temp_str), NULL);
+	printf("%s\n", temp_str);
+	return (close(fd_random), temp_str);
+	
+	// temp_nbr = NULL;
+	// temp_name = NULL;
+	// i = 0;
+	// while (i < INT_MAX - 1)
+	// {
+	// 	temp_nbr = ft_itoa(i);
+	// 	if (temp_nbr == NULL)
+	// 		return (ft_free(temp_nbr), ft_free(temp_name), NULL);
+	// 	temp_name = ft_strjoin(temp_str, temp_nbr);
+	// 	if (temp_name == NULL)
+	// 		return (ft_free(temp_nbr), ft_free(temp_name), NULL);
+	// 	printf("%s\n", temp_name);
+	// 	if (access(temp_name, F_OK) == -1)
+	// 		return (free(temp_nbr), temp_name);
+	// 	free(temp_nbr);
+	// 	free(temp_name);
+	// 	i++;
+	// }
+	// return (free(temp_nbr), free(temp_name), NULL);
+}
 
 int		get_cmds(t_executor *exec, t_list **list, int error_check, int i)
 {

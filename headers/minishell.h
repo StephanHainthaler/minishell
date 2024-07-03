@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/28 13:46:35 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/03 13:44:30 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_cmd
     char	*cmd_path;
     char	*infile;
     char	*outfile;
+	//char	*here_doc;
     int		in_fd;
     int		out_fd;
     int		cmd_nbr;
@@ -130,6 +131,8 @@ int		get_here_doc(t_executor *exec, char *delim, int i);
 int 	handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code);
 char	*check_for_here_doc_expansion(char *str, char **envp, int ec);
 char    *expand_here_doc(char *str, char **envp, int exit_code, int *i);
+char    *get_temp_name(void);
+char    *get_random_temp_name(void);
 
 //executor.c
 int		execute_input(t_minishell *ms);
