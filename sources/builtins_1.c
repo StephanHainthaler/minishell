@@ -84,18 +84,33 @@ void	ft_echo(char **simp_cmd)
 
 void	ft_cd(char **simp_cmd)
 {
+    char *oldpwd;
+	char *pwd;
+	
+	oldpwd = getcwd(NULL, 0);
 	if (ft_strarrlen(simp_cmd) == 1)
-	{
-		if (chdir(getenv("HOME")) == -1)
-			ft_putendl_fd("cd: HOME not set\n", 2);
-	}
+    {
+        if (chdir(getenv("HOME")) == -1)
+            ft_putendl_fd("cd: HOME not set\n", 2);
+    }
 	else if (ft_strarrlen(simp_cmd) == 2)
-	{
-		if (chdir(simp_cmd[1]) == -1)
-			ft_putendl_fd("cd: no such file or directory\n", 2);
-	}
+    {
+        if (chdir(simp_cmd[1]) == -1)
+        {
+            ft_putendl_fd("cd: no such file or directory\n", 2);
+            return (free(oldpwd));
+        }
+    }
 	else
-		ft_putendl_fd("cd: too many arguments", 2);
+    {
+        ft_putendl_fd("cd: too many arguments", 2);
+		return (free(oldpwd));
+    }
+    setenv("OLDPWD", oldpwd, 1);
+    free(oldpwd);
+    pwd = getcwd(NULL, 0);
+    setenv("PWD", pwd, 1);
+    free(pwd);
 }
 
 void	ft_pwd(char **simp_cmd)
