@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/04 14:22:39 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/04 14:35:25 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,15 +98,13 @@ void	ft_cd(char **simp_cmd)
         if (chdir(simp_cmd[1]) == -1)
         {
             ft_putendl_fd("cd: no such file or directory\n", 2);
-            free(oldpwd);
-            return ;
+            return (free(oldpwd));
         }
     }
 	else
     {
         ft_putendl_fd("cd: too many arguments", 2);
-        free(oldpwd);
-        return ;
+		return (free(oldpwd));
     }
     setenv("OLDPWD", oldpwd, 1);
     free(oldpwd);
