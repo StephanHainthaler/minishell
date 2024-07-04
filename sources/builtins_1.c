@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/24 13:37:58 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:22:39 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,39 @@ void	ft_echo(char **simp_cmd)
 
 void	ft_cd(char **simp_cmd)
 {
+    char *oldpwd;
+	char *pwd;
+	
+	oldpwd = getcwd(NULL, 0);
+	if (ft_strarrlen(simp_cmd) == 1)
+    {
+        if (chdir(getenv("HOME")) == -1)
+            ft_putendl_fd("cd: HOME not set\n", 2);
+    }
+	else if (ft_strarrlen(simp_cmd) == 2)
+    {
+        if (chdir(simp_cmd[1]) == -1)
+        {
+            ft_putendl_fd("cd: no such file or directory\n", 2);
+            free(oldpwd);
+            return ;
+        }
+    }
+	else
+    {
+        ft_putendl_fd("cd: too many arguments", 2);
+        free(oldpwd);
+        return ;
+    }
+    setenv("OLDPWD", oldpwd, 1);
+    free(oldpwd);
+    pwd = getcwd(NULL, 0);
+    setenv("PWD", pwd, 1);
+    free(pwd);
+}
+
+/* void	ft_cd(char **simp_cmd)
+{
 	if (ft_strarrlen(simp_cmd) == 1)
 	{
 		if (chdir(getenv("HOME")) == -1)
@@ -96,7 +129,7 @@ void	ft_cd(char **simp_cmd)
 	}
 	else
 		ft_putendl_fd("cd: too many arguments", 2);
-}
+} */
 
 void	ft_pwd(char **simp_cmd)
 {
