@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/07 18:40:11 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/07 19:11:59 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	read_input(t_minishell *ms)
 		return (1);
 	while (true)
 	{
+		//global_state = 0;
 		signal(SIGINT, &handle_signal);
 		ms->lex->input = readline("./minishell$ ");
 		if (ms->lex->input == NULL)
