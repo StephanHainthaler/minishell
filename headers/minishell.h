@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/07 16:54:00 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/07 17:32:27 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ typedef struct s_minishell
 	char		**argv;
 	char		**envp;
 }				t_minishell;
+
+extern volatile sig_atomic_t sigint_received;
 
 //initialization.c 
 int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);

@@ -6,25 +6,26 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/07 16:58:03 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/07 18:40:11 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+#include <signal.h>
 
 int	read_input(t_minishell *ms)
 {
 	int	error_check;
-
+	
 	error_check = 0;
 	if (initialize_lexer(ms) == 1)
 		return (1);
 	while (true)
 	{
-		//signal(SIGINT, &handle_signal);
+		signal(SIGINT, &handle_signal);
 		ms->lex->input = readline("./minishell$ ");
 		if (ms->lex->input == NULL)
-			return (1);
+			return (ft_putendl_fd("exit", 2), 1);
 		if (ft_isspace_str(ms->lex->input) == false)
 			break ;
 	}
