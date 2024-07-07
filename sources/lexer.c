@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/27 12:16:57 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/07 16:58:03 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	read_input(t_minishell *ms)
 		return (1);
 	while (true)
 	{
+		//signal(SIGINT, &handle_signal);
 		ms->lex->input = readline("./minishell$ ");
 		if (ms->lex->input == NULL)
 			return (1);

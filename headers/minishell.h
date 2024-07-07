@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/28 15:34:31 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/07 16:54:00 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,9 @@ char	**ft_unset(char **simp_cmd, char **envp);
 void	sort_strarray(char **strarray);
 bool	ft_are_str_indentical(char *str1, char *str2);
 bool	is_replacable(char *str1, char *str2);
+
+//signals.c
+void	handle_signal(int sig_num);
 
 //free.c
 void	free_lexer(t_lexer *lex);

@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/04 14:35:25 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/07 17:00:59 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	ft_echo(char **simp_cmd)
 	i = 1;
 	while (simp_cmd[i])
 	{
-		if (ft_strncmp(simp_cmd[1], "-n", ft_strlen(simp_cmd[1])) == 0)
+		while (ft_strncmp(simp_cmd[i], "-n", ft_strlen(simp_cmd[i])) == 0)
             i++;
 		ft_putstr_fd(simp_cmd[i], 1);
 		if (simp_cmd[i + 1])
