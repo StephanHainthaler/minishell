@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/07 17:00:59 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/17 16:41:00 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,22 @@ int	handle_builtins_non_pipable(t_minishell *ms)
 void	ft_echo(char **simp_cmd)
 {
 	int	i;
+	int j;
+	bool flag;
 
 	i = 1;
+	j = 0;
+	flag = false;
 	while (simp_cmd[i])
 	{
 		while (ft_strncmp(simp_cmd[i], "-n", ft_strlen(simp_cmd[i])) == 0)
-            i++;
+		{
+			flag = true;
+			j++;
+		}
+		while (simp_cmd[i][j + 1] == 'n' && flag == true)
+			j++;
+		i++;
 		ft_putstr_fd(simp_cmd[i], 1);
 		if (simp_cmd[i + 1])
 			ft_putstr_fd(" ", 1);

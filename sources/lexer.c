@@ -6,23 +6,25 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/07 19:11:59 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/17 17:37:05 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 #include <signal.h>
 
+int global_state;
+
 int	read_input(t_minishell *ms)
 {
 	int	error_check;
-	
+
 	error_check = 0;
 	if (initialize_lexer(ms) == 1)
 		return (1);
 	while (true)
 	{
-		//global_state = 0;
+		global_state = 0;
 		signal(SIGINT, &handle_signal);
 		ms->lex->input = readline("./minishell$ ");
 		if (ms->lex->input == NULL)
