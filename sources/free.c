@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/03 13:44:25 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:10:17 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ void	free_executor(t_executor *exec)
 		return ;
 	if (exec->paths != NULL)
 		ft_free_strarr(exec->paths);
-	if (exec->cpids != NULL)
-		free(exec->cpids);
-	if (exec->pipes != NULL)
-		free_pipes(exec->pipes, exec->num_of_pipes);
+	// if (exec->cpids != NULL)
+	// 	free(exec->cpids);
+	// if (exec->pipes != NULL)
+	// 	free_pipes(exec->pipes, exec->num_of_pipes);
 	free_cmds(exec->cmds, exec->num_of_cmds);
 	free(exec);
 	exec = NULL;
@@ -61,37 +61,16 @@ void	free_cmds(t_cmd **cmds, int	num_of_cmds)
 		if (cmds[i]->simp_cmd != NULL)
 			ft_free_strarr(cmds[i]->simp_cmd);
 		if (cmds[i]->has_here_doc == true)
-			unlink("temp");
-			//unlink(cmds[i]->here_doc);
-		// if (cmds[i]->here_doc != NULL)
-		// 	free(cmds[i]->here_doc);
+			//unlink("temp");
+			unlink(cmds[i]->here_doc);
+		if (cmds[i]->here_doc != NULL)
+			free(cmds[i]->here_doc);
 		free(cmds[i]);
 		cmds[i] = NULL;
 		i++;
 	}
 	free(cmds);
 	cmds = NULL;
-}
-
-void	free_pipes(int **pipes, int num_of_pipes)
-{
-	int	i;
-
-	if (pipes == NULL)
-		return ;
-	i = 0;
-	while (i < num_of_pipes)
-	{
-		if (pipes[i][0] != -1)
-			close(pipes[i][0]);
-		if (pipes[i][1] != -1)
-			close(pipes[i][1]);
-		ft_free(pipes[i]);
-		pipes[i] = NULL;
-		i++;	
-	}
-	free(pipes);
-	pipes = NULL;
 }
 
 void	free_and_exit(t_minishell *ms) //int exit_code

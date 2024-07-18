@@ -6,12 +6,145 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/03 13:28:37 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:10:38 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
+void	free_pipes(int **pipes, int num_of_pipes)
+{
+	int	i;
+
+	if (pipes == NULL)
+		return ;
+	i = 0;
+	while (i < num_of_pipes)
+	{
+		if (pipes[i][0] != -1)
+			close(pipes[i][0]);
+		if (pipes[i][1] != -1)
+			close(pipes[i][1]);
+		ft_free(pipes[i]);
+		pipes[i] = NULL;
+		i++;	
+	}
+	free(pipes);
+	pipes = NULL;
+}
+
+int	initialize_executor_2(t_minishell *ms, int i)
+{
+	int	error_flag;
+
+	error_flag = 0;
+	i = 0;
+	// ms->exec->cpids = (pid_t *)malloc(ms->exec->num_of_cmds * sizeof(pid_t));
+	// if (ms->exec->cpids == NULL)
+	// 	return (1);
+	// ms->exec->pipes = (int **)malloc(ms->exec->num_of_pipes * sizeof(int *));
+	// if (ms->exec->pipes == NULL)
+	// 	return (free(ms->exec->cpids), 1);
+	// while (i < ms->exec->num_of_pipes)
+	// {
+	// 	ms->exec->pipes[i] = (int *)malloc(2 * sizeof(int));
+	// 	if (ms->exec->pipes[i] == NULL)
+	// 		return (free_pipes(ms->exec->pipes, i), 1);
+	// 	ms->exec->pipes[i][0] = -1;
+	// 	ms->exec->pipes[i][1] = -1;
+	// 	i++;
+	// }
+	if (is_path_set(ms->envp) == true)
+	{
+		ms->exec->paths = get_paths(ms->exec, &error_flag);
+		if (ms->exec->paths == NULL && error_flag == 1)
+			return (1);
+	}
+	return (0);
+}
+
+int	read_input(t_minishell *ms)
+{
+	int	error_check;
+
+	error_check = 0;
+	if (initialize_lexer(ms) == 1)
+		return (1);
+	while (true)
+	{
+		ms->lex->input = readline("./minishell$ ");
+		if (ms->lex->input == NULL)
+			return (1);
+		if (ft_isspace_str(ms->lex->input) == false)
+			break ;
+	}
+	add_history(ms->lex->input);
+	error_check = tokenize_input(ms->lex);
+	if (error_check == 1)
+		return (1);
+	if (error_check == 2)
+		return (free_lexer(ms->lex), 2);
+	if (check_for_expansion(&ms->lex->token_list, ms->envp, ms->last_exit_code) == 1)
+		return (1);
+	if (check_for_dequotation(&ms->lex->token_list) == 1)
+		return (1);
+	return (0);
+}
+
+int handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code)
+{
+	char    *temp_str;
+
+	while (true)
+	{
+		temp_str = readline("> ");
+		if (temp_str == NULL)
+			return (1);
+		if (ft_strnstr(temp_str, delim, ft_strlen(delim)) != NULL \
+			&& ft_strlen(temp_str) == ft_strlen(delim))
+			break ;
+		if (!(ft_strchr(delim, '\'') || ft_strchr(delim, '"')))
+		{
+			temp_str = check_for_here_doc_expansion(temp_str, envp, exit_code);
+			if (temp_str == NULL)
+				return (1);
+		}
+		ft_putendl_fd(temp_str, here_doc_fd);
+		free(temp_str);
+	}
+	return (0);
+}
+
+int	get_here_doc(t_executor *exec, char *delim, int i)
+{
+	if (exec->cmds[i]->infile != NULL)
+		free(exec->cmds[i]->infile);
+	if (exec->cmds[i]->in_fd != -1 && exec->cmds[i]->in_fd != 0)
+		close(exec->cmds[i]->in_fd);
+	if (exec->cmds[i]->has_here_doc == true)
+		unlink(exec->cmds[i]->here_doc);
+	// if (exec->cmds[i]->here_doc == NULL) //access(exec->cmds[i]->here_doc, F_OK) == -1)
+	// {
+	// 	exec->cmds[i]->here_doc = get_temp_name();
+	// 	if (exec->cmds[i]->here_doc == NULL)
+	// 		return (1);
+	// 	printf("%s\n", exec->cmds[i]->here_doc);
+	// }
+	exec->cmds[i]->has_here_doc = true;
+	exec->cmds[i]->infile = ft_strdup(exec->cmds[i]->here_doc);
+	if (exec->cmds[i]->infile == NULL)
+		return (1); 
+	exec->cmds[i]->in_fd = open(exec->cmds[i]->here_doc, O_WRONLY | O_APPEND | O_CREAT, 0777);
+    if (exec->cmds[i]->in_fd == -1)
+		return (1);
+	if (handle_here_doc(exec->cmds[i]->in_fd, delim, exec->envp, exec->exit_status) == -1)
+		return (1);
+	close(exec->cmds[i]->in_fd);
+	exec->cmds[i]->in_fd = open(exec->cmds[i]->here_doc, O_RDONLY, 0777);
+	if (exec->cmds[i]->in_fd == -1)
+		return (1);
+	return (0);
+}
 
 int	get_word(t_executor *exec, char *word, int i)
 {
@@ -19,6 +152,37 @@ int	get_word(t_executor *exec, char *word, int i)
 	if (exec->cmds[i]->simp_cmd == NULL)
 		return (1);
 	return (0);
+}
+
+int	multiple_execution(t_executor *exec, int i)
+{
+	int		cpid;
+	int		ends[2];
+	int		status;
+	
+	if (pipe(ends) == -1)
+		return (ft_putendl_fd("pipe error", 2), 1);
+	//ft_putstrarr_fd(exec->cmds[i]->simp_cmd, 1);
+	cpid = fork();
+	if (cpid == -1)
+		return (ft_putendl_fd("fork error", 2), close(ends[0]), close(ends[1]), 1);
+	if (cpid == 0)
+	{
+		child_proc(exec, exec->cmds[i], ends);
+	}
+	//printf("Waiting...\n");
+	waitpid(cpid, &status, 0);
+	//printf("End Wait\n");
+	// if (i == exec->num_of_cmds)
+	// {
+	// 	if (dup2(ends[1], 1) == -1)
+	// 		return (ft_putendl_fd("FATAL dup2 error", 2), 1);
+	// }
+	if (dup2(ends[0], 0) == -1)
+		return (ft_putendl_fd("FATAL dup2 error", 2), 1);
+	if (close(ends[0]) == -1 || close(ends[1]) == -1)
+        return (ft_putendl_fd("FATAL error", 2), 1);
+	return (WEXITSTATUS(status));
 }
 
 int	get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i)

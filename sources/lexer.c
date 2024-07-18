@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/03 10:25:25 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:09:17 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,16 @@ int	read_input(t_minishell *ms)
 {
 	int	error_check;
 
-	error_check = 0;
+	//error_check = 0;
 	if (initialize_lexer(ms) == 1)
 		return (1);
 	while (true)
 	{
+		global_state = 0;
+		signal(SIGINT, &handle_signal);
 		ms->lex->input = readline("./minishell$ ");
 		if (ms->lex->input == NULL)
-			return (1);
+			return (ft_putendl_fd("exit", 2), 1);
 		if (ft_isspace_str(ms->lex->input) == false)
 			break ;
 	}

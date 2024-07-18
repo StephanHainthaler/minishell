@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/03 13:44:30 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:00:19 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct s_cmd
     char	*cmd_path;
     char	*infile;
     char	*outfile;
-	//char	*here_doc;
+	char	*here_doc;
     int		in_fd;
     int		out_fd;
     int		cmd_nbr;
@@ -64,9 +64,6 @@ typedef struct s_executor
 	int		num_of_pipes;
 	char	**paths;
 	bool	is_path_set;
-	int		**pipes;
-	int		*ends;
-	pid_t	*cpids;
 	int		exit_status;
 	char	**envp;
 }			t_executor;
@@ -80,6 +77,8 @@ typedef struct s_minishell
 	char		**argv;
 	char		**envp;
 }				t_minishell;
+
+extern int	global_state;
 
 //initialization.c 
 int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
@@ -137,7 +136,9 @@ char    *get_random_temp_name(void);
 //executor.c
 int		execute_input(t_minishell *ms);
 int		single_execution(t_executor *exec);
-int		multiple_execution(t_executor *exec, int i);
+int		multiple_execution(t_executor *exec);
+int		multi_pipe(t_executor *exec, int *prevpipe, int i);
+int		last_pipe(t_executor *exec, int prevpipe, int i);
 void	execute_cmd(t_executor *exec, t_cmd *cmd);
 
 //executor_utils.c
@@ -150,6 +151,8 @@ int		handle_redirection(t_cmd *cmd);
 //child.c
 void	child_proc(t_executor *exec, t_cmd *cmd, int ends[]);
 void	single_child_proc(t_executor *exec, t_cmd *cmd);
+void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end);
+void	last_child_proc(t_executor *exec, t_cmd *cmd, int old_end);
 void	exit_child(t_executor *exec, int end1, int end2, int exit_status);
 
 //builtins_1.c
@@ -165,6 +168,9 @@ char	**ft_unset(char **simp_cmd, char **envp);
 void	sort_strarray(char **strarray);
 bool	ft_are_str_indentical(char *str1, char *str2);
 bool	is_replacable(char *str1, char *str2);
+
+//signals.c
+void	handle_signal(int sig_num);
 
 //free.c
 void	free_lexer(t_lexer *lex);

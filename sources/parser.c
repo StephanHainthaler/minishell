@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/28 13:32:04 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/18 16:07:50 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,17 @@
 
 int	parse_input(t_minishell *ms)
 {
+	int	error_check;
+
 	if (initialize_executor(ms) == 1)
 		return (1);
 	if (is_valid_input(ms->lex) == false)
 		return (free_lexer(ms->lex), free_executor(ms->exec), 2);
-	if (get_cmds(ms->exec, &ms->lex->token_list, 0 , 0) == 1)
+	error_check = get_cmds(ms->exec, &ms->lex->token_list, 0 , 0);
+	if (error_check == 1)
 		return (free_executor(ms->exec), 1);
+	if (error_check == 2)
+		return (free_executor(ms->exec), free_lexer(ms->lex), 2);
 	return (0);
 }
 
@@ -42,15 +47,14 @@ int		get_cmds(t_executor *exec, t_list **list, int error_check, int i)
 				error_check = get_here_doc(exec, cur->next->attr, i);
 			cur = cur->next;
 		}
-		if (error_check == 1)
-			return (1);
+		if (error_check == 1 || error_check == 2)
+			return (error_check);
 		if (cur->type == PIPE)
 			i++;
 		cur = cur->next;
 	}
 	return (0);
 }
-
 
 int	count_cmds(t_list **list)
 {
@@ -90,19 +94,17 @@ bool is_valid_input(t_lexer *lex)
 {
 	t_list *head;
 	t_list *current;
-	bool	has_wrd;
+	int		i;
 
+	i = 0;
 	head = lex->token_list;
 	current = lex->token_list;
-	has_wrd = false;
 	while (current != NULL)
 	{
-		if (current->type == WORD)
-			has_wrd = true;
-		if (current->type == PIPE)
-			has_wrd = false;
-		if (current->type != PIPE && has_wrd == false)
-			return (ft_putendl_fd("command has no word", 2), false);
+		if (current->type == PIPE && i == 0)
+			return (ft_putendl_fd("input can not start with `|'", 2), false);
+		if (current->type == PIPE && current->next->type == PIPE)
+			return (ft_putendl_fd("sorry, no double pipes allowed in here", 2), false);
 		if (current->type == RE_IN && current->next != NULL && current->next->type != WORD)
 			return (ft_putendl_fd("parse error near `<'", 2), false);
 		if (current->type == RE_OUT && current->next != NULL && current->next->type != WORD)
@@ -114,9 +116,8 @@ bool is_valid_input(t_lexer *lex)
 		if (current->type != WORD && current->next == NULL)
 			return (ft_putendl_fd("word token required as last input", 2), false);
 		current = current->next;
+		i++;
 	}
-	if (has_wrd == false)
-		return (ft_putendl_fd("command has no word", 2), false);
 	lex->token_list = head;
 	return (true);
 }

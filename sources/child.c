@@ -3,14 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/28 13:51:16 by codespace        ###   ########.fr       */
+/*   Updated: 2024/07/18 15:54:44 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
+{
+	close(ends[0]);
+	if (dup2(ends[1], 1) == -1)
+	{
+		ft_putendl_fd("FATAL child error", 2);
+		exit_child(exec, *old_end, ends[1], 1);
+	}
+	close(ends[1]);
+	if (dup2(*old_end, 0) == -1)
+	{
+		ft_putendl_fd("FATAL child error", 2);
+		exit_child(exec, *old_end, -1, 1);
+	}
+	close(*old_end);
+	if (exec->paths != NULL)
+	{
+		cmd->cmd_path = get_cmd_path(exec, cmd);
+		if (cmd->cmd_path == NULL)
+		exit_child(exec, -1, -1, 1);
+	}
+	execute_cmd(exec, cmd);
+}
+
+void	last_child_proc(t_executor *exec, t_cmd *cmd, int old_end)
+{
+	if (dup2(old_end, 0) == -1)
+	{
+		ft_putendl_fd("FATAL child error", 2);
+		exit_child(exec, old_end, -1, 1);
+	}
+	close(old_end);
+	if (exec->paths != NULL)
+	{
+		cmd->cmd_path = get_cmd_path(exec, cmd);
+		if (cmd->cmd_path == NULL)
+			exit_child(exec, -1, -1, 1);
+	}
+	execute_cmd(exec, cmd);	
+}	
 
 void	child_proc(t_executor *exec, t_cmd *cmd, int ends[])
 {
@@ -18,7 +59,7 @@ void	child_proc(t_executor *exec, t_cmd *cmd, int ends[])
 		exit_child(exec, ends[0], ends[1], 1);
 	if ((dup2(ends[1], 1) == -1))
 	{
-		ft_putendl_fd("FATAL child error 1", 2);
+		ft_putendl_fd("FATAL child error", 2);
 		exit_child(exec, ends[0], ends[1], 1);
 	}
 	close(ends[0]);
@@ -33,7 +74,7 @@ void	child_proc(t_executor *exec, t_cmd *cmd, int ends[])
 	//exit_child(exec, -1, -1, 1);
 }
 
-void	child_proc2(t_executor *exec, t_cmd *cmd, int ends[])
+void	child_proc3(t_executor *exec, t_cmd *cmd, int ends[])
 {
 	if (cmd->in_fd == -1 || cmd->out_fd == -1)
 		exit_child(exec, ends[0], ends[1], 1);
@@ -63,6 +104,7 @@ void	child_proc2(t_executor *exec, t_cmd *cmd, int ends[])
 
 void	single_child_proc(t_executor *exec, t_cmd *cmd)
 {	
+	printf("Single exection\n");
 	if (cmd->in_fd == -1 || cmd->out_fd == -1)
 		exit_child(exec, -1, -1, 1);
 	if (handle_redirection(cmd) == 1)

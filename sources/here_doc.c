@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:24:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/03 13:11:53 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/18 15:42:23 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,30 @@
 
 int handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code)
 {
-	char    *temp_str;
+    char    *temp_str;
 
-	while (true)
+    while (true)
 	{
+		global_state = 1;
+		signal(SIGINT, &handle_signal);
 		temp_str = readline("> ");
+		if (global_state == 2)
+			return (2);
 		if (temp_str == NULL)
 			return (1);
-		if (ft_strnstr(temp_str, delim, ft_strlen(delim)) != NULL \
-			&& ft_strlen(temp_str) == ft_strlen(delim))
+        if (ft_strnstr(temp_str, delim, ft_strlen(delim)) != NULL \
+            && ft_strlen(temp_str) == ft_strlen(delim))
 			break ;
 		if (!(ft_strchr(delim, '\'') || ft_strchr(delim, '"')))
-		{
+        {
 			temp_str = check_for_here_doc_expansion(temp_str, envp, exit_code);
-			if (temp_str == NULL)
-				return (1);
-		}
-		ft_putendl_fd(temp_str, here_doc_fd);
+            if (temp_str == NULL)
+                return (1);
+        }
+        ft_putendl_fd(temp_str, here_doc_fd);
 		free(temp_str);
 	}
-	return (0);
+    return (0);
 }
 
 char	*check_for_here_doc_expansion(char *str, char **envp, int ec)
@@ -99,7 +103,6 @@ char    *get_temp_name(void)
 		temp_name = ft_strjoin(temp_str, temp_nbr);
 		if (temp_name == NULL)
 			return (ft_free(temp_nbr), ft_free(temp_name), NULL);
-		printf("%s\n", temp_name);
 		if (access(temp_name, F_OK) == -1)
 			return (free(temp_nbr), temp_name);
 		free(temp_nbr);

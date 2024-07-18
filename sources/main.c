@@ -6,11 +6,13 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/03 13:48:49 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/18 15:43:21 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+int	global_state;
 
 int	main_loop(t_minishell *ms, int error_check)
 {
@@ -27,7 +29,6 @@ int	main_loop(t_minishell *ms, int error_check)
 		if (error_check == 2)
 			continue ;
 		free_lexer(ms->lex);
-		//printf("Test1\n");
 		error_check = execute_input(ms);
 		if (error_check == 1)
 			return (free_executor(ms->exec), 1);
