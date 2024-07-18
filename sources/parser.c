@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/18 14:10:46 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/18 16:04:57 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	parse_input(t_minishell *ms)
 	if (error_check == 1)
 		return (free_executor(ms->exec), 1);
 	if (error_check == 2)
-		return (free_executor(ms->exec), free_lexer(ms->lex), rl_clear_history(), 2);
+		return (free_executor(ms->exec), free_lexer(ms->lex), 2);
 	// i = 0;
 	// while (i < ms->exec->num_of_cmds)
 	// 	ft_print_cmd(ms->exec->cmds[i++]);
@@ -100,25 +100,17 @@ bool is_valid_input(t_lexer *lex)
 {
 	t_list *head;
 	t_list *current;
-	//bool	has_wrd;
 	int		i;
 
 	i = 0;
 	head = lex->token_list;
 	current = lex->token_list;
-	//has_wrd = false;
 	while (current != NULL)
 	{
 		if (current->type == PIPE && i == 0)
 			return (ft_putendl_fd("input can not start with `|'", 2), false);
 		if (current->type == PIPE && current->next->type == PIPE)
 			return (ft_putendl_fd("sorry, no double pipes allowed in here", 2), false);
-		// if (current->type == WORD)
-		// 	has_wrd = true;
-		// if (current->type == PIPE)
-		// 	has_wrd = false;
-		// if (current->type != PIPE && has_wrd == false)
-		// 	return (ft_putendl_fd("command has no word", 2), false);
 		if (current->type == RE_IN && current->next != NULL && current->next->type != WORD)
 			return (ft_putendl_fd("parse error near `<'", 2), false);
 		if (current->type == RE_OUT && current->next != NULL && current->next->type != WORD)
@@ -132,8 +124,15 @@ bool is_valid_input(t_lexer *lex)
 		current = current->next;
 		i++;
 	}
-	// if (has_wrd == false)
-	// 	return (ft_putendl_fd("command has no word", 2), false);
 	lex->token_list = head;
 	return (true);
 }
+	// if (current->type == WORD)
+		// 	has_wrd = true;
+		// if (current->type == PIPE)
+		// 	has_wrd = false;
+		// if (current->type != PIPE && has_wrd == false)
+		// 	return (ft_putendl_fd("command has no word", 2), false);
+
+			// if (has_wrd == false)
+	// 	return (ft_putendl_fd("command has no word", 2), false);
