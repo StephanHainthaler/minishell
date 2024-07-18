@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:24:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/17 18:33:55 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/18 14:18:23 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 int handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code)
 {
     char    *temp_str;
-	//rl_catch_signals = 0;
 
     while (true)
 	{
@@ -24,7 +23,7 @@ int handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code)
 		signal(SIGINT, &handle_signal);
 		temp_str = readline("> ");
 		if (global_state == 2)
-			break ;
+			return (2);
 		if (temp_str == NULL)
 			return (1);
         if (ft_strnstr(temp_str, delim, ft_strlen(delim)) != NULL \

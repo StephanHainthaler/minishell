@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/06/28 17:32:42 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/18 14:10:46 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,17 @@
 
 int	parse_input(t_minishell *ms)
 {
-	//int	i;
+	int	error_check;
 
 	if (initialize_executor(ms) == 1)
 		return (1);
 	if (is_valid_input(ms->lex) == false)
 		return (free_lexer(ms->lex), free_executor(ms->exec), 2);
-	if (get_cmds(ms->exec, &ms->lex->token_list, 0 , 0) == 1)
+	error_check = get_cmds(ms->exec, &ms->lex->token_list, 0 , 0);
+	if (error_check == 1)
 		return (free_executor(ms->exec), 1);
+	if (error_check == 2)
+		return (free_executor(ms->exec), free_lexer(ms->lex), rl_clear_history(), 2);
 	// i = 0;
 	// while (i < ms->exec->num_of_cmds)
 	// 	ft_print_cmd(ms->exec->cmds[i++]);
@@ -49,8 +52,8 @@ int		get_cmds(t_executor *exec, t_list **list, int error_check, int i)
 				error_check = get_here_doc(exec, cur->next->attr, i);
 			cur = cur->next;
 		}
-		if (error_check == 1)
-			return (1);
+		if (error_check == 1 || error_check == 2)
+			return (error_check);
 		if (cur->type == PIPE)
 			i++;
 		cur = cur->next;
