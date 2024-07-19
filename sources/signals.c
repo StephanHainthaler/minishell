@@ -6,7 +6,7 @@
 /*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:49:44 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/19 21:41:37 by julian           ###   ########.fr       */
+/*   Updated: 2024/07/19 22:24:50 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	handle_signal(int sig_num)
 	else if (sig_num == SIGINT && global_state == 3)
 	{
 		printf("\n");
-		rl_redisplay();
+		//rl_redisplay();
 		//ioctl(STDIN_FILENO, TIOCSTI, "\n");
 		//rl_on_new_line();
 		//rl_replace_line("", 0);
