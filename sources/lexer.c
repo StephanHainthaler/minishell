@@ -6,7 +6,7 @@
 /*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/19 20:55:14 by julian           ###   ########.fr       */
+/*   Updated: 2024/07/19 21:41:46 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,16 @@ int	read_input(t_minishell *ms)
 	{
 		global_state = 0;
 		signal(SIGINT, &handle_signal);
-		signal(SIGQUIT, SIG_IGN);
+		//signal(SIGQUIT, &handle_signal);
+		signal(SIGTERM, SIG_IGN);
+		if (global_state == 0 || global_state == 1 || global_state == 2)
+			signal(SIGQUIT, SIG_IGN);
 		ms->lex->input = readline("./minishell$ ");
 		if (ms->lex->input == NULL)
 			return (ft_putendl_fd("exit", 2), 1);
 		global_state = 3;
+		if (global_state == 3)
+			signal(SIGQUIT, SIG_DFL);
 		if (ft_isspace_str(ms->lex->input) == false)
 			break ;
 	}

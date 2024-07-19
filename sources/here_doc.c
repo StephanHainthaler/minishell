@@ -6,7 +6,7 @@
 /*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:24:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/19 20:39:07 by julian           ###   ########.fr       */
+/*   Updated: 2024/07/19 21:47:05 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code)
 		if (global_state == 2)
 			return (2);
 		if (temp_str == NULL)
-			return (1);
+			return (printf("warning: here-doc delimited by EOF (wanted `%s')\n", delim), 1);
         if (ft_strnstr(temp_str, delim, ft_strlen(delim)) != NULL \
             && ft_strlen(temp_str) == ft_strlen(delim))
 			break ;
