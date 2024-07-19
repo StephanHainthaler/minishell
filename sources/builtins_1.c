@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/17 16:41:00 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/19 20:58:36 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,25 @@ int	handle_builtins_non_pipable(t_minishell *ms)
 void	ft_echo(char **simp_cmd)
 {
 	int	i;
+
+	i = 1;
+	while (simp_cmd[i])
+	{
+		while (ft_strncmp(simp_cmd[i], "-n", ft_strlen(simp_cmd[1])) == 0)
+            i++;
+		ft_putstr_fd(simp_cmd[i], 1);
+		if (simp_cmd[i + 1])
+			ft_putstr_fd(" ", 1);
+		i++;
+	}
+	if ((ft_strarrlen(simp_cmd) == 1) || ft_strncmp(simp_cmd[1], "-n", ft_strlen(simp_cmd[0])) != 0)
+		ft_putstr_fd("\n", 1);
+}
+
+
+/* void	ft_echo(char **simp_cmd)
+{
+	int	i;
 	int j;
 	bool flag;
 
@@ -91,7 +110,7 @@ void	ft_echo(char **simp_cmd)
 	if ((ft_strarrlen(simp_cmd) == 1) || ft_strncmp(simp_cmd[1], "-n", ft_strlen(simp_cmd[0])) != 0)
 		ft_putstr_fd("\n", 1);
 }
-
+ */
 void	ft_cd(char **simp_cmd)
 {
     char *oldpwd;

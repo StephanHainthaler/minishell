@@ -1,0 +1,5 @@
+echo -n -k -n
+echo -nnnnnnnn
+cd update env
+cat SIGINT prints extra minishell
+here_doc SIGINT makes empty line -fixed
