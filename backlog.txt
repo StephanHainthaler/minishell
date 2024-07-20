@@ -10,3 +10,7 @@ SIGINT with valgrind in here_doc:
 	==717391==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
 SIGINT return code 130, wie implementieren?
 expanding calculations?
+cat << here | = segfault
+./minishell ./minishell ctrl+\
+input: exit "number" should print exit "number"
+exit | exit | exit shouldn't do anything
