@@ -4,3 +4,9 @@ cd update env
 cat SIGINT prints extra minishell -fixed
 here_doc SIGINT makes empty line -fixed
 If job control is in effect (see Job Control), Bash ignores SIGTTIN, SIGTTOU, and SIGTSTP. ????
+SIGINT with valgrind in here_doc:
+	==717391== Warning: noted but unhandled ioctl 0x5412 with no size/direction hints.
+	==717391==    This could cause spurious value errors to appear.
+	==717391==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+SIGINT return code 130, wie implementieren?
+expanding calculations?

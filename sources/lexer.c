@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/19 22:23:17 by julian           ###   ########.fr       */
+/*   Updated: 2024/07/20 14:29:15 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int	read_input(t_minishell *ms)
 	while (true)
 	{
 		global_state = 0;
-		signal(SIGINT, &handle_signal);
+		if (signal(SIGINT, &handle_sigint))
+			ms->exec->exit_status = 130;
 		//signal(SIGQUIT, &handle_signal);
 		signal(SIGTERM, SIG_IGN);
 		if (global_state == 0 || global_state == 1 || global_state == 2)
@@ -35,7 +36,7 @@ int	read_input(t_minishell *ms)
 			return (ft_putendl_fd("exit", 2), 1);
 		global_state = 3;
 		if (global_state == 3)
-			signal(SIGQUIT, SIG_DFL);
+			signal(SIGQUIT, &handle_sigquit);
 		if (ft_isspace_str(ms->lex->input) == false)
 			break ;
 	}

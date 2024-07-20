@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:49:44 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/19 22:24:50 by julian           ###   ########.fr       */
+/*   Updated: 2024/07/20 14:24:57 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <asm-generic/ioctls.h>
 #include <unistd.h>
 
-void	handle_signal(int sig_num)
+void	handle_sigint(int sig_num)
 {
 	if (sig_num == SIGINT && global_state == 0)
 	{
@@ -33,21 +33,11 @@ void	handle_signal(int sig_num)
 		//rl_redisplay();
 	}
 	else if (sig_num == SIGINT && global_state == 3)
-	{
 		printf("\n");
-		//rl_redisplay();
-		//ioctl(STDIN_FILENO, TIOCSTI, "\n");
-		//rl_on_new_line();
-		//rl_replace_line("", 0);
-	}
-/* 	if (global_state == 0 || global_state == 1 || global_state == 2)
-		signal(SIGQUIT, SIG_IGN);
-	if (global_state == 3)
-		signal(SIGQUIT, SIG_DFL); */
 }
 
-/* void	ignored_signals()
+void handle_sigquit(int sig_num)
 {
-	signal(SIGQUIT, SIG_IGN);
-	
-} */
+	if (sig_num == SIGQUIT && global_state == 3)
+		ft_putendl_fd("Quit (core dumped)", 2);
+}
