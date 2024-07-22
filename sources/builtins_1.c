@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/22 11:21:43 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:16:14 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	ft_pwd(char **simp_cmd)
 char	**ft_export(char **simp_cmd, char **envp)
 {
 	int		i;
-	int		j;
+	int		pos;
 	bool	found;
 
 	if (ft_strarrlen(simp_cmd) == 1)
@@ -140,23 +140,20 @@ char	**ft_export(char **simp_cmd, char **envp)
 	i = 1;
 	while (i < (int)ft_strarrlen(simp_cmd))
 	{
-		j = 0;
-		while (envp[j] != NULL)
+		pos = 0;
+		while (envp[pos] != NULL)
 		{
 			found = false;
-			//printf("simp_cmd%i - Test%i: %s\n", i, j, envp[j]);
-			//if (is_replacable(envp[j], simp_cmd[i]) == true)
-			if (check_for_env(envp[j], simp_cmd[i], ft_strlen(simp_cmd[i])) == true)
+			if (is_replacable(envp[pos], simp_cmd[i]) == false)
 			{
-				//printf("Found\n");
-				envp = ft_strreplace_instrarr(envp, simp_cmd[i], j);
-				if (envp[j] == NULL)
-					return (NULL);
-				j = ft_strarrlen(envp);
-				found = true;
+				pos++;
 				continue ;
 			}
-			j++;
+			found = true;
+			envp = ft_strreplace_instrarr(envp, simp_cmd[i], pos);
+			if (envp[pos] == NULL)
+				return (NULL);
+			break ;
 		}
 		if (found == false)
 		{

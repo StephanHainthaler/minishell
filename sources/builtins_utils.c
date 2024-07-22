@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 13:46:46 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/22 10:22:48 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:12:25 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,32 +41,6 @@ int	sort_strarray(char **strarray)
 	return (ft_putstrarr_fd(arrdup, 1), ft_free_strarr(arrdup), 0);
 }
 
-// void	print_strarr_sorted(char **strarr)
-// {
-// 	char	*temp;
-// 	size_t	i;
-// 	int		j;
-
-// 	if (strarr == NULL)
-// 		return ;
-	
-// 	i = 0;
-// 	while (i < ft_strarrlen(strarr))
-// 	{
-// 		j = 0;
-// 		while (strarr[j])
-// 		{
-// 			if (i == 0)
-// 				temp = strarr[0];
-// 			if (ft_strncmp(temp, strarr[j], ft_strlen(strarr[j])) > 0 && ft_strncmp(temp, strarr[j], ft_strlen(strarr[j])) != 0)
-// 				temp = strarr[j];
-// 			j++;
-// 		}
-// 		ft_putendl_fd(temp, 1);
-// 		i++;
-// 	}
-// }
-
 bool	ft_are_str_indentical(char *str1, char *str2)
 {
 	if (ft_strlen(str1) != ft_strlen(str2))
@@ -79,16 +53,12 @@ bool	ft_are_str_indentical(char *str1, char *str2)
 
 bool	is_replacable(char *str1, char *str2)
 {
-	int	i;
+	char	*temp;
+	int		i;
 
+	temp = NULL;
 	i = 0;
-	// while (str1[i] && str1[i] != '=')
-	// 	i++;
-	// if (ft_strlen(str1) != ft_strlen(str2))
-	// 	return (false);
-	if (ft_strncmp(str1, str2, i) != 0)
-		return (false);
-	// if (str2[i] != '\0' || str2[i] != '=')
-	// 	return (false);
-	return (true);
+	while (str2[i] != '\0' && str2[i] != '=')
+		i++;
+	return (check_for_env(str1, str2, i));
 }

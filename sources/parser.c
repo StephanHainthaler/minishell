@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/18 16:07:50 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:23:34 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,23 +72,23 @@ int	count_cmds(t_list **list)
 	return (num_of_cmds);
 }
 
-void	ft_print_cmd(t_cmd *cmd)
-{
-	size_t	i;
+// void	ft_print_cmd(t_cmd *cmd)
+// {
+// 	size_t	i;
 
-	i = 0;
-	while (i < ft_strarrlen(cmd->simp_cmd))
-	{
-		printf("cmd->simp_cmd[%zu]: %s\n", i, cmd->simp_cmd[i]);
-		i++;
-	}
-	printf("cmd->infile: %s\n", cmd->infile);
-	printf("cmd->outfile: %s\n", cmd->outfile);
-	printf("cmd->in_fd: %d\n", cmd->in_fd);
-	printf("cmd->out_fd: %d\n", cmd->out_fd);
-	printf("cmd->cmd_nbr: %d\n", cmd->cmd_nbr);
-	printf("cmd->cmd_path: %s\n", cmd->cmd_path);
-}
+// 	i = 0;
+// 	while (i < ft_strarrlen(cmd->simp_cmd))
+// 	{
+// 		printf("cmd->simp_cmd[%zu]: %s\n", i, cmd->simp_cmd[i]);
+// 		i++;
+// 	}
+// 	printf("cmd->infile: %s\n", cmd->infile);
+// 	printf("cmd->outfile: %s\n", cmd->outfile);
+// 	printf("cmd->in_fd: %d\n", cmd->in_fd);
+// 	printf("cmd->out_fd: %d\n", cmd->out_fd);
+// 	printf("cmd->cmd_nbr: %d\n", cmd->cmd_nbr);
+// 	printf("cmd->cmd_path: %s\n", cmd->cmd_path);
+// }
 
 bool is_valid_input(t_lexer *lex)
 {
