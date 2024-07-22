@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/18 16:00:19 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/22 10:23:22 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ char	**ft_export(char **simp_cmd, char **envp);
 char	**ft_unset(char **simp_cmd, char **envp);
 
 //builtins_utils.c
-void	sort_strarray(char **strarray);
+int		sort_strarray(char **strarray);
 bool	ft_are_str_indentical(char *str1, char *str2);
 bool	is_replacable(char *str1, char *str2);
 

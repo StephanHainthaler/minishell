@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/18 15:56:10 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/22 11:14:02 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	execute_input(t_minishell *ms)
 		if (ms->exec->cmds[0]->in_fd == -1 || ms->exec->cmds[0]->out_fd == -1)
 			return (free_executor(ms->exec), 2);
 		if (handle_builtins_non_pipable(ms) == 0)
-			return (printf("End of cmd:3\n"), 0);
+			return (0);
 		if (single_execution(ms->exec) == 1)
 			return (1);
 		ms->last_exit_code = ms->exec->exit_status;

@@ -6,34 +6,11 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 09:04:11 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/24 12:57:34 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/22 11:47:51 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/libft.h"
-
-char	**ft_strreplace_instrarr(char **strarr, char *new_str, int pos)
-{
-	int		i;
-
-	if (pos < 0 || new_str == NULL)
-		return (strarr);
-	i = 0;
-	while (i < (int)ft_strarrlen(strarr))
-	{
-		if (i == pos)
-		{
-			ft_putendl_fd(strarr[pos], 1);
-			ft_free(strarr[pos]);
-			strarr[pos] = ft_strdup(new_str);
-			if (strarr[pos] == NULL)
-				return (NULL);
-			return (strarr);
-		}
-		i++;
-	}
-	return (strarr);
-}
 
 char	**ft_strdel_fromstrarr(char **strarr, int pos)
 {
@@ -45,7 +22,7 @@ char	**ft_strdel_fromstrarr(char **strarr, int pos)
 		return (strarr);
 	new_strarr = (char **)malloc((ft_strarrlen(strarr) - 1 + 1) * sizeof(char *));
 	if (new_strarr == NULL)
-		return (NULL);
+		return (ft_free_strarr(strarr), NULL);
 	i = 0;
 	j = 0;
 	while (i < (int)ft_strarrlen(strarr))
@@ -57,7 +34,7 @@ char	**ft_strdel_fromstrarr(char **strarr, int pos)
 		}
 		new_strarr[j++] = ft_strdup(strarr[i++]);
 		if (new_strarr[j - 1] == NULL)
-			return (ft_free_strarr(new_strarr), NULL);
+			return (ft_free_strarr(new_strarr), ft_free_strarr(strarr), NULL);
 	}
 	new_strarr[j] = NULL;
 	return (ft_free_strarr(strarr), new_strarr);

@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/18 15:54:44 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/22 09:25:53 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,16 @@
 
 void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
 {
+	//printf("Multiple execution\n");
 	close(ends[0]);
+	if (cmd->in_fd == -1 || cmd->out_fd == -1)	
+		exit_child(exec, ends[1], *old_end, 1);
+	if (handle_redirection(cmd) == 1)
+		exit_child(exec, ends[1], *old_end, 1);
 	if (dup2(ends[1], 1) == -1)
 	{
 		ft_putendl_fd("FATAL child error", 2);
-		exit_child(exec, *old_end, ends[1], 1);
+		exit_child(exec, ends[1], *old_end, 1);
 	}
 	close(ends[1]);
 	if (dup2(*old_end, 0) == -1)
@@ -71,7 +76,6 @@ void	child_proc(t_executor *exec, t_cmd *cmd, int ends[])
 			exit_child(exec, -1, -1, 1);
 	}
 	execute_cmd(exec, cmd);
-	//exit_child(exec, -1, -1, 1);
 }
 
 void	child_proc3(t_executor *exec, t_cmd *cmd, int ends[])
@@ -104,7 +108,7 @@ void	child_proc3(t_executor *exec, t_cmd *cmd, int ends[])
 
 void	single_child_proc(t_executor *exec, t_cmd *cmd)
 {	
-	printf("Single exection\n");
+	//printf("Single execution\n");
 	if (cmd->in_fd == -1 || cmd->out_fd == -1)
 		exit_child(exec, -1, -1, 1);
 	if (handle_redirection(cmd) == 1)

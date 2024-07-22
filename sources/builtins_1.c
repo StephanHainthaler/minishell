@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/24 13:37:58 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/22 11:21:43 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,17 @@ int	handle_builtin(char **simp_cmd, t_executor *exec)
 		return (ft_export(simp_cmd, exec->envp), 0);
 	}
 	if (ft_are_str_indentical(simp_cmd[0], "unset") == true)
+	{
+		exec->envp = ft_unset(simp_cmd, exec->envp);
+		if (exec->envp == NULL)
+			return (-1);
 		return (ft_unset(simp_cmd, exec->envp), 0);
+	}
 	if (ft_are_str_indentical(simp_cmd[0], "env") == true)
 		return (ft_putstrarr_fd(exec->envp, 1), 0);
 	if (ft_are_str_indentical(simp_cmd[0], "exit") == true)
 		return (0);
-	else
-		return (1);
+	return (1);
 }
 
 int	handle_builtins_non_pipable(t_minishell *ms)
@@ -128,7 +132,11 @@ char	**ft_export(char **simp_cmd, char **envp)
 	bool	found;
 
 	if (ft_strarrlen(simp_cmd) == 1)
-		return (sort_strarray(envp), envp);
+	{
+		if (sort_strarray(envp) == 1)
+			return (NULL);
+		return (envp);
+	}
 	i = 1;
 	while (i < (int)ft_strarrlen(simp_cmd))
 	{
@@ -140,7 +148,7 @@ char	**ft_export(char **simp_cmd, char **envp)
 			//if (is_replacable(envp[j], simp_cmd[i]) == true)
 			if (check_for_env(envp[j], simp_cmd[i], ft_strlen(simp_cmd[i])) == true)
 			{
-				printf("Found\n");
+				//printf("Found\n");
 				envp = ft_strreplace_instrarr(envp, simp_cmd[i], j);
 				if (envp[j] == NULL)
 					return (NULL);
@@ -163,28 +171,28 @@ char	**ft_export(char **simp_cmd, char **envp)
 
 char	**ft_unset(char **simp_cmd, char **envp)
 {
-	char	**new_envp;
-	bool	is_new;
 	int		i;
 	int		pos;
 
-	is_new = false;
+	if (ft_strarrlen(simp_cmd) == 1)
+		return (envp);
 	i = 1;
 	while (i < (int)ft_strarrlen(simp_cmd))
 	{
 		pos = 0;
 		while (envp[pos] != NULL)
 		{
-			if (check_for_env(envp[pos++], simp_cmd[i], ft_strlen(simp_cmd[i])) == false)
+			if (check_for_env(envp[pos], simp_cmd[i], ft_strlen(simp_cmd[i])) == false)
+			{
+				pos++ ;
 				continue ;
-			new_envp = ft_strdel_fromstrarr(envp, pos - 1);
-			if (new_envp == NULL)
-				return (ft_free_strarr(new_envp), NULL);
-			is_new = true;
+			}
+			envp = ft_strdel_fromstrarr(envp, pos);
+			if (envp == NULL)
+				return (NULL);
+			break ;
 		}
 		i++;
 	}
-	if (is_new == false)
-		return (envp);
-	return (new_envp);
+	return (envp);
 }

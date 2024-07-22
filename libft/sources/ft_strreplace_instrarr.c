@@ -1,0 +1,36 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strreplace_instrarr.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/19 09:04:11 by shaintha          #+#    #+#             */
+/*   Updated: 2024/07/22 11:47:17 by shaintha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../headers/libft.h"
+
+char	**ft_strreplace_instrarr(char **strarr, char *new_str, int pos)
+{
+	int		i;
+
+	if (pos < 0 || new_str == NULL)
+		return (strarr);
+	i = 0;
+	while (i < (int)ft_strarrlen(strarr))
+	{
+		if (i == pos)
+		{
+			ft_putendl_fd(strarr[pos], 1);
+			ft_free(strarr[pos]);
+			strarr[pos] = ft_strdup(new_str);
+			if (strarr[pos] == NULL)
+				return (ft_free_strarr(strarr), NULL);
+			return (strarr);
+		}
+		i++;
+	}
+	return (strarr);
+}
