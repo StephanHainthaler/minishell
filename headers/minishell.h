@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/22 10:23:22 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:05:28 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,8 @@ void	exit_child(t_executor *exec, int end1, int end2, int exit_status);
 //builtins_1.c
 int		handle_builtin(char **simp_cmd, t_executor *exec);
 int		handle_builtins_non_pipable(t_minishell *ms);
+
+//builtins_2.c
 void	ft_echo(char **simp_cmd);
 void	ft_cd(char **simp_cmd);
 void	ft_pwd(char **simp_cmd);
@@ -175,8 +177,8 @@ void	handle_signal(int sig_num);
 //free.c
 void	free_lexer(t_lexer *lex);
 void	free_executor(t_executor *exec);
-void	free_cmds(t_cmd **cmds, int	num_of_cmds);
-void	free_pipes(int **pipes, int num_of_pipes);
+void	free_cmds(t_cmd **cmds, int num_of_cmds);
+void	free_cmd(t_cmd *cmd);
 void	free_and_exit(t_minishell *ms);
 
 #endif

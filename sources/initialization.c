@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/18 16:09:58 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:31:19 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ int	initialize_executor(t_minishell *ms)
 	}
 	ms->exec->is_path_set = is_path_set(ms->envp);
 	ms->exec->paths = NULL;
-	// ms->exec->pipes = NULL;
-	// ms->exec->cpids = NULL;
 	ms->exec->envp = ms->envp;
 	return (0);
 }
@@ -92,10 +90,11 @@ t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr)
 	cmd->here_doc = NULL;
 	if (cmd->here_doc == NULL)
 	{
-		cmd->here_doc = get_temp_name();
+		//cmd->here_doc = get_temp_name();
+		//cmd->here_doc = get_random_temp_name();
+		cmd->here_doc = ft_strdup("temp");
 		if (cmd->here_doc== NULL)
-			return (NULL);
-		//printf("%s\n", cmd->here_doc);
+			return (free(cmd), NULL);
 	}
 	cmd->in_fd = 0;
 	cmd->out_fd = 1;

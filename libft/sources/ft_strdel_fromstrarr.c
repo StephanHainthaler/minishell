@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 09:04:11 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/22 11:47:51 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:01:05 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ char	**ft_strdel_fromstrarr(char **strarr, int pos)
 
 	if (pos < 0)
 		return (strarr);
-	new_strarr = (char **)malloc((ft_strarrlen(strarr) - 1 + 1) * sizeof(char *));
+	new_strarr = (char **)malloc((\
+		ft_strarrlen(strarr) - 1 + 1) * sizeof(char *));
 	if (new_strarr == NULL)
 		return (ft_free_strarr(strarr), NULL);
 	i = 0;

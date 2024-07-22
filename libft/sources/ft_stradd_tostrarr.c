@@ -6,18 +6,18 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 10:53:43 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/22 11:10:28 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:00:21 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/libft.h"
 
 char	**ft_stradd_tostrarr(char **strarr, char *str)
-{	
+{
 	char	**new_strarr;
 	int		arr_size;
 	int		i;
-	
+
 	arr_size = ft_strarrlen(strarr);
 	new_strarr = (char **)malloc((arr_size + 1 + 1) * sizeof(char *));
 	if (new_strarr == NULL)
