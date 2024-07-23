@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/22 15:05:28 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/23 09:01:00 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ char	*get_cmd_path(t_executor *exec, t_cmd *cmd);
 int		get_fd(char *file, bool is_in_fd, bool is_append);
 bool	is_path_set(char *envp[]);
 int		handle_redirection(t_cmd *cmd);
+int		handle_redirection_2(t_cmd *cmd, int re_in, int re_out);
 
 //child.c
 void	child_proc(t_executor *exec, t_cmd *cmd, int ends[]);
