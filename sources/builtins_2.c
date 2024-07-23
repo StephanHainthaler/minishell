@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/22 15:03:47 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/23 15:09:05 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,18 @@
 void	ft_echo(char **simp_cmd)
 {
 	int	i;
+	int j;
 
 	i = 1;
+	j = 0;
+	if (simp_cmd[1][0] == '\0' && ft_strarrlen(simp_cmd) == 2)
+	{
+		ft_putstr_fd("\n", 1);
+		return;
+	}
 	while (simp_cmd[i])
 	{
-		if (ft_strncmp(simp_cmd[1], "-n", ft_strlen(simp_cmd[1])) == 0)
+		while (ft_strncmp(simp_cmd[i], "-n", ft_strlen(simp_cmd[i])) == 0)
             i++;
 		ft_putstr_fd(simp_cmd[i], 1);
 		if (simp_cmd[i + 1])
@@ -31,6 +38,35 @@ void	ft_echo(char **simp_cmd)
 		ft_putstr_fd("\n", 1);
 }
 
+
+/* void	ft_echo(char **simp_cmd)
+{
+	int	i;
+	int j;
+	bool flag;
+
+	i = 1;
+	j = 0;
+	flag = false;
+	while (simp_cmd[i])
+	{
+		while (ft_strncmp(simp_cmd[i], "-n", ft_strlen(simp_cmd[i])) == 0)
+		{
+			flag = true;
+			j++;
+		}
+		while (simp_cmd[i][j + 1] == 'n' && flag == true)
+			j++;
+		i++;
+		ft_putstr_fd(simp_cmd[i], 1);
+		if (simp_cmd[i + 1])
+			ft_putstr_fd(" ", 1);
+		i++;
+	}
+	if ((ft_strarrlen(simp_cmd) == 1) || ft_strncmp(simp_cmd[1], "-n", ft_strlen(simp_cmd[0])) != 0)
+		ft_putstr_fd("\n", 1);
+}
+ */
 void	ft_cd(char **simp_cmd)
 {
     char *oldpwd;
@@ -61,6 +97,22 @@ void	ft_cd(char **simp_cmd)
     setenv("PWD", pwd, 1);
     free(pwd);
 }
+
+/* void	ft_cd(char **simp_cmd)
+{
+	if (ft_strarrlen(simp_cmd) == 1)
+	{
+		if (chdir(getenv("HOME")) == -1)
+			ft_putendl_fd("cd: HOME not set\n", 2);
+	}
+	else if (ft_strarrlen(simp_cmd) == 2)
+	{
+		if (chdir(simp_cmd[1]) == -1)
+			ft_putendl_fd("cd: no such file or directory\n", 2);
+	}
+	else
+		ft_putendl_fd("cd: too many arguments", 2);
+} */
 
 void	ft_pwd(char **simp_cmd)
 {

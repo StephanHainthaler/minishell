@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/23 14:23:25 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/23 14:55:59 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ bool	is_valid_input(t_lexer *lex)
 	cur = lex->token_list;
 	while (cur != NULL)
 	{
+		if (cur->type != WORD && cur->next == NULL)
+			return (ft_putendl_fd("last input is not word token", 2), false);
 		if (cur->type == PIPE && i == 0)
 			return (ft_putendl_fd("input can not start with `|'", 2), false);
 		if (cur->type == PIPE && cur->next->type == PIPE)
@@ -96,8 +98,6 @@ bool	is_valid_input(t_lexer *lex)
 			return (ft_putendl_fd("parse error near `<<'", 2), false);
 		if (cur->type == APPEND && cur->next != NULL && cur->next->type != WORD)
 			return (ft_putendl_fd("parse error near `>>'", 2), false);
-		if (cur->type != WORD && cur->next == NULL)
-			return (ft_putendl_fd("last input is not word token", 2), false);
 		cur = cur->next;
 		i++;
 	}

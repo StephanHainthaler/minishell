@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/23 14:25:48 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/23 14:41:13 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,8 @@ bool	ft_are_str_indentical(char *str1, char *str2);
 bool	is_replacable(char *str1, char *str2);
 
 //signals.c
-void	handle_signal(int sig_num);
+void	handle_sigint(int sig_num);
+void	handle_sigquit(int sig_num);
 
 //free.c
 void	free_lexer(t_lexer *lex);
