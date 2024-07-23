@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:49:44 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/23 14:35:10 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/23 16:44:11 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ void	handle_sigint(int sig_num)
 	}
 	else if (sig_num == SIGINT && global_state == 3)
 		printf("\n");
+	else if (sig_num == SIGINT && global_state == 4)
+	{
+		rl_on_new_line();
+		rl_replace_line("", 0);
+	}
 }
 
 void handle_sigquit(int sig_num)

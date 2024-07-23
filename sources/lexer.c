@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/23 14:41:52 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/23 16:42:55 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	read_input(t_minishell *ms)
 		if (ms->lex->input == NULL)
 			return (ft_putendl_fd("exit", 2), 1);
 		global_state = 3;
+		if (ft_are_str_indentical("./minishell", ms->lex->input))
+			global_state = 4;
 		if (global_state == 3)
 			signal(SIGQUIT, &handle_sigquit);
 		if (ft_isspace_str(ms->lex->input) == false)

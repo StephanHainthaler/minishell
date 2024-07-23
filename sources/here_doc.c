@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:24:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/23 14:39:51 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/23 16:23:52 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ int handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code)
 		signal(SIGINT, &handle_sigint);
 		signal(SIGQUIT, SIG_IGN);
 		temp_str = readline("> ");
-		if (global_state == 2)
-			return (2);
 		if (global_state == 2)
 			return (2);
 		if (temp_str == NULL)
