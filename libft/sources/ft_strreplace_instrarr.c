@@ -1,37 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isspace.c                                       :+:      :+:    :+:   */
+/*   ft_strreplace_instrarr.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/18 09:23:01 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/22 15:00:37 by shaintha         ###   ########.fr       */
+/*   Created: 2024/07/22 09:18:54 by shaintha          #+#    #+#             */
+/*   Updated: 2024/07/22 15:04:36 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/libft.h"
 
-bool	ft_isspace_str(char *str)
+char	**ft_strreplace_instrarr(char **strarr, char *new_str, int pos)
 {
-	int	i;
+	int		i;
 
+	if (pos < 0 || new_str == NULL)
+		return (strarr);
 	i = 0;
-	while (str[i] != '\0')
+	while (i < (int)ft_strarrlen(strarr))
 	{
-		if (ft_isspace(str[i]) == false)
-			return (false);
+		if (i == pos)
+		{
+			ft_free(strarr[pos]);
+			strarr[pos] = ft_strdup(new_str);
+			if (strarr[pos] == NULL)
+				return (ft_free_strarr(strarr), NULL);
+			return (strarr);
+		}
 		i++;
 	}
-	return (true);
-}
-
-bool	ft_isspace(int c)
-{
-	if (c == ' ' || c == '\f'
-		|| c == '\n' || c == '\r'
-		|| c == '\t' || c == '\v')
-		return (true);
-	else
-		return (false);
+	return (strarr);
 }

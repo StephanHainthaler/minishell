@@ -6,11 +6,13 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/17 17:33:56 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/23 14:33:30 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+int	global_state;
 
 int	main_loop(t_minishell *ms, int error_check)
 {

@@ -6,7 +6,7 @@
 #    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/07/17 16:52:02 by juitz            ###   ########.fr        #
+#    Updated: 2024/07/23 14:26:20 by juitz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,8 +45,9 @@ $(SRC_DIR)/executor.c \
 $(SRC_DIR)/executor_utils.c \
 $(SRC_DIR)/child.c \
 $(SRC_DIR)/builtins_1.c \
+$(SRC_DIR)/builtins_2.c \
 $(SRC_DIR)/builtins_utils.c \
-$(SRC_DIR)/signals.c
+$(SRC_DIR)/signals.c 
 
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 

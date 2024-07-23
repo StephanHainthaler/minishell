@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:24:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/20 13:26:39 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/23 14:31:24 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code)
 		signal(SIGINT, &handle_sigint);
 		signal(SIGQUIT, SIG_IGN);
 		temp_str = readline("> ");
+		if (global_state == 2)
+			return (2);
 		if (global_state == 2)
 			return (2);
 		if (temp_str == NULL)
@@ -46,7 +48,7 @@ char	*check_for_here_doc_expansion(char *str, char **envp, int ec)
 {
 	int		i;
 
-    i = 0;
+	i = 0;
 	while (str[i] != '\0')
 	{
 			if (str[i] == '$')
@@ -62,7 +64,7 @@ char	*check_for_here_doc_expansion(char *str, char **envp, int ec)
 
 char    *expand_here_doc(char *str, char **envp, int exit_code, int *i)
 {
-    int		len;
+	int		len;
 	int		pos;
 	int		j;
 
@@ -83,4 +85,56 @@ char    *expand_here_doc(char *str, char **envp, int exit_code, int *i)
 		j++;
 	}
 	return (*i = pos - 1, handle_invalid_expansion(str, len, pos));
+}
+
+char    *get_temp_name(void)
+{
+	char	*temp_name;
+	char    *temp_str;
+	char    *temp_nbr;
+	int     i;
+
+	temp_str = ".temp";
+	
+	temp_nbr = NULL;
+	temp_name = NULL;
+	i = 0;
+	while (i < INT_MAX - 1)
+	{
+		temp_nbr = ft_itoa(i);
+		if (temp_nbr == NULL)
+			return (ft_free(temp_nbr), ft_free(temp_name), NULL);
+		temp_name = ft_strjoin(temp_str, temp_nbr);
+		if (temp_name == NULL)
+			return (ft_free(temp_nbr), ft_free(temp_name), NULL);
+		if (access(temp_name, F_OK) == -1)
+			return (free(temp_nbr), temp_name);
+		free(temp_nbr);
+		free(temp_name);
+		i++;
+	}
+	return (free(temp_nbr), free(temp_name), NULL);
+}
+
+char    *get_random_temp_name(void)
+{
+	char    *temp_str;
+	int		fd_random;
+
+	fd_random = open("/dev/random", O_RDONLY, 0777);
+	if (fd_random == -1)
+		return (NULL);
+	temp_str = (char *)malloc((10 + 1) * sizeof(char));
+	if (temp_str == NULL)
+		return (close(fd_random), NULL);
+	while (true)
+	{
+		if (read(fd_random, temp_str, 10) == -1)
+			return (close(fd_random), free(temp_str), NULL);
+		temp_str[10] = '\0';
+		//ft_putendl_fd(temp_str, 1);
+		if (access(temp_str, F_OK) == -1 && ft_isspace_str(temp_str) == false)
+			break ;
+	}
+	return (close(fd_random), temp_str);
 }

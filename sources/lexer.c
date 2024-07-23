@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/23 13:59:40 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/23 14:33:08 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	read_input(t_minishell *ms)
 {
 	int	error_check;
 
-	error_check = 0;
 	if (initialize_lexer(ms) == 1)
 		return (1);
 	while (true)

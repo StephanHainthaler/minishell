@@ -6,35 +6,39 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 13:46:46 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/24 13:35:14 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:12:25 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void	sort_strarray(char **strarray)
+int	sort_strarray(char **strarray)
 {
+	char	**arrdup;
+	char	*temp;
 	int		i;
 	int		j;
-	char	*temp;
 
+	arrdup = ft_strarrdup(strarray);
+	if (arrdup == NULL)
+		return (1);
 	i = 0;
-	while (strarray[i])
+	while (arrdup[i])
 	{
 		j = i + 1;
-		while (strarray[j])
+		while (arrdup[j])
 		{
-			if (ft_strncmp(strarray[i], strarray[j], ft_strlen(strarray[i])) > 0)
+			if (ft_strncmp(arrdup[i], arrdup[j], ft_strlen(arrdup[i])) > 0)
 			{
-				temp = strarray[i];
-				strarray[i] = strarray[j];
-				strarray[j] = temp;
+				temp = arrdup[i];
+				arrdup[i] = arrdup[j];
+				arrdup[j] = temp;
 			}
 			j++;
 		}
 		i++;
 	}
-	ft_putstrarr_fd(strarray, 1);
+	return (ft_putstrarr_fd(arrdup, 1), ft_free_strarr(arrdup), 0);
 }
 
 bool	ft_are_str_indentical(char *str1, char *str2)
@@ -49,16 +53,12 @@ bool	ft_are_str_indentical(char *str1, char *str2)
 
 bool	is_replacable(char *str1, char *str2)
 {
-	int	i;
+	char	*temp;
+	int		i;
 
+	temp = NULL;
 	i = 0;
-	// while (str1[i] && str1[i] != '=')
-	// 	i++;
-	// if (ft_strlen(str1) != ft_strlen(str2))
-	// 	return (false);
-	if (ft_strncmp(str1, str2, i) != 0)
-		return (false);
-	// if (str2[i] != '\0' || str2[i] != '=')
-	// 	return (false);
-	return (true);
+	while (str2[i] != '\0' && str2[i] != '=')
+		i++;
+	return (check_for_env(str1, str2, i));
 }

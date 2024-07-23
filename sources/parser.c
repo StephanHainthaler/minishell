@@ -6,9 +6,10 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/23 14:16:11 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/23 14:23:25 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 
 #include "../headers/minishell.h"
@@ -21,19 +22,15 @@ int	parse_input(t_minishell *ms)
 		return (1);
 	if (is_valid_input(ms->lex) == false)
 		return (free_lexer(ms->lex), free_executor(ms->exec), 2);
-	error_check = get_cmds(ms->exec, &ms->lex->token_list, 0 , 0);
+	error_check = get_cmds(ms->exec, &ms->lex->token_list, 0, 0);
 	if (error_check == 1)
 		return (free_executor(ms->exec), 1);
 	if (error_check == 2)
 		return (free_executor(ms->exec), free_lexer(ms->lex), 2);
-	// i = 0;
-	// while (i < ms->exec->num_of_cmds)
-	// 	ft_print_cmd(ms->exec->cmds[i++]);
-	// printf("\n");
 	return (0);
 }
 
-int		get_cmds(t_executor *exec, t_list **list, int error_check, int i)
+int	get_cmds(t_executor *exec, t_list **list, int error_check, int i)
 {
 	t_list	*cur;
 
@@ -47,7 +44,8 @@ int		get_cmds(t_executor *exec, t_list **list, int error_check, int i)
 			if (cur->type == RE_IN)
 				error_check = get_infile_redir(exec, cur->next->attr, i);
 			if (cur->type == RE_OUT || cur->type == APPEND)
-				error_check = get_outfile_redir(exec, cur->next->attr, cur->type, i);
+				error_check = get_outfile_redir(exec, cur->next->attr, \
+					cur->type, i);
 			if (cur->type == HERE_DOC)
 				error_check = get_here_doc(exec, cur->next->attr, i);
 			cur = cur->next;
@@ -60,7 +58,6 @@ int		get_cmds(t_executor *exec, t_list **list, int error_check, int i)
 	}
 	return (0);
 }
-
 
 int	count_cmds(t_list **list)
 {
@@ -76,6 +73,35 @@ int	count_cmds(t_list **list)
 		current_node = current_node->next;
 	}
 	return (num_of_cmds);
+}
+
+bool	is_valid_input(t_lexer *lex)
+{
+	t_list	*cur;
+	int		i;
+
+	i = 0;
+	cur = lex->token_list;
+	while (cur != NULL)
+	{
+		if (cur->type == PIPE && i == 0)
+			return (ft_putendl_fd("input can not start with `|'", 2), false);
+		if (cur->type == PIPE && cur->next->type == PIPE)
+			return (ft_putendl_fd("no double pipes allowed in here", 2), false);
+		if (cur->type == RE_IN && cur->next != NULL && cur->next->type != WORD)
+			return (ft_putendl_fd("parse error near `<'", 2), false);
+		if (cur->type == RE_OUT && cur->next != NULL && cur->next->type != WORD)
+			return (ft_putendl_fd("parse error near `>'", 2), false);
+		if (cur->type == 5 && cur->next != NULL && cur->next->type != WORD)
+			return (ft_putendl_fd("parse error near `<<'", 2), false);
+		if (cur->type == APPEND && cur->next != NULL && cur->next->type != WORD)
+			return (ft_putendl_fd("parse error near `>>'", 2), false);
+		if (cur->type != WORD && cur->next == NULL)
+			return (ft_putendl_fd("last input is not word token", 2), false);
+		cur = cur->next;
+		i++;
+	}
+	return (true);
 }
 
 void	ft_print_cmd(t_cmd *cmd)
@@ -95,41 +121,3 @@ void	ft_print_cmd(t_cmd *cmd)
 	printf("cmd->cmd_nbr: %d\n", cmd->cmd_nbr);
 	printf("cmd->cmd_path: %s\n", cmd->cmd_path);
 }
-
-bool is_valid_input(t_lexer *lex)
-{
-	t_list *current;
-	int		i;
-
-	i = 0;
-	current = lex->token_list;
-	while (current != NULL)
-	{
-		if (current->type != WORD && current->next == NULL)
-			return (ft_putendl_fd("word token required as last input", 2), false);
-		if (current->type == PIPE && i == 0)
-			return (ft_putendl_fd("input can not start with `|'", 2), false);
-		if (current->type == PIPE && current->next->type == PIPE)
-			return (ft_putendl_fd("sorry, no double pipes allowed in here", 2), false);
-		if (current->type == RE_IN && current->next != NULL && current->next->type != WORD)
-			return (ft_putendl_fd("parse error near `<'", 2), false);
-		if (current->type == RE_OUT && current->next != NULL && current->next->type != WORD)
-			return (ft_putendl_fd("parse error near `>'", 2), false);
-		if (current->type == HERE_DOC && current->next != NULL && current->next->type != WORD)
-			return (ft_putendl_fd("parse error near `<<'", 2), false);
-		if (current->type == APPEND && current->next != NULL && current->next->type != WORD)
-			return (ft_putendl_fd("parse error near `>>'", 2), false);
-		current = current->next;
-		i++;
-	}
-	return (true);
-}
-	// if (current->type == WORD)
-		// 	has_wrd = true;
-		// if (current->type == PIPE)
-		// 	has_wrd = false;
-		// if (current->type != PIPE && has_wrd == false)
-		// 	return (ft_putendl_fd("command has no word", 2), false);
-
-			// if (has_wrd == false)
-	// 	return (ft_putendl_fd("command has no word", 2), false);
