@@ -6,20 +6,21 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/23 15:09:05 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/23 18:47:22 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-#include <string.h>
 
 void	ft_echo(char **simp_cmd)
 {
-	int	i;
-	int j;
+	int		i;
+	int		j;
+	bool	flag;
 
 	i = 1;
 	j = 0;
+	flag = false;
 	if (simp_cmd[1][0] == '\0' && ft_strarrlen(simp_cmd) == 2)
 	{
 		ft_putstr_fd("\n", 1);
@@ -27,7 +28,9 @@ void	ft_echo(char **simp_cmd)
 	}
 	while (simp_cmd[i])
 	{
-		while (ft_strncmp(simp_cmd[i], "-n", ft_strlen(simp_cmd[i])) == 0)
+		// if (ft_strncmp(simp_cmd[i + 1], "-n", ft_strlen(simp_cmd[i + 1])) != 0)
+		// 	flag = true;
+		while (ft_strncmp(simp_cmd[i], "-n", ft_strlen(simp_cmd[i])) == 0 /* && flag == false */)
             i++;
 		ft_putstr_fd(simp_cmd[i], 1);
 		if (simp_cmd[i + 1])
@@ -37,7 +40,6 @@ void	ft_echo(char **simp_cmd)
 	if ((ft_strarrlen(simp_cmd) == 1) || ft_strncmp(simp_cmd[1], "-n", ft_strlen(simp_cmd[0])) != 0)
 		ft_putstr_fd("\n", 1);
 }
-
 
 /* void	ft_echo(char **simp_cmd)
 {
