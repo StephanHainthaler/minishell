@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/20 14:29:15 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/23 13:59:40 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	read_input(t_minishell *ms)
 	{
 		global_state = 0;
 		if (signal(SIGINT, &handle_sigint))
-			ms->exec->exit_status = 130;
+			ms->last_exit_code = 130;
 		//signal(SIGQUIT, &handle_signal);
 		signal(SIGTERM, SIG_IGN);
 		if (global_state == 0 || global_state == 1 || global_state == 2)
