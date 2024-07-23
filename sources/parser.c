@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/20 17:52:24 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/23 14:16:11 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,10 @@ void	ft_print_cmd(t_cmd *cmd)
 
 bool is_valid_input(t_lexer *lex)
 {
-	t_list *head;
 	t_list *current;
 	int		i;
 
 	i = 0;
-	head = lex->token_list;
 	current = lex->token_list;
 	while (current != NULL)
 	{
@@ -124,7 +122,6 @@ bool is_valid_input(t_lexer *lex)
 		current = current->next;
 		i++;
 	}
-	lex->token_list = head;
 	return (true);
 }
 	// if (current->type == WORD)
