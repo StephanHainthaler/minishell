@@ -14,4 +14,5 @@ cat << here | = segfault -fixed
 ./minishell ./minishell ctrl+\ -fixed
 input: exit "number" should print exit "number"
 exit | exit | exit shouldn't do anything - fixed
-echo hi >1 >2 >3 this is a test, should print "this is a test" into all three files
+echo $"" should print newline
+echo $ should print 

@@ -6,12 +6,11 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:24:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/23 16:23:52 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/24 15:02:37 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-#include <readline/readline.h>
 
 int handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code)
 {

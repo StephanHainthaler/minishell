@@ -6,13 +6,11 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:49:44 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/24 12:08:33 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/24 15:02:05 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-#include <asm-generic/ioctls.h>
-#include <unistd.h>
 
 void	handle_sigint(int sig_num)
 {
