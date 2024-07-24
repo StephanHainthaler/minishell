@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/24 12:59:38 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/24 13:06:26 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,63 +48,6 @@ void	ft_echo(char **simp_cmd)
 		ft_putstr_fd("\n", 1);
 }
 
-/* void	ft_echo(char **simp_cmd)
-{
-	int		i;
-	int		j;
-	bool	flag;
-
-	i = 1;
-	j = 0;
-	flag = false;
-	if (simp_cmd[1][0] == '\0' && ft_strarrlen(simp_cmd) == 2)
-	{
-		ft_putstr_fd("\n", 1);
-		return;
-	}
-	while (simp_cmd[i])
-	{
-		// if (ft_strncmp(simp_cmd[i + 1], "-n", ft_strlen(simp_cmd[i + 1])) != 0)
-		// 	flag = true;
-		while (ft_strncmp(simp_cmd[i], "-n", ft_strlen(simp_cmd[i])) == 0 && flag == false )
-            i++;
-		ft_putstr_fd(simp_cmd[i], 1);
-		if (simp_cmd[i + 1])
-			ft_putstr_fd(" ", 1);
-		i++;
-	}
-	if ((ft_strarrlen(simp_cmd) == 1) || ft_strncmp(simp_cmd[1], "-n", ft_strlen(simp_cmd[0])) != 0)
-		ft_putstr_fd("\n", 1);
-} */
-
-/* void	ft_echo(char **simp_cmd)
-{
-	int	i;
-	int j;
-	bool flag;
-
-	i = 1;
-	j = 0;
-	flag = false;
-	while (simp_cmd[i])
-	{
-		while (ft_strncmp(simp_cmd[i], "-n", ft_strlen(simp_cmd[i])) == 0)
-		{
-			flag = true;
-			j++;
-		}
-		while (simp_cmd[i][j + 1] == 'n' && flag == true)
-			j++;
-		i++;
-		ft_putstr_fd(simp_cmd[i], 1);
-		if (simp_cmd[i + 1])
-			ft_putstr_fd(" ", 1);
-		i++;
-	}
-	if ((ft_strarrlen(simp_cmd) == 1) || ft_strncmp(simp_cmd[1], "-n", ft_strlen(simp_cmd[0])) != 0)
-		ft_putstr_fd("\n", 1);
-}
- */
 void	ft_cd(char **simp_cmd)
 {
     char *oldpwd;

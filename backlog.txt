@@ -1,5 +1,5 @@
-echo -n -k -n
-echo -nnnnnnnn
+echo -n -k -n -fixed
+echo -nnnnnnnn -fixed
 cd update env
 cat SIGINT prints extra minishell -fixed
 here_doc SIGINT makes empty line -fixed
@@ -8,9 +8,10 @@ SIGINT with valgrind in here_doc:
 	==717391== Warning: noted but unhandled ioctl 0x5412 with no size/direction hints.
 	==717391==    This could cause spurious value errors to appear.
 	==717391==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
-SIGINT return code 130, wie implementieren?
+SIGINT return code 130, wie implementieren? -fixed
 expanding calculations?
 cat << here | = segfault -fixed
 ./minishell ./minishell ctrl+\ -fixed
 input: exit "number" should print exit "number"
 exit | exit | exit shouldn't do anything - fixed
+echo hi >1 >2 >3 this is a test, should print "this is a test" into all three files
