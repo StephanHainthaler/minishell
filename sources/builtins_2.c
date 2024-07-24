@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/24 12:23:31 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/24 12:59:38 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@ void	ft_echo(char **simp_cmd)
 {
 	int	i;
 	int	j;
-	bool	flag_n;
 	
-	i = 0;
+	i = 1;
 	j = 0;
-	flag_n = false;
+	int flag_n = 0;
 
 	while (simp_cmd[i])
 	{
@@ -31,7 +30,7 @@ void	ft_echo(char **simp_cmd)
 				j++;
 			if (simp_cmd[i][j] == '\0')
 			{
-				flag_n = true;
+				flag_n = 1;
 				i++;
 				continue;
 			}
@@ -45,7 +44,7 @@ void	ft_echo(char **simp_cmd)
 			ft_putstr_fd(" ", 1);
 		i++;
 	}
-	if ((ft_strarrlen(simp_cmd) == 1) || ft_strncmp(simp_cmd[1], "-n", ft_strlen(simp_cmd[0])) != 0)
+	if (!flag_n)
 		ft_putstr_fd("\n", 1);
 }
 
