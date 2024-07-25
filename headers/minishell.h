@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -87,7 +85,7 @@ extern int	global_state;
 int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
 int		initialize_lexer(t_minishell *ms);
 int		initialize_executor(t_minishell *ms);
-int		initialize_executor_2(t_minishell *ms, int i);
+int		initialize_executor_2(t_minishell *ms);
 t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr);
 
 //lexer.c

@@ -14,15 +14,19 @@
 
 int	get_word(t_executor *exec, char *word, int i)
 {
-	// ft_putendl_fd(word, 1);
-	// if (ft_strchr(word, '\'') || ft_strchr(word, '"'))
-	// {
-	// 	word = dequote(word);
-	// 	if (word == NULL)
-	// 		return (1);
-	// 	ft_putendl_fd(word, 1);
-	// 	ft_putnbr_fd(ft_strlen(word), 1);
-	// }
+	char	*deq_word;
+
+	if (ft_strchr(word, '\'') || ft_strchr(word, '"'))
+	{
+		deq_word = NULL;
+		deq_word = dequote(word);
+		if (deq_word == NULL)
+			return (1);
+		exec->cmds[i]->simp_cmd = ft_stradd_tostrarr(exec->cmds[i]->simp_cmd, deq_word);
+		if (exec->cmds[i]->simp_cmd == NULL)
+			return (free(deq_word), 1);
+		return (free(deq_word), 0);	
+	}
 	exec->cmds[i]->simp_cmd = ft_stradd_tostrarr(exec->cmds[i]->simp_cmd, word);
 	if (exec->cmds[i]->simp_cmd == NULL)
 		return (1);
@@ -31,17 +35,14 @@ int	get_word(t_executor *exec, char *word, int i)
 
 int	get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i)
 {
-	if (ft_strchr(outfile, '\'') || ft_strchr(outfile, '"'))
-	{
-		exec->cmds[i]->outfile = dequote(exec->cmds[i]->outfile);
-		if (exec->cmds[i]->outfile == NULL)
-			return (1);
-	}
 	if (exec->cmds[i]->outfile != NULL)
 		free(exec->cmds[i]->outfile);
 	if (exec->cmds[i]->out_fd != -1 && exec->cmds[i]->out_fd != 1)
 		close(exec->cmds[i]->out_fd);
-	exec->cmds[i]->outfile = ft_strdup(outfile);
+	if (ft_strchr(outfile, '\'') || ft_strchr(outfile, '"'))
+		exec->cmds[i]->outfile = dequote(outfile);
+	else
+		exec->cmds[i]->outfile = ft_strdup(outfile);
 	if (exec->cmds[i]->outfile == NULL)
 		return (1);
 	if (type == RE_OUT)
@@ -53,12 +54,6 @@ int	get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i)
 
 int	get_infile_redir(t_executor *exec, char *infile, int i)
 {
-	// if (ft_strchr(infile, '\'') || ft_strchr(infile, '"'))
-	// {
-	// 	exec->cmds[i]->infile = dequote(exec->cmds[i]->infile);
-	// 	if (exec->cmds[i]->infile == NULL)
-	// 		return (1);
-	// }
 	if (exec->cmds[i]->infile != NULL)
 		free(exec->cmds[i]->infile);
 	if (exec->cmds[i]->in_fd != -1 && exec->cmds[i]->in_fd != 0)
@@ -66,7 +61,10 @@ int	get_infile_redir(t_executor *exec, char *infile, int i)
 	if (exec->cmds[i]->has_here_doc == true)
 		unlink(exec->cmds[i]->here_doc);
 	exec->cmds[i]->has_here_doc = false;
-	exec->cmds[i]->infile = ft_strdup(infile);
+	if (ft_strchr(infile, '\'') || ft_strchr(infile, '"'))
+		exec->cmds[i]->infile = dequote(infile);
+	else
+		exec->cmds[i]->infile = ft_strdup(infile);
 	if (exec->cmds[i]->infile == NULL)
 		return (1);
 	exec->cmds[i]->in_fd = get_fd(exec->cmds[i]->infile, true, false);

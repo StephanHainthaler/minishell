@@ -45,11 +45,9 @@ int	handle_builtins_non_pipable(t_minishell *ms)
 {
 	char **simp_cmd;
 
-	printf("TEST7\n");
 	simp_cmd = ms->exec->cmds[0]->simp_cmd;
 	if (ft_are_str_indentical(simp_cmd[0], "cd") == true)
 		return (ft_cd(simp_cmd), 0);
-	printf("TEST8\n");
 	if (ft_are_str_indentical(simp_cmd[0], "export") == true)
 	{
 		ms->envp = ft_export(simp_cmd, ms->envp);

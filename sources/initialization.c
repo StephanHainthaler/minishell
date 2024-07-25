@@ -63,12 +63,11 @@ int	initialize_executor(t_minishell *ms)
 	return (0);
 }
 
-int	initialize_executor_2(t_minishell *ms, int i)
+int	initialize_executor_2(t_minishell *ms)
 {
 	int	error_flag;
 
 	error_flag = 0;
-	i = 0;
 	if (is_path_set(ms->envp) == true)
 	{
 		ms->exec->paths = get_paths(ms->exec, &error_flag);

@@ -37,7 +37,8 @@ char	*dequote(char *str)
 			new_str[j++] = str[i++];
 	}
 	new_str[j] = '\0';
-	return (free(str), new_str);
+	//free(str);
+	return (new_str);
 }
 
 int	handle_quotes(t_lexer *lex, char quote, int *len)

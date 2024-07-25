@@ -14,7 +14,7 @@
 
 int	execute_input(t_minishell *ms)
 {
-	if (initialize_executor_2(ms, 0) == 1)
+	if (initialize_executor_2(ms) == 1)
 		return (1);
 	if (ms->exec->cmds[0]->simp_cmd == NULL)
 		return (0);
