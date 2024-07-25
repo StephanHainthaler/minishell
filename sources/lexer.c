@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/22 14:20:41 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:02:49 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,20 @@ int	read_input(t_minishell *ms)
 	while (true)
 	{
 		global_state = 0;
-		signal(SIGINT, &handle_signal);
+		if (signal(SIGINT, &handle_sigint))
+			ms->last_exit_code = 130;
+		//signal(SIGQUIT, &handle_signal);
+		signal(SIGTERM, SIG_IGN);
+		if (global_state == 0 || global_state == 1 || global_state == 2)
+			signal(SIGQUIT, SIG_IGN);
 		ms->lex->input = readline("./minishell$ ");
 		if (ms->lex->input == NULL)
-			return (1);
-			//return (ft_putendl_fd("exit", 2), 1);
+			return (ft_putendl_fd("exit", 2), 1);
+		global_state = 3;
+		if (ft_are_str_indentical("./minishell", ms->lex->input))
+			global_state = 4;
+		if (global_state == 3)
+			signal(SIGQUIT, &handle_sigquit);
 		if (ft_isspace_str(ms->lex->input) == false)
 			break ;
 	}

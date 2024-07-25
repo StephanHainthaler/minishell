@@ -6,9 +6,11 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/25 13:25:22 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:29:30 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -174,7 +176,8 @@ bool	ft_are_str_indentical(char *str1, char *str2);
 bool	is_replacable(char *str1, char *str2);
 
 //signals.c
-void	handle_signal(int sig_num);
+void	handle_sigint(int sig_num);
+void	handle_sigquit(int sig_num);
 
 //free.c
 void	free_lexer(t_lexer *lex);

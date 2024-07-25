@@ -6,9 +6,11 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/25 13:25:01 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:29:13 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 #include "../headers/minishell.h"
 
@@ -82,6 +84,8 @@ bool	is_valid_input(t_lexer *lex)
 	cur = lex->token_list;
 	while (cur != NULL)
 	{
+		if (cur->type != WORD && cur->next == NULL)
+			return (ft_putendl_fd("last input is not word token", 2), false);
 		if (cur->type == PIPE && i == 0)
 			return (ft_putendl_fd("input can not start with `|'", 2), false);
 		if (cur->type == PIPE && cur->next->type == PIPE)
@@ -94,8 +98,6 @@ bool	is_valid_input(t_lexer *lex)
 			return (ft_putendl_fd("parse error near `<<'", 2), false);
 		if (cur->type == APPEND && cur->next != NULL && cur->next->type != WORD)
 			return (ft_putendl_fd("parse error near `>>'", 2), false);
-		if (cur->type != WORD && cur->next == NULL)
-			return (ft_putendl_fd("last input is not word token", 2), false);
 		cur = cur->next;
 		i++;
 	}
