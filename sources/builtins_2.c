@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/25 12:55:09 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/25 17:35:01 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,10 @@ void	ft_pwd(char **simp_cmd)
 
 	i = 0;
 	j = 0;
-	if (simp_cmd[1][0] != '-')
+	if (ft_strarrlen(simp_cmd) == 1)
 		ft_putendl_fd(getcwd(NULL, 0), 1);
 	else
-		ft_putendl_fd("pwd: bad option: -a", 2);
+		ft_putendl_fd("pwd: too many arguments", 2);
 }
 
 char	**ft_export(char **simp_cmd, char **envp)
