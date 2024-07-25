@@ -6,11 +6,39 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:46:31 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/28 11:46:54 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:22:58 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+char	*dequote(char *str)
+{
+	char	*new_str;
+	char	quote;
+	int		i;
+	int		j;
+
+	new_str = (char *)malloc((get_dequoted_strlen(str) + 1) * (sizeof(char)));
+	if (new_str == NULL)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '\'' || str[i] == '"')
+		{
+			quote = str[i++];
+			while (str[i] != quote)
+				new_str[j++] = str[i++];
+			i++;
+		}
+		else
+			new_str[j++] = str[i++];
+	}
+	new_str[j] = '\0';
+	return (free(str), new_str);
+}
 
 int	handle_quotes(t_lexer *lex, char quote, int *len)
 {
