@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/23 09:01:00 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:25:22 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 typedef struct s_lexer
 {
 	t_list	*token_list;
+	t_list	*here_doc;
 	char	*input;
 	int		i;
 	char	**envp;
