@@ -15,4 +15,4 @@ cat << here | = segfault -fixed
 input: exit "number" should print exit "number"
 exit | exit | exit shouldn't do anything - fixed
 echo $"" should print newline
-echo $ should print 
+print individual delim error when pressing ctrl+d 
