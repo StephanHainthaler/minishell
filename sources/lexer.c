@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/24 15:02:49 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/25 13:33:24 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int	read_input(t_minishell *ms)
 		return (free_lexer(ms->lex), 2);
 	if (check_for_expansion(&ms->lex->token_list, ms->envp, ms->last_exit_code) == 1)
 		return (1);
-	if (check_for_dequotation(&ms->lex->token_list) == 1)
-		return (1);
+	// if (check_for_dequotation(&ms->lex->token_list) == 1)
+	// 	return (1);
 	return (0);
 }
 

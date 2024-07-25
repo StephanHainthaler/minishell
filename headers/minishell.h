@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/25 13:29:30 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:39:50 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ bool	check_for_env(char *str1, char *str2, int len);
 bool	is_str_expandable(char *str);
 
 //quotation.c
+char	*dequote(char *str);
 int		check_for_dequotation(t_list **token_list);
 int		handle_quotes(t_lexer *lex, char quote, int *len);
 char	*handle_dequotation(char *to_trim, int i, int j);

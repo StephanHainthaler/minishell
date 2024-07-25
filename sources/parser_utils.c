@@ -3,18 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/23 14:34:30 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/25 15:05:41 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../headers/minishell.h"
 
 int	get_word(t_executor *exec, char *word, int i)
 {
+	// ft_putendl_fd(word, 1);
+	// if (ft_strchr(word, '\'') || ft_strchr(word, '"'))
+	// {
+	// 	word = dequote(word);
+	// 	if (word == NULL)
+	// 		return (1);
+	// 	ft_putendl_fd(word, 1);
+	// 	ft_putnbr_fd(ft_strlen(word), 1);
+	// }
 	exec->cmds[i]->simp_cmd = ft_stradd_tostrarr(exec->cmds[i]->simp_cmd, word);
 	if (exec->cmds[i]->simp_cmd == NULL)
 		return (1);
@@ -23,6 +31,12 @@ int	get_word(t_executor *exec, char *word, int i)
 
 int	get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i)
 {
+	if (ft_strchr(outfile, '\'') || ft_strchr(outfile, '"'))
+	{
+		exec->cmds[i]->outfile = dequote(exec->cmds[i]->outfile);
+		if (exec->cmds[i]->outfile == NULL)
+			return (1);
+	}
 	if (exec->cmds[i]->outfile != NULL)
 		free(exec->cmds[i]->outfile);
 	if (exec->cmds[i]->out_fd != -1 && exec->cmds[i]->out_fd != 1)
@@ -39,6 +53,12 @@ int	get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i)
 
 int	get_infile_redir(t_executor *exec, char *infile, int i)
 {
+	// if (ft_strchr(infile, '\'') || ft_strchr(infile, '"'))
+	// {
+	// 	exec->cmds[i]->infile = dequote(exec->cmds[i]->infile);
+	// 	if (exec->cmds[i]->infile == NULL)
+	// 		return (1);
+	// }
 	if (exec->cmds[i]->infile != NULL)
 		free(exec->cmds[i]->infile);
 	if (exec->cmds[i]->in_fd != -1 && exec->cmds[i]->in_fd != 0)
