@@ -23,7 +23,7 @@ int	execute_input(t_minishell *ms)
 		if (ms->exec->cmds[0]->in_fd == -1 || ms->exec->cmds[0]->out_fd == -1)
 			return (free_executor(ms->exec), 2);
 		if (handle_builtins_non_pipable(ms) == 0)
-			return (0);
+			return (ms->last_exit_code = ms->exec->exit_status, 0);
 		if (single_execution(ms->exec) == 1)
 			return (1);
 		ms->last_exit_code = ms->exec->exit_status;
