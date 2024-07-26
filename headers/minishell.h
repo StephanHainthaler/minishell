@@ -109,11 +109,11 @@ bool	is_str_expandable(char *str);
 
 //quotation.c
 char	*dequote(char *str);
-int		check_for_dequotation(t_list **token_list);
-int		handle_quotes(t_lexer *lex, char quote, int *len);
+int		handle_quote_closure(t_lexer *lex, char quote, int *len);
 char	*handle_dequotation(char *to_trim, int i, int j);
 int		get_dequoted_strlen(char *str);
 void	handle_quotes_in_expansion(t_list *node, char quote);
+void	handle_quotes_in_expansion2(char quote, bool *in_sq, bool *in_dq);
 
 //parser.c
 int		parse_input(t_minishell *ms);
@@ -141,7 +141,6 @@ int		single_execution(t_executor *exec);
 int		multiple_execution(t_executor *exec);
 int		multi_pipe(t_executor *exec, int *prevpipe, int i);
 int		last_pipe(t_executor *exec, int prevpipe, int i);
-void	execute_cmd(t_executor *exec, t_cmd *cmd);
 
 //executor_utils.c
 char	**get_paths(t_executor *exec, int *error_flag);
@@ -152,7 +151,7 @@ int		handle_redirection(t_cmd *cmd);
 int		handle_redirection_2(t_cmd *cmd, int re_in, int re_out);
 
 //child.c
-void	child_proc(t_executor *exec, t_cmd *cmd, int ends[]);
+void	execute_cmd(t_executor *exec, t_cmd *cmd);
 void	single_child_proc(t_executor *exec, t_cmd *cmd);
 void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end);
 void	last_child_proc(t_executor *exec, t_cmd *cmd, int old_end);

@@ -41,6 +41,32 @@ int	check_for_expansion(t_list **token_list, char **envp, int ec)
 	return (0);
 }
 
+char	*expand_str(char *to_expand, char **envp, int exitcode)
+{
+	bool	in_sq;
+	bool	in_dq;
+	int		i;
+
+	if (ft_strchr(to_expand) == NULL)
+		return (to_expand);
+	in_sq = false;
+	in_dq = false;
+	i = 0;
+	while (to_expand[i] != '\0')
+	{
+		if (to_expand[i] == '\'' || to_expand[i] == '"')
+			handle_quotes_in_expansion2(to_expand[i], in_sq, in_dq);
+		if (to_expand[i] == '$' && cur_node->in_squotes == false)
+		{
+			to_expand = handle_expansion(cur_node, envp, ec, &i);
+			if (to_expand == NULL)
+				return (1);
+		}
+		i++;
+	}
+	return (to_expand);
+}
+
 char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i)
 {
 	int		len;

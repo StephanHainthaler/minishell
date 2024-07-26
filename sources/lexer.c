@@ -46,8 +46,6 @@ int	read_input(t_minishell *ms)
 		return (free_lexer(ms->lex), 2);
 	if (check_for_expansion(&ms->lex->token_list, ms->envp, ms->last_exit_code) == 1)
 		return (1);
-	// if (check_for_dequotation(&ms->lex->token_list) == 1)
-	// 	return (1);
 	return (0);
 }
 
@@ -99,7 +97,7 @@ t_list	*get_word_token(t_lexer *lex, int *error)
 	{
 		if (lex->input[lex->i] == '\'' || lex->input[lex->i] == '\"')
 		{
-			if (handle_quotes(lex, lex->input[lex->i], &len) == 1)
+			if (handle_quote_closure(lex, lex->input[lex->i], &len) == 1)
 				return (*error = 1, NULL);
 		}
 		if (ft_isspace(lex->input[lex->i]) == true

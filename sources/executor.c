@@ -117,17 +117,3 @@ int	last_pipe(t_executor *exec, int old_end, int i)
 	return (0);
 }
 
-void	execute_cmd(t_executor *exec, t_cmd *cmd)
-{
-	//printf("%s\n", cmd->cmd_path);
-	if (cmd->cmd_path == NULL)
-		exit_child(exec, -1, -1, 127);
-	if (handle_builtin(cmd->simp_cmd, exec) == 0)
-		exit_child(exec, -1, -1, 0);
-	if (execve(cmd->cmd_path, cmd->simp_cmd, exec->envp) == -1)
-	{
-		ft_putstr_fd(cmd->cmd_path, 2);
-		ft_putendl_fd(": command not found", 2);
-		exit_child(exec, -1, -1, 127);
-	}
-}

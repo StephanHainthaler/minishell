@@ -12,6 +12,30 @@
 
 #include "../headers/minishell.h"
 
+// int	check_for_dequotation(t_list **token_list)
+// {
+// 	t_list	*current_node;
+
+// 	current_node = *token_list;
+// 	while (current_node != NULL)
+// 	{
+// 		if (current_node->type == 1)
+// 		{
+// 			if (ft_strchr(current_node->attr, '"') != NULL
+// 				|| ft_strchr(current_node->attr, '\'') != NULL)
+// 			{
+// 				current_node->attr = handle_dequotation(\
+// 					current_node->attr, 0, 0);
+// 				if (current_node->attr == NULL)
+// 					return (1);
+// 				current_node->was_in_quotes = true;
+// 			}
+// 		}
+// 		current_node = current_node->next;
+// 	}
+// 	return (0);
+// }
+
 // void	child_proc(t_executor *exec, t_cmd *cmd, int ends[])
 // {
 // 	if (handle_redirection(cmd) == 1)
