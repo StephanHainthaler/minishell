@@ -134,12 +134,12 @@ void	handle_quotes_in_expansion2(char quote, bool *in_sq, bool *in_dq)
 {
 	if (quote == '\'')
 	{
-		if (in_dq == false)
-			in_sq = !(in_sq);
+		if (*in_dq == false)
+			*in_sq = !(*in_sq);
 	}
 	if (quote == '"')
 	{
-		if (in_sq == false)
-			in_dq = !(in_dq);
+		if (*in_sq == false)
+			*in_dq = !(*in_dq);
 	}
 }

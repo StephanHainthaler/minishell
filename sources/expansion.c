@@ -47,7 +47,7 @@ char	*expand_str(char *to_expand, char **envp, int exitcode)
 	bool	in_dq;
 	int		i;
 
-	if (ft_strchr(to_expand) == NULL)
+	if (ft_strchr(to_expand, '$') == NULL)
 		return (to_expand);
 	in_sq = false;
 	in_dq = false;
@@ -55,12 +55,12 @@ char	*expand_str(char *to_expand, char **envp, int exitcode)
 	while (to_expand[i] != '\0')
 	{
 		if (to_expand[i] == '\'' || to_expand[i] == '"')
-			handle_quotes_in_expansion2(to_expand[i], in_sq, in_dq);
-		if (to_expand[i] == '$' && cur_node->in_squotes == false)
+			handle_quotes_in_expansion2(to_expand[i], &in_sq, &in_dq);
+		if (to_expand[i] == '$' && in_sq == false)
 		{
-			to_expand = handle_expansion(cur_node, envp, ec, &i);
+			to_expand = handle_expansion2(to_expand, envp, exitcode, &i);
 			if (to_expand == NULL)
-				return (1);
+				return (NULL);
 		}
 		i++;
 	}
@@ -172,4 +172,37 @@ char	*handle_exit_code_expansion(char *to_expand, int exit_code, int *i)
 		exp_str[k++] = to_expand[j++];
 	exp_str[k] = '\0';
 	return (free(to_expand), free(exp_var), exp_str);
+}
+
+char	*handle_expansion2(char *to_expand, char **envp, int exit_code, int *i)
+{
+	int		len;
+	int		pos;
+	int		j;
+
+	if (to_expand == NULL)
+		return (NULL);
+	if (to_expand[*i + 1] == '?')
+		return (to_expand = handle_exit_code_expansion(to_expand, exit_code, i));
+	if (ft_isspace(to_expand[*i + 1]) == true || to_expand[*i + 1] == '\0'
+		|| to_expand[*i + 1] == '$' || to_expand[*i + 1] == '"'
+		|| to_expand[*i + 1] == '\'')
+		return (to_expand);
+	pos = *i;
+	len = get_envname_len(to_expand, i);
+	// if (to_expand[*i] == '\'')
+	// {
+	// 	handle_quotes_in_expansion(node, to_expand[*i]);
+	// 	if (node->in_squotes == true)
+	// 		return (to_expand);
+	// }
+	j = 0;
+	while (envp[j] != NULL)
+	{
+		if (check_for_env(envp[j], to_expand + pos + 1, len - 1) == true)
+			return (*i = pos - 1,
+				handle_valid_expansion(to_expand, envp[j], len, pos));
+		j++;
+	}
+	return (*i = pos - 1, handle_invalid_expansion(to_expand, len, pos));
 }

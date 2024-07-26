@@ -98,6 +98,7 @@ t_list	*get_non_word_token(t_lexer *lex);
 //expansion.c
 int		check_for_expansion(t_list **token_list, char **envp, int ec);
 char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i);
+char	*handle_expansion2(char *to_expand, char **envp, int exit_code, int *i);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
 char	*handle_invalid_expansion(char *str, int len, int pos);
 char	*handle_exit_code_expansion(char *to_expand, int exit_code, int *i);
