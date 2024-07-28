@@ -6,7 +6,7 @@
 /*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:49:44 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/28 15:11:46 by julian           ###   ########.fr       */
+/*   Updated: 2024/07/28 15:20:12 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	sigint_interactive(int sig_num)
 
 void	sigint_heredoc(int sig_num)
 {
-	if (sig_num == SIGINT)
+	if (sig_num == SIGINT && exit_code == 1)
 	{
 		exit_code = 2;
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
