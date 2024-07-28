@@ -6,13 +6,13 @@
 /*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/28 15:01:22 by julian           ###   ########.fr       */
+/*   Updated: 2024/07/28 15:43:01 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-volatile sig_atomic_t exit_code;
+int	global_code;
 
 int	main_loop(t_minishell *ms, int error_check)
 {

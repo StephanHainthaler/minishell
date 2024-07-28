@@ -6,7 +6,7 @@
 /*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/28 15:05:35 by julian           ###   ########.fr       */
+/*   Updated: 2024/07/28 15:43:39 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	read_input(t_minishell *ms)
 		return (1);
 	if (error_check == 2)
 		return (free_lexer(ms->lex), 2);
-	if (check_for_expansion(&ms->lex->token_list, ms->envp, exit_code) == 1)
+	if (check_for_expansion(&ms->lex->token_list, ms->envp, global_code) == 1)
 		return (1);
 	// if (check_for_dequotation(&ms->lex->token_list) == 1)
 	// 	return (1);

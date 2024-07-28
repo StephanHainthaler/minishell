@@ -6,7 +6,7 @@
 /*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/28 15:02:49 by julian           ###   ########.fr       */
+/*   Updated: 2024/07/28 15:42:49 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ typedef struct s_minishell
 	char		**envp;
 }				t_minishell;
 
-extern volatile sig_atomic_t exit_code;
+extern int	global_code;
 
 //initialization.c 
 int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
