@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/25 17:35:01 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/28 10:27:09 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,17 @@ void	ft_echo(char **simp_cmd)
 {
 	int	i;
 	int	j;
+	int flag_n;
 	
 	i = 1;
 	j = 0;
-	int flag_n = 0;
+	flag_n = 0;
 
 	while (simp_cmd[i])
 	{
 		if (ft_strncmp(simp_cmd[i], "-n", 2) == 0)
 		{
-			int j = 2;
+			j = 2;
 			while (simp_cmd[i][j] == 'n')
 				j++;
 			if (simp_cmd[i][j] == '\0')
@@ -97,11 +98,6 @@ void	ft_cd(char **simp_cmd)
 
 void	ft_pwd(char **simp_cmd)
 {
-	int i;
-	int	j;
-
-	i = 0;
-	j = 0;
 	if (ft_strarrlen(simp_cmd) == 1)
 		ft_putendl_fd(getcwd(NULL, 0), 1);
 	else

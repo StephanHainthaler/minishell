@@ -3,14 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/23 14:19:17 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/28 10:32:52 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+void	execute_cmd(t_executor *exec, t_cmd *cmd)
+{
+	//printf("%i\n", exec->is_path_set);
+	// 	exit_child(exec, -1, -1, 127);
+	// if (exec->is_path_set == false)
+	// {
+	// 	// if (access(cmd->simp_cmd[0], F_OK) == 0)
+	// 	// 	printf("cmd exists: %s\n", cmd->simp_cmd[0]);
+	// 	// else
+	// 	// 	printf("cmd DOES NOT exist: %s\n", cmd->simp_cmd[0]);
+	// 	printf("ARGH\n");
+	// 	if (execve(cmd->simp_cmd[0], cmd->simp_cmd, exec->envp) == -1)
+	// 	{
+	// 		ft_putstr_fd(cmd->simp_cmd[0], 2);
+	// 		ft_putendl_fd(": command not found", 2);
+	// 		exit_child(exec, -1, -1, 127);
+	// 	}
+	// 	printf("ARGH\n");
+	// }
+	if (handle_builtin(cmd->simp_cmd, exec) == 0)
+		exit_child(exec, -1, -1, 0);
+	if (execve(cmd->cmd_path, cmd->simp_cmd, exec->envp) == -1)
+	{
+		ft_putstr_fd(cmd->cmd_path, 2);
+		ft_putendl_fd(": command not found", 2);
+		exit_child(exec, -1, -1, 127);
+	}
+}
 
 void	single_child_proc(t_executor *exec, t_cmd *cmd)
 {	

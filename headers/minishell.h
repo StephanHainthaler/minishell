@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/25 13:39:50 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/28 15:02:49 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,13 @@ typedef struct s_minishell
 	char		**envp;
 }				t_minishell;
 
-extern int	global_state;
+extern volatile sig_atomic_t exit_code;
 
 //initialization.c 
 int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
 int		initialize_lexer(t_minishell *ms);
 int		initialize_executor(t_minishell *ms);
-int		initialize_executor_2(t_minishell *ms, int i);
+int		initialize_executor_2(t_minishell *ms);
 t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr);
 
 //lexer.c
@@ -177,7 +177,10 @@ bool	ft_are_str_indentical(char *str1, char *str2);
 bool	is_replacable(char *str1, char *str2);
 
 //signals.c
-void	handle_sigint(int sig_num);
+void	sigint_interactive(int sig_num);
+void	sigint_heredoc(int sig_num);
+void	sigint_process(int sig_num);
+void	sigint_subshell(int	sig_num);
 void	handle_sigquit(int sig_num);
 
 //free.c

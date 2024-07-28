@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialization.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/23 14:46:36 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/28 10:23:24 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,11 @@ int	initialize_executor(t_minishell *ms)
 	return (0);
 }
 
-int	initialize_executor_2(t_minishell *ms, int i)
+int	initialize_executor_2(t_minishell *ms)
 {
 	int	error_flag;
 
 	error_flag = 0;
-	i = 0;
 	if (is_path_set(ms->envp) == true)
 	{
 		ms->exec->paths = get_paths(ms->exec, &error_flag);

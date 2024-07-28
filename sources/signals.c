@@ -3,44 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:49:44 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/24 15:02:05 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/28 15:11:46 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void	handle_sigint(int sig_num)
+void	sigint_interactive(int sig_num)
 {
-	if (sig_num == SIGINT && global_state == 0)
+	if (sig_num == SIGINT)
 	{
 		//printf("\n");
+		exit_code = 130;
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		//rl_redisplay();
 	}
-	else if (sig_num == SIGINT && global_state == 1)
+}
+
+void	sigint_heredoc(int sig_num)
+{
+	if (sig_num == SIGINT)
 	{
-		global_state = 2;
+		exit_code = 2;
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		//rl_redisplay();
 	}
-	else if (sig_num == SIGINT && global_state == 3)
+}
+
+void	sigint_process(int sig_num)
+{
+	if (sig_num == SIGINT)
+	{
 		printf("\n");
-	else if (sig_num == SIGINT && global_state == 4)
+		exit_code = 130;
+	}
+}
+
+void	sigint_subshell(int	sig_num)
+{
+	if (sig_num == SIGINT)
 	{
 		rl_on_new_line();
 		rl_replace_line("", 0);
+		exit_code = 130;
 	}
 }
 
 void handle_sigquit(int sig_num)
 {
-	if (sig_num == SIGQUIT && global_state == 3)
+	if (sig_num == SIGQUIT)
 		ft_putendl_fd("Quit (core dumped)", 2);
 }

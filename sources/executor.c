@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/25 14:57:32 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/28 14:16:33 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	execute_input(t_minishell *ms)
 {
-	if (initialize_executor_2(ms, 0) == 1)
+	if (initialize_executor_2(ms) == 1)
 		return (1);
 	if (ms->exec->cmds[0]->simp_cmd == NULL)
 		return (0);
@@ -23,15 +23,15 @@ int	execute_input(t_minishell *ms)
 		if (ms->exec->cmds[0]->in_fd == -1 || ms->exec->cmds[0]->out_fd == -1)
 			return (free_executor(ms->exec), 2);
 		if (handle_builtins_non_pipable(ms) == 0)
-			return (0);
+			return (exit_code = ms->exec->exit_status, 0);
 		if (single_execution(ms->exec) == 1)
 			return (1);
-		ms->last_exit_code = ms->exec->exit_status;
+		exit_code = ms->exec->exit_status;
 		return (0);
 	}
 	if (multiple_execution(ms->exec) == 1)
 		return (1);
-	ms->last_exit_code = ms->exec->exit_status;
+	exit_code = ms->exec->exit_status;
 	return (0);
 }
 
@@ -115,19 +115,4 @@ int	last_pipe(t_executor *exec, int old_end, int i)
 	exec->exit_status = WEXITSTATUS(status);
 	//printf("Exit Status: %i\n", WEXITSTATUS(status));
 	return (0);
-}
-
-void	execute_cmd(t_executor *exec, t_cmd *cmd)
-{
-	//printf("%s\n", cmd->cmd_path);
-	if (cmd->cmd_path == NULL)
-		exit_child(exec, -1, -1, 127);
-	if (handle_builtin(cmd->simp_cmd, exec) == 0)
-		exit_child(exec, -1, -1, 0);
-	if (execve(cmd->cmd_path, cmd->simp_cmd, exec->envp) == -1)
-	{
-		ft_putstr_fd(cmd->cmd_path, 2);
-		ft_putendl_fd(": command not found", 2);
-		exit_child(exec, -1, -1, 127);
-	}
 }

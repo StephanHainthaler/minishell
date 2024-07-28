@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/25 13:33:24 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/28 15:05:35 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,19 @@ int	read_input(t_minishell *ms)
 		return (1);
 	while (true)
 	{
-		global_state = 0;
-		if (signal(SIGINT, &handle_sigint))
-			ms->last_exit_code = 130;
+		signal(SIGINT, &sigint_interactive);
 		//signal(SIGQUIT, &handle_signal);
 		signal(SIGTERM, SIG_IGN);
-		if (global_state == 0 || global_state == 1 || global_state == 2)
-			signal(SIGQUIT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		ms->lex->input = readline("./minishell$ ");
 		if (ms->lex->input == NULL)
 			return (ft_putendl_fd("exit", 2), 1);
-		global_state = 3;
+		signal(SIGINT, &sigint_process);
 		if (ft_are_str_indentical("./minishell", ms->lex->input))
-			global_state = 4;
-		if (global_state == 3)
+		{
 			signal(SIGQUIT, &handle_sigquit);
+			signal(SIGINT, &sigint_subshell);
+		}
 		if (ft_isspace_str(ms->lex->input) == false)
 			break ;
 	}
@@ -44,7 +42,7 @@ int	read_input(t_minishell *ms)
 		return (1);
 	if (error_check == 2)
 		return (free_lexer(ms->lex), 2);
-	if (check_for_expansion(&ms->lex->token_list, ms->envp, ms->last_exit_code) == 1)
+	if (check_for_expansion(&ms->lex->token_list, ms->envp, exit_code) == 1)
 		return (1);
 	// if (check_for_dequotation(&ms->lex->token_list) == 1)
 	// 	return (1);

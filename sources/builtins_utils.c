@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 13:46:46 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/22 13:12:25 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/28 10:29:55 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ bool	ft_are_str_indentical(char *str1, char *str2)
 
 bool	is_replacable(char *str1, char *str2)
 {
-	char	*temp;
+	//char	*temp;
 	int		i;
 
-	temp = NULL;
+	//temp = NULL;
 	i = 0;
 	while (str2[i] != '\0' && str2[i] != '=')
 		i++;
