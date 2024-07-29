@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/29 11:23:17 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/29 16:11:36 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,23 @@
 
 void	execute_cmd(t_executor *exec, t_cmd *cmd)
 {
-	//printf("%i\n", exec->is_path_set);
-	// 	exit_child(exec, -1, -1, 127);
-	// if (exec->is_path_set == false)
-	// {
-	// 	// if (access(cmd->simp_cmd[0], F_OK) == 0)
-	// 	// 	printf("cmd exists: %s\n", cmd->simp_cmd[0]);
-	// 	// else
-	// 	// 	printf("cmd DOES NOT exist: %s\n", cmd->simp_cmd[0]);
-	// 	printf("ARGH\n");
-	// 	if (execve(cmd->simp_cmd[0], cmd->simp_cmd, exec->envp) == -1)
-	// 	{
-	// 		ft_putstr_fd(cmd->simp_cmd[0], 2);
-	// 		ft_putendl_fd(": command not found", 2);
-	// 		exit_child(exec, -1, -1, 127);
-	// 	}
-	// 	printf("ARGH\n");
-	// }
 	if (cmd->simp_cmd == NULL)
 		exit_child(exec, -1, -1, 0);
 	if (handle_builtin(cmd->simp_cmd, exec) == 0)
 		exit_child(exec, -1, -1, 0);
+	ft_putendl_fd(cmd->cmd_path, 1);
+	if (access(cmd->cmd_path, F_OK) != 0)
+	{
+		ft_putstr_fd(cmd->cmd_path, 2);
+		ft_putendl_fd(": command not found", 2);
+		exit_child(exec, -1, -1, 127);
+	}
+	if (access(cmd->cmd_path, F_OK | X_OK) != 0)
+	{
+		ft_putstr_fd(cmd->cmd_path, 2);
+		ft_putendl_fd(": no permission", 2);
+		exit_child(exec, -1, -1, 126);
+	}
 	if (execve(cmd->cmd_path, cmd->simp_cmd, exec->envp) == -1)
 	{
 		ft_putstr_fd(cmd->cmd_path, 2);
@@ -49,7 +45,8 @@ void	single_child_proc(t_executor *exec, t_cmd *cmd)
 		exit_child(exec, -1, -1, 1);
 	if (handle_redirection(cmd, 0 ,1) == 1)
 		exit_child(exec, -1, -1, 1);
-	if (exec->paths != NULL && cmd->simp_cmd != NULL)
+	//if (exec->paths != NULL && cmd->simp_cmd != NULL)
+	if (cmd->simp_cmd != NULL)
 	{
 		cmd->cmd_path = get_cmd_path(exec, exec->cmds[0]);
 		if (cmd->cmd_path == NULL)
@@ -80,6 +77,7 @@ void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
 		exit_child(exec, ends[1], -1, 1);
 	}
 	close(ends[1]);
+	//TO DO
 	if (exec->paths != NULL && cmd->simp_cmd != NULL)
 	{
 		cmd->cmd_path = get_cmd_path(exec, cmd);
@@ -101,6 +99,7 @@ void	last_child_proc(t_executor *exec, t_cmd *cmd, int old_end)
 		exit_child(exec, old_end, -1, 1);
 	}
 	close(old_end);
+	//TO DO
 	if (exec->paths != NULL && cmd->simp_cmd != NULL)
 	{
 		cmd->cmd_path = get_cmd_path(exec, cmd);

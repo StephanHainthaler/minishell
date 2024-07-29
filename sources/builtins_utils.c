@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 13:46:46 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/22 13:12:25 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/29 15:36:10 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,34 @@ bool	is_replacable(char *str1, char *str2)
 	while (str2[i] != '\0' && str2[i] != '=')
 		i++;
 	return (check_for_env(str1, str2, i));
+}
+
+int	get_exitcode(char **simp_cmd)
+{
+	char 	*exitcode_str;
+	int		exitcode;
+
+	if (ft_strarrlen(simp_cmd) == 1)
+		return (0);
+	if (ft_strarrlen(simp_cmd) > 2)
+		return (ft_putendl_fd("exit\nexec: exit: too many arguments", 2), -1);
+	exitcode_str = simp_cmd[1];
+	if (ft_isnumber(exitcode_str) == false)
+	{
+		ft_putendl_fd("exit\nexec: exit: ", 2);
+		ft_putendl_fd(exitcode_str, 2);
+		return (ft_putendl_fd(": numeric argument required", 2), -1);
+	}
+	if (ft_isint(exitcode_str) == false)
+	{
+		ft_putendl_fd("exit\nexec: exit: ", 2);
+		ft_putendl_fd(exitcode_str, 2);
+		return (ft_putendl_fd("exec: exit: value overflow", 2), -1);
+	}
+	exitcode = ft_atoi(exitcode_str);
+	while (exitcode < 0)
+		exitcode = exitcode + 256;
+	while (exitcode > 255)
+		exitcode = exitcode - 256;
+	return (exitcode);
 }

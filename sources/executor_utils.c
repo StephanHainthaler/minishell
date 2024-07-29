@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:40:11 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/29 12:37:39 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/29 15:58:46 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ char	*get_cmd_path(t_executor *exec, t_cmd *cmd)
 	char	*temp;
 	int		i;
 
+	if (exec->is_path_set == false)
+		return (ft_strdup(cmd->simp_cmd[0]));
 	i = 0;
 	while (exec->paths[i] != NULL)
 	{
