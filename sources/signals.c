@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:49:44 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/28 15:43:10 by julian           ###   ########.fr       */
+/*   Updated: 2024/07/29 12:39:26 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ void	sigint_subshell(int	sig_num)
 
 void handle_sigquit(int sig_num)
 {
-	if (sig_num == SIGQUIT)
+	if (sig_num == SIGQUIT && global_code == 2)
+	{
 		ft_putendl_fd("Quit (core dumped)", 2);
+		global_code = 131;
+	}
 }
