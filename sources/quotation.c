@@ -37,10 +37,10 @@ char	*dequote(char *str)
 			new_str[j++] = str[i++];
 	}
 	new_str[j] = '\0';
-	return (free(str), new_str);
+	return (new_str);
 }
 
-int	handle_quotes(t_lexer *lex, char quote, int *len)
+int	handle_quote_closure(t_lexer *lex, char quote, int *len)
 {
 	bool	is_closed;
 
@@ -59,30 +59,6 @@ int	handle_quotes(t_lexer *lex, char quote, int *len)
 	}
 	if (is_closed == false)
 		return (1);
-	return (0);
-}
-
-int	check_for_dequotation(t_list **token_list)
-{
-	t_list	*current_node;
-
-	current_node = *token_list;
-	while (current_node != NULL)
-	{
-		if (current_node->type == 1)
-		{
-			if (ft_strchr(current_node->attr, '"') != NULL
-				|| ft_strchr(current_node->attr, '\'') != NULL)
-			{
-				current_node->attr = handle_dequotation(\
-					current_node->attr, 0, 0);
-				if (current_node->attr == NULL)
-					return (1);
-				current_node->was_in_quotes = true;
-			}
-		}
-		current_node = current_node->next;
-	}
 	return (0);
 }
 
@@ -151,5 +127,19 @@ void	handle_quotes_in_expansion(t_list *node, char quote)
 	{
 		if (node->in_squotes == false)
 			node->in_dquotes = !(node->in_dquotes);
+	}
+}
+
+void	handle_quotes_in_expansion2(char quote, bool *in_sq, bool *in_dq)
+{
+	if (quote == '\'')
+	{
+		if (*in_dq == false)
+			*in_sq = !(*in_sq);
+	}
+	if (quote == '"')
+	{
+		if (*in_sq == false)
+			*in_dq = !(*in_dq);
 	}
 }

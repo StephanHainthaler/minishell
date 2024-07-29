@@ -6,11 +6,63 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/23 14:18:44 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/29 11:14:30 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+// void	multi_child_proc2(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
+// {
+// 	close(ends[0]);
+// 	if (cmd->in_fd == -1 || cmd->out_fd == -1)	
+// 		exit_child(exec, ends[1], *old_end, 1);
+// 	// if (handle_redirection_2(cmd, *old_end, ends[1]) == 1)
+// 	// 	exit_child(exec, ends[1], *old_end, 1);
+// 	if (dup2(ends[1], 1) == -1)
+// 	{
+// 		ft_putendl_fd("FATAL child error 1", 2);
+// 		exit_child(exec, ends[1], *old_end, 1);
+// 	}
+// 	close(ends[1]);
+// 	if (dup2(*old_end, 0) == -1)
+// 	{
+// 		ft_putendl_fd("FATAL child error 2", 2);
+// 		exit_child(exec, *old_end, -1, 1);
+// 	}
+// 	close(*old_end);
+// 	if (exec->paths != NULL)
+// 	{
+// 		cmd->cmd_path = get_cmd_path(exec, cmd);
+// 		if (cmd->cmd_path == NULL)
+// 		exit_child(exec, -1, -1, 1);
+// 	}
+// 	execute_cmd(exec, cmd);
+// }
+
+// int	check_for_dequotation(t_list **token_list)
+// {
+// 	t_list	*current_node;
+
+// 	current_node = *token_list;
+// 	while (current_node != NULL)
+// 	{
+// 		if (current_node->type == 1)
+// 		{
+// 			if (ft_strchr(current_node->attr, '"') != NULL
+// 				|| ft_strchr(current_node->attr, '\'') != NULL)
+// 			{
+// 				current_node->attr = handle_dequotation(\
+// 					current_node->attr, 0, 0);
+// 				if (current_node->attr == NULL)
+// 					return (1);
+// 				current_node->was_in_quotes = true;
+// 			}
+// 		}
+// 		current_node = current_node->next;
+// 	}
+// 	return (0);
+// }
 
 // void	child_proc(t_executor *exec, t_cmd *cmd, int ends[])
 // {

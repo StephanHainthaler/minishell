@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/28 15:42:49 by julian           ###   ########.fr       */
+/*   Updated: 2024/07/29 13:47:50 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -100,6 +98,7 @@ t_list	*get_non_word_token(t_lexer *lex);
 //expansion.c
 int		check_for_expansion(t_list **token_list, char **envp, int ec);
 char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i);
+char	*handle_expansion2(char *to_expand, char **envp, int exit_code, int *i);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
 char	*handle_invalid_expansion(char *str, int len, int pos);
 char	*handle_exit_code_expansion(char *to_expand, int exit_code, int *i);
@@ -111,11 +110,11 @@ bool	is_str_expandable(char *str);
 
 //quotation.c
 char	*dequote(char *str);
-int		check_for_dequotation(t_list **token_list);
-int		handle_quotes(t_lexer *lex, char quote, int *len);
+int		handle_quote_closure(t_lexer *lex, char quote, int *len);
 char	*handle_dequotation(char *to_trim, int i, int j);
 int		get_dequoted_strlen(char *str);
 void	handle_quotes_in_expansion(t_list *node, char quote);
+void	handle_quotes_in_expansion2(char quote, bool *in_sq, bool *in_dq);
 
 //parser.c
 int		parse_input(t_minishell *ms);
@@ -129,6 +128,7 @@ int		get_word(t_executor *exec, char *word, int i);
 int		get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i);
 int		get_infile_redir(t_executor *exec, char *infile, int i);
 int		get_here_doc(t_executor *exec, char *delim, int i);
+bool	is_file_ambigious(char *file);
 
 //here_doc.c
 int 	handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code);
@@ -143,18 +143,16 @@ int		single_execution(t_executor *exec);
 int		multiple_execution(t_executor *exec);
 int		multi_pipe(t_executor *exec, int *prevpipe, int i);
 int		last_pipe(t_executor *exec, int prevpipe, int i);
-void	execute_cmd(t_executor *exec, t_cmd *cmd);
 
 //executor_utils.c
 char	**get_paths(t_executor *exec, int *error_flag);
 char	*get_cmd_path(t_executor *exec, t_cmd *cmd);
 int		get_fd(char *file, bool is_in_fd, bool is_append);
 bool	is_path_set(char *envp[]);
-int		handle_redirection(t_cmd *cmd);
-int		handle_redirection_2(t_cmd *cmd, int re_in, int re_out);
+int		handle_redirection(t_cmd *cmd, int in, int out);
 
 //child.c
-void	child_proc(t_executor *exec, t_cmd *cmd, int ends[]);
+void	execute_cmd(t_executor *exec, t_cmd *cmd);
 void	single_child_proc(t_executor *exec, t_cmd *cmd);
 void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end);
 void	last_child_proc(t_executor *exec, t_cmd *cmd, int old_end);

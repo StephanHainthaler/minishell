@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:24:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/29 12:45:23 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/29 13:52:01 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,39 @@
 int handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code)
 {
     char    *temp_str;
+	char	*deq_delim;
 
+	deq_delim = dequote(delim);
+	if (deq_delim == NULL)
+		return (1);
     while (true)
 	{
 		global_code = 1;
 		signal(SIGINT, &sigint_heredoc);
 		signal(SIGQUIT, SIG_IGN);
 		temp_str = readline("> ");
+		if (global_state == 2)
+			return (free(deq_delim), 2);
 		if (temp_str == NULL)
 			return (ft_putendl_fd("warning: here-doc delimited by EOF", 2), 2);
 		if (global_code == 2)
 			return (global_code = 130, 2);
         if (ft_strnstr(temp_str, delim, ft_strlen(delim)) != NULL \
             && ft_strlen(temp_str) == ft_strlen(delim))
+			return (free(deq_delim), ft_putendl_fd("warning: here-doc delimited by EOF", 2), 2);
+        if (ft_strnstr(temp_str, deq_delim, ft_strlen(deq_delim)) != NULL \
+            && ft_strlen(temp_str) == ft_strlen(deq_delim))
 			break ;
 		if (!(ft_strchr(delim, '\'') || ft_strchr(delim, '"')))
         {
 			temp_str = check_for_here_doc_expansion(temp_str, envp, exit_code);
             if (temp_str == NULL)
-                return (1);
+                return (free(deq_delim), 1);
         }
         ft_putendl_fd(temp_str, here_doc_fd);
 		free(temp_str);
 	}
-    return (0);
+    return (free(deq_delim), 0);
 }
 
 char	*check_for_here_doc_expansion(char *str, char **envp, int ec)
@@ -128,7 +137,6 @@ char    *get_random_temp_name(void)
 		if (read(fd_random, temp_str, 10) == -1)
 			return (close(fd_random), free(temp_str), NULL);
 		temp_str[10] = '\0';
-		//ft_putendl_fd(temp_str, 1);
 		if (access(temp_str, F_OK) == -1 && ft_isspace_str(temp_str) == false)
 			break ;
 	}

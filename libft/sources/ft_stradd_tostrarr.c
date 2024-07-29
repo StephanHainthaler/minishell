@@ -31,7 +31,7 @@ char	**ft_stradd_tostrarr(char **strarr, char *str)
 		i++;
 	}
 	new_strarr[i++] = ft_strdup(str);
-	if (new_strarr == NULL)
+	if (new_strarr[i - 1] == NULL)
 		return (ft_free_strarr(new_strarr), ft_free_strarr(strarr), NULL);
 	new_strarr[i] = NULL;
 	return (ft_free_strarr(strarr), new_strarr);
