@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/25 13:39:50 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/29 12:52:15 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ int		get_word(t_executor *exec, char *word, int i);
 int		get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i);
 int		get_infile_redir(t_executor *exec, char *infile, int i);
 int		get_here_doc(t_executor *exec, char *delim, int i);
+bool	is_file_ambigious(char *file);
 
 //here_doc.c
 int 	handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code);
@@ -148,8 +149,7 @@ char	**get_paths(t_executor *exec, int *error_flag);
 char	*get_cmd_path(t_executor *exec, t_cmd *cmd);
 int		get_fd(char *file, bool is_in_fd, bool is_append);
 bool	is_path_set(char *envp[]);
-int		handle_redirection(t_cmd *cmd);
-int		handle_redirection_2(t_cmd *cmd, int re_in, int re_out);
+int		handle_redirection(t_cmd *cmd, int in, int out);
 
 //child.c
 void	execute_cmd(t_executor *exec, t_cmd *cmd);

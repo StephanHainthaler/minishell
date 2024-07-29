@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/25 15:05:41 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/29 12:28:25 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int	get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i)
 		exec->cmds[i]->outfile = ft_strdup(outfile);
 	if (exec->cmds[i]->outfile == NULL)
 		return (1);
+	if (is_file_ambigious(exec->cmds[i]->outfile) == true)
+		return (2);
 	if (type == RE_OUT)
 		exec->cmds[i]->out_fd = get_fd(exec->cmds[i]->outfile, false, false);
 	else
@@ -67,6 +69,8 @@ int	get_infile_redir(t_executor *exec, char *infile, int i)
 		exec->cmds[i]->infile = ft_strdup(infile);
 	if (exec->cmds[i]->infile == NULL)
 		return (1);
+	if (is_file_ambigious(exec->cmds[i]->infile) == true)
+		return (2);
 	exec->cmds[i]->in_fd = get_fd(exec->cmds[i]->infile, true, false);
 	return (0);
 }
@@ -97,4 +101,30 @@ int	get_here_doc(t_executor *exec, char *delim, int i)
 	if (exec->cmds[i]->in_fd == -1)
 		return (1);
 	return (0);
+}
+
+bool	is_file_ambigious(char *file)
+{
+	char	quote;
+	int		i;
+
+	i = 0;
+	while (file[i] != '\0')
+	{
+		if (file[i] == '\'' || file[i] == '"')
+		{
+			quote = file[i++];
+			while (file[i] != quote)
+				i++;
+		}
+		if (ft_isspace(file[i]) == true)
+		{
+			ft_putstr_fd("exec: ", 2);
+			ft_putstr_fd(file, 2);
+			ft_putendl_fd(": ambiguous redirect", 2);
+			return (true);
+		}
+		i++;
+	}
+	return (false);
 }

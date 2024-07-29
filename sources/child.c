@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/23 14:19:17 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/29 11:23:17 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	execute_cmd(t_executor *exec, t_cmd *cmd)
 	// 	}
 	// 	printf("ARGH\n");
 	// }
+	if (cmd->simp_cmd == NULL)
+		exit_child(exec, -1, -1, 0);
 	if (handle_builtin(cmd->simp_cmd, exec) == 0)
 		exit_child(exec, -1, -1, 0);
 	if (execve(cmd->cmd_path, cmd->simp_cmd, exec->envp) == -1)
@@ -45,9 +47,9 @@ void	single_child_proc(t_executor *exec, t_cmd *cmd)
 {	
 	if (cmd->in_fd == -1 || cmd->out_fd == -1)
 		exit_child(exec, -1, -1, 1);
-	if (handle_redirection(cmd) == 1)
+	if (handle_redirection(cmd, 0 ,1) == 1)
 		exit_child(exec, -1, -1, 1);
-	if (exec->paths != NULL)
+	if (exec->paths != NULL && cmd->simp_cmd != NULL)
 	{
 		cmd->cmd_path = get_cmd_path(exec, exec->cmds[0]);
 		if (cmd->cmd_path == NULL)
@@ -62,23 +64,23 @@ void	single_child_proc(t_executor *exec, t_cmd *cmd)
 void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
 {
 	close(ends[0]);
-	if (cmd->in_fd == -1 || cmd->out_fd == -1)	
-		exit_child(exec, ends[1], *old_end, 1);
-	// if (handle_redirection_2(cmd, *old_end, ends[1]) == 1)
-	// 	exit_child(exec, ends[1], *old_end, 1);
-	if (dup2(ends[1], 1) == -1)
-	{
-		ft_putendl_fd("FATAL child error 1", 2);
-		exit_child(exec, ends[1], *old_end, 1);
-	}
-	close(ends[1]);
+	if (cmd->in_fd == -1 || cmd->out_fd == -1)
+		exit_child(exec, *old_end, ends[1], 1);
+	if (handle_redirection(cmd, *old_end, ends[1]) == 1)
+		exit_child(exec, *old_end, ends[1], 1);
 	if (dup2(*old_end, 0) == -1)
 	{
-		ft_putendl_fd("FATAL child error 2", 2);
-		exit_child(exec, *old_end, -1, 1);
+		ft_putendl_fd("FATAL child error", 2);
+		exit_child(exec, *old_end, ends[1], 1);
 	}
 	close(*old_end);
-	if (exec->paths != NULL)
+	if (dup2(ends[1], 1) == -1)
+	{
+		ft_putendl_fd("FATAL child error", 2);
+		exit_child(exec, ends[1], -1, 1);
+	}
+	close(ends[1]);
+	if (exec->paths != NULL && cmd->simp_cmd != NULL)
 	{
 		cmd->cmd_path = get_cmd_path(exec, cmd);
 		if (cmd->cmd_path == NULL)
@@ -89,15 +91,17 @@ void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
 
 void	last_child_proc(t_executor *exec, t_cmd *cmd, int old_end)
 {
-	// if (handle_redirection(cmd) == 1)
-	// 	exit_child(exec, -1, -1, 1);
+	if (cmd->in_fd == -1 || cmd->out_fd == -1)	
+		exit_child(exec, old_end, -1, 1);
+	if (handle_redirection(cmd, old_end, 1) == 1)
+		exit_child(exec, old_end, -1, 1);
 	if (dup2(old_end, 0) == -1)
 	{
-		ft_putendl_fd("FATAL child error 3", 2);
+		ft_putendl_fd("FATAL child error", 2);
 		exit_child(exec, old_end, -1, 1);
 	}
 	close(old_end);
-	if (exec->paths != NULL)
+	if (exec->paths != NULL && cmd->simp_cmd != NULL)
 	{
 		cmd->cmd_path = get_cmd_path(exec, cmd);
 		if (cmd->cmd_path == NULL)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:24:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/25 13:17:30 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/29 10:48:54 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,6 @@ char    *get_random_temp_name(void)
 		if (read(fd_random, temp_str, 10) == -1)
 			return (close(fd_random), free(temp_str), NULL);
 		temp_str[10] = '\0';
-		//ft_putendl_fd(temp_str, 1);
 		if (access(temp_str, F_OK) == -1 && ft_isspace_str(temp_str) == false)
 			break ;
 	}

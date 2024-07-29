@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialization.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/23 14:46:36 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/29 10:48:25 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,7 @@ t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr)
 	cmd->here_doc = NULL;
 	if (cmd->here_doc == NULL)
 	{
-		//cmd->here_doc = get_temp_name();
-		//cmd->here_doc = get_random_temp_name();
-		cmd->here_doc = ft_strdup("temp");
+		cmd->here_doc = get_random_temp_name();
 		if (cmd->here_doc== NULL)
 			return (free(cmd), NULL);
 	}

@@ -15,4 +15,5 @@ cat << here | = segfault -fixed
 input: exit "number" should print exit "number"
 exit | exit | exit shouldn't do anything - fixed
 echo $"" should print newline
-print individual delim error when pressing ctrl+d 
+print individual delim error when pressing ctrl+d
+possible issue if child free executor and UNLINKS the temp file serval times?

@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/25 14:57:32 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/29 11:20:35 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,19 @@ int	execute_input(t_minishell *ms)
 {
 	if (initialize_executor_2(ms) == 1)
 		return (1);
-	if (ms->exec->cmds[0]->simp_cmd == NULL)
-		return (0);
 	if (ms->exec->num_of_cmds == 1)
 	{
 		if (ms->exec->cmds[0]->in_fd == -1 || ms->exec->cmds[0]->out_fd == -1)
-			return (free_executor(ms->exec), 2);
+			return (free_executor(ms->exec), ms->last_exit_code = 1, 2);
 		if (handle_builtins_non_pipable(ms) == 0)
 			return (ms->last_exit_code = ms->exec->exit_status, 0);
 		if (single_execution(ms->exec) == 1)
-			return (1);
-		ms->last_exit_code = ms->exec->exit_status;
-		return (0);
+			return (ms->last_exit_code = ms->exec->exit_status, 1);
+		return (ms->last_exit_code = ms->exec->exit_status, 0);
 	}
 	if (multiple_execution(ms->exec) == 1)
-		return (1);
-	ms->last_exit_code = ms->exec->exit_status;
-	return (0);
+		return (ms->last_exit_code = ms->exec->exit_status, 1);
+	return (ms->last_exit_code = ms->exec->exit_status, 0);
 }
 
 int	single_execution(t_executor *exec)
@@ -78,7 +74,6 @@ int	multiple_execution(t_executor *exec)
 
 int	multi_pipe(t_executor *exec, int *old_end, int i)
 {
-	//int		status;
 	int		ends[2];
 	pid_t	cpid;
 
@@ -96,7 +91,6 @@ int	multi_pipe(t_executor *exec, int *old_end, int i)
 	*old_end = ends[0];
 	// waitpid(cpid, &status, 0);
 	// exec->exit_status = WEXITSTATUS(status);
-	//printf("Exit Status: %i\n", WEXITSTATUS(status));
 	return (0);
 }
 
@@ -113,7 +107,5 @@ int	last_pipe(t_executor *exec, int old_end, int i)
 	close(old_end);
 	waitpid(cpid, &status, 0);
 	exec->exit_status = WEXITSTATUS(status);
-	//printf("Exit Status: %i\n", WEXITSTATUS(status));
 	return (0);
 }
-
