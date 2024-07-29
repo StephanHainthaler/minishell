@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/29 13:50:03 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/29 13:55:46 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,16 @@ int	execute_input(t_minishell *ms)
 	if (ms->exec->num_of_cmds == 1)
 	{
 		if (ms->exec->cmds[0]->in_fd == -1 || ms->exec->cmds[0]->out_fd == -1)
-			return (free_executor(ms->exec), ms->last_exit_code = 1, 2);
+			return (free_executor(ms->exec), global_code = 1, 2);
 		if (handle_builtins_non_pipable(ms) == 0)
-			return (ms->last_exit_code = ms->exec->exit_status, 0);
+			return (global_code = ms->exec->exit_status, 0);
 		if (single_execution(ms->exec) == 1)
-			return (ms->last_exit_code = ms->exec->exit_status, 1);
-		return (ms->last_exit_code = ms->exec->exit_status, 0);
+			return (global_code = ms->exec->exit_status, 1);
+		return (global_code = ms->exec->exit_status, 0);
 	}
 	if (multiple_execution(ms->exec) == 1)
-		return (ms->last_exit_code = ms->exec->exit_status, 1);
-	return (ms->last_exit_code = ms->exec->exit_status, 0);
+		return (global_code = ms->exec->exit_status, 1);
+	return (global_code = ms->exec->exit_status, 0);
 }
 
 int	single_execution(t_executor *exec)

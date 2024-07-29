@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:49:44 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/29 12:39:26 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/29 15:54:14 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,17 @@ void	sigint_heredoc(int sig_num)
 {
 	if (sig_num == SIGINT && global_code == 1)
 	{
-		global_code = 2;
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
+		global_code = 130;
 		//rl_redisplay();
 	}
 }
 
 void	sigint_process(int sig_num)
 {
-	if (sig_num == SIGINT)
+	if (sig_num == SIGINT && global_code == 2)
 	{
 		printf("\n");
 		global_code = 130;
@@ -48,7 +48,7 @@ void	sigint_process(int sig_num)
 
 void	sigint_subshell(int	sig_num)
 {
-	if (sig_num == SIGINT)
+	if (sig_num == SIGINT && global_code == 3)
 	{
 		rl_on_new_line();
 		rl_replace_line("", 0);

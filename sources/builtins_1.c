@@ -6,7 +6,7 @@
 /*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/29 13:47:09 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/29 13:56:27 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 int	handle_builtin(char **simp_cmd, t_executor *exec)
 {
 	if (ft_are_str_indentical(simp_cmd[0], "echo") == true)
-	{
-		printf("TEST\n");
 		return (ft_echo(simp_cmd), 0);
-	}
 	if (ft_are_str_indentical(simp_cmd[0], "cd") == true)
 		return (ft_cd(simp_cmd), 0);
 	if (ft_are_str_indentical(simp_cmd[0], "pwd") == true)
