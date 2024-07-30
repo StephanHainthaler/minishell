@@ -18,7 +18,7 @@ void	execute_cmd(t_executor *exec, t_cmd *cmd)
 		exit_child(exec, -1, -1, 0);
 	if (handle_builtin(cmd->simp_cmd, exec) == 0)
 		exit_child(exec, -1, -1, 0);
-	ft_putendl_fd(cmd->cmd_path, 1);
+	//ft_putendl_fd(cmd->cmd_path, 1);
 	if (access(cmd->cmd_path, F_OK) != 0)
 	{
 		ft_putstr_fd(cmd->cmd_path, 2);
@@ -41,6 +41,7 @@ void	execute_cmd(t_executor *exec, t_cmd *cmd)
 
 void	single_child_proc(t_executor *exec, t_cmd *cmd)
 {	
+	cmd->is_parent = false;
 	if (cmd->in_fd == -1 || cmd->out_fd == -1)
 		exit_child(exec, -1, -1, 1);
 	if (handle_redirection(cmd, 0 ,1) == 1)
@@ -60,6 +61,7 @@ void	single_child_proc(t_executor *exec, t_cmd *cmd)
 
 void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
 {
+	cmd->is_parent = false;
 	close(ends[0]);
 	if (cmd->in_fd == -1 || cmd->out_fd == -1)
 		exit_child(exec, *old_end, ends[1], 1);
@@ -77,8 +79,8 @@ void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
 		exit_child(exec, ends[1], -1, 1);
 	}
 	close(ends[1]);
-	//TO DO
-	if (exec->paths != NULL && cmd->simp_cmd != NULL)
+	//if (exec->paths != NULL && cmd->simp_cmd != NULL)
+	if (cmd->simp_cmd != NULL)
 	{
 		cmd->cmd_path = get_cmd_path(exec, cmd);
 		if (cmd->cmd_path == NULL)
@@ -89,6 +91,7 @@ void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
 
 void	last_child_proc(t_executor *exec, t_cmd *cmd, int old_end)
 {
+	cmd->is_parent = false;
 	if (cmd->in_fd == -1 || cmd->out_fd == -1)	
 		exit_child(exec, old_end, -1, 1);
 	if (handle_redirection(cmd, old_end, 1) == 1)
@@ -100,7 +103,8 @@ void	last_child_proc(t_executor *exec, t_cmd *cmd, int old_end)
 	}
 	close(old_end);
 	//TO DO
-	if (exec->paths != NULL && cmd->simp_cmd != NULL)
+	//if (exec->paths != NULL && cmd->simp_cmd != NULL)
+	if (cmd->simp_cmd != NULL)
 	{
 		cmd->cmd_path = get_cmd_path(exec, cmd);
 		if (cmd->cmd_path == NULL)

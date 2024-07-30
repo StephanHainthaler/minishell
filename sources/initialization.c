@@ -97,5 +97,6 @@ t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr)
 	cmd->out_fd = 1;
 	cmd->cmd_nbr = cmd_nbr;
 	cmd->has_here_doc = false;
+	cmd->is_parent = true;
     return (cmd);
 }

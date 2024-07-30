@@ -65,7 +65,7 @@ void	free_cmd(t_cmd *cmd)
 		close(cmd->out_fd);
 	if (cmd->simp_cmd != NULL)
 		ft_free_strarr(cmd->simp_cmd);
-	if (cmd->has_here_doc == true)
+	if (cmd->has_here_doc == true && cmd->is_parent == true)
 		unlink(cmd->here_doc);
 	if (cmd->here_doc != NULL)
 		free(cmd->here_doc);

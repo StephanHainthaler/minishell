@@ -75,16 +75,12 @@ int	get_exitcode(char **simp_cmd)
 	exitcode_str = simp_cmd[1];
 	if (ft_isnumber(exitcode_str) == false)
 	{
-		ft_putendl_fd("exit\nexec: exit: ", 2);
-		ft_putendl_fd(exitcode_str, 2);
+		ft_putstr_fd("exit\nexec: exit: ", 2);
+		ft_putstr_fd(exitcode_str, 2);
 		return (ft_putendl_fd(": numeric argument required", 2), -1);
 	}
 	if (ft_isint(exitcode_str) == false)
-	{
-		ft_putendl_fd("exit\nexec: exit: ", 2);
-		ft_putendl_fd(exitcode_str, 2);
 		return (ft_putendl_fd("exec: exit: value overflow", 2), -1);
-	}
 	exitcode = ft_atoi(exitcode_str);
 	while (exitcode < 0)
 		exitcode = exitcode + 256;

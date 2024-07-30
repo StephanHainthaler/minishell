@@ -56,6 +56,7 @@ typedef struct s_cmd
     int		out_fd;
     int		cmd_nbr;
 	bool	has_here_doc;
+	bool	is_parent;
 }			t_cmd;
 
 typedef struct s_executor
