@@ -14,6 +14,7 @@ cat << here | = segfault -fixed
 ./minishell ./minishell ctrl+\ -fixed
 input: exit "number" should print exit "number"
 exit | exit | exit shouldn't do anything - fixed
-echo $"" should print newline
+echo $"" should print newline -> $"" should expand to ""
 print individual delim error when pressing ctrl+d
-possible issue if child free executor and UNLINKS the temp file serval times?
+possible issue if child free executor and UNLINKS the temp file serval times? - done
+SHLVL + 1 ?

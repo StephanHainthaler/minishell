@@ -53,10 +53,8 @@ bool	ft_are_str_indentical(char *str1, char *str2)
 
 bool	is_replacable(char *str1, char *str2)
 {
-	//char	*temp;
 	int		i;
 
-	//temp = NULL;
 	i = 0;
 	while (str2[i] != '\0' && str2[i] != '=')
 		i++;

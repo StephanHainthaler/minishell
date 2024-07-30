@@ -14,12 +14,15 @@
 
 int	execute_input(t_minishell *ms)
 {
+	int	error_check;
+
 	if (initialize_executor_2(ms) == 1)
 		return (1);
 	if (ms->exec->num_of_cmds == 1)
 	{
 		if (ms->exec->cmds[0]->in_fd == -1 || ms->exec->cmds[0]->out_fd == -1)
 			return (free_executor(ms->exec), ms->last_exit_code = 1, 2);
+		error_check
 		if (handle_builtins_non_pipable(ms) == 0)
 			return (ms->last_exit_code = ms->exec->exit_status, 0);
 		if (single_execution(ms->exec) == 1)
