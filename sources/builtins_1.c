@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/31 09:03:29 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/31 15:52:36 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	handle_builtin(char **simp_cmd, t_executor *exec)
 	if (ft_are_str_indentical(simp_cmd[0], "echo") == true)
 		return (ft_echo(simp_cmd), 0);
 	if (ft_are_str_indentical(simp_cmd[0], "cd") == true)
-		return (ft_cd(simp_cmd), 0);
+		return (ft_cd(simp_cmd, exec->envp), 0);
 	if (ft_are_str_indentical(simp_cmd[0], "pwd") == true)
 		return (ft_pwd(simp_cmd), 0);
 	if (ft_are_str_indentical(simp_cmd[0], "export") == true)
@@ -49,7 +49,7 @@ int	handle_builtins_non_pipable(t_minishell *ms)
 	if (simp_cmd == NULL)
 		return (1);
 	if (ft_are_str_indentical(simp_cmd[0], "cd") == true)
-		return (ft_cd(simp_cmd), 0);
+		return (ft_cd(simp_cmd, ms->exec->envp), 0);
 	if (ft_are_str_indentical(simp_cmd[0], "export") == true)
 	{
 		ms->envp = ft_export(simp_cmd, ms->envp);
@@ -73,7 +73,7 @@ int	ft_exit(t_minishell *ms, char **simp_cmd)
 {
 	int	exitcode;
 
-	exitcode = get_exitcode(simp_cmd);
+	exitcode = get_exitcode(simp_cmd, ms->last_exit_code);
 	if (exitcode == -1)
 		return (0);
 	if (ms->envp != NULL)

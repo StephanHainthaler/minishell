@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 13:46:46 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/31 09:03:45 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/31 10:04:46 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,35 +50,34 @@ bool	ft_are_str_indentical(char *str1, char *str2)
 	return (true);
 }
 
-
 bool	is_replacable(char *str1, char *str2)
 {
-	int		i;
+	int	i;
 
+	if (str1 == NULL)
+		return (false);
 	i = 0;
 	while (str2[i] != '\0' && str2[i] != '=')
 		i++;
 	return (check_for_env(str1, str2, i));
 }
 
-int	get_exitcode(char **simp_cmd)
+int	get_exitcode(char **simp_cmd, int last_exit_code)
 {
 	char 	*exitcode_str;
 	int		exitcode;
 
 	if (ft_strarrlen(simp_cmd) == 1)
-		return (0);
+		return (last_exit_code = global_code, last_exit_code);
 	if (ft_strarrlen(simp_cmd) > 2)
 		return (ft_putendl_fd("exit\nexec: exit: too many arguments", 2), -1);
 	exitcode_str = simp_cmd[1];
-	if (ft_isnumber(exitcode_str) == false)
+	if (ft_isnumber(exitcode_str) == false || ft_isint(exitcode_str) == false)
 	{
 		ft_putstr_fd("exit\nexec: exit: ", 2);
 		ft_putstr_fd(exitcode_str, 2);
-		return (ft_putendl_fd(": numeric argument required", 2), -1);
+		return (ft_putendl_fd(": numeric argument required", 2), 2);
 	}
-	if (ft_isint(exitcode_str) == false)
-		return (ft_putendl_fd("exec: exit: value overflow", 2), -1);
 	exitcode = ft_atoi(exitcode_str);
 	while (exitcode < 0)
 		exitcode = exitcode + 256;

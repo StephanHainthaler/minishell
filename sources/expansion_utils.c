@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 14:01:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/27 13:41:59 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/31 11:51:16 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	get_envname_len(char *str, int *i)
 
 	len = 0;
 	while (str[*i] != '\0' && ft_isspace(str[*i]) == false
-		&& str[*i] != '\'' && str[*i] != '"')
+		&& str[*i] != '\'' && str[*i] != '"') // && str[*i] != '\\')
 	{
 		if (str[*i + 1] == '$')
 		{

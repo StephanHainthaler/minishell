@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/29 13:48:30 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/31 15:58:56 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,14 @@ void	ft_echo(char **simp_cmd)
 		ft_putstr_fd("\n", 1);
 }
 
-void	ft_cd(char **simp_cmd)
+void	ft_cd(char **simp_cmd, char **envp)
 {
     char *oldpwd;
 	char *pwd;
+	int		i;
 	
 	oldpwd = getcwd(NULL, 0);
+	//ERROR_CHECK
 	if (ft_strarrlen(simp_cmd) == 1)
     {
         if (chdir(getenv("HOME")) == -1)
@@ -74,10 +76,32 @@ void	ft_cd(char **simp_cmd)
         ft_putendl_fd("cd: too many arguments", 2);
 		return (free(oldpwd));
     }
-    setenv("OLDPWD", oldpwd, 1);
+	i = 0;
+	while (envp[i] != NULL) 
+	{	
+		if (ft_strncmp("OLDPWD=", envp[i], 7) == false)
+			break ;
+		i++;
+	}
+	oldpwd = ft_strjoin("OLDPWD=", oldpwd);
+	//NULL CHECK
+	envp = ft_strreplace_instrarr(envp, oldpwd, i);
+	//NULL CHECK
     free(oldpwd);
+	
     pwd = getcwd(NULL, 0);
-    setenv("PWD", pwd, 1);
+	//ERROR CHECK
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		if (ft_strncmp("PWD=", envp[i], 4) == false)
+			break ;
+		i++;
+	}
+	pwd = ft_strjoin("PWD=", pwd);
+	//NULL CHECK
+	envp = ft_strreplace_instrarr(envp, pwd, i);
+	//NULL CHECK
     free(pwd);
 }
 
@@ -85,6 +109,7 @@ void	ft_pwd(char **simp_cmd)
 {
 	if (ft_strarrlen(simp_cmd) == 1)
 		ft_putendl_fd(getcwd(NULL, 0), 1);
+	//ERROR_CHECK
 	else
 		ft_putendl_fd("pwd: too many arguments", 2);
 }
@@ -104,20 +129,16 @@ char	**ft_export(char **simp_cmd, char **envp)
 	i = 1;
 	while (i < (int)ft_strarrlen(simp_cmd))
 	{
+		found = false;
 		pos = 0;
-		while (envp[pos] != NULL)
+		while (envp[pos] != NULL && is_replacable(envp[pos], simp_cmd[i]) == false)
+			pos++;
+		if (is_replacable(envp[pos], simp_cmd[i]) == true)
 		{
-			found = false;
-			if (is_replacable(envp[pos], simp_cmd[i]) == false)
-			{
-				pos++;
-				continue ;
-			}
 			found = true;
 			envp = ft_strreplace_instrarr(envp, simp_cmd[i], pos);
 			if (envp[pos] == NULL)
 				return (NULL);
-			break ;
 		}
 		if (found == false)
 		{

@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/31 09:03:57 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/31 09:15:56 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,6 @@ void	last_child_proc(t_executor *exec, t_cmd *cmd, int old_end)
 		exit_child(exec, old_end, -1, 1);
 	}
 	close(old_end);
-	//TO DO
-	//if (exec->paths != NULL && cmd->simp_cmd != NULL)
 	if (cmd->simp_cmd != NULL)
 	{
 		cmd->cmd_path = get_cmd_path(exec, cmd);

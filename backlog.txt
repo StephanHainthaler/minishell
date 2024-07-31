@@ -18,3 +18,9 @@ echo $"" should print newline -> $"" should expand to ""
 print individual delim error when pressing ctrl+d
 possible issue if child free executor and UNLINKS the temp file serval times? - done
 SHLVL + 1 ?
+echo '' -n\
+handle \ in lexer part
+cannot end on \
+
+env -i ./minishell + CRTL+D
+REMOVE SET_ENV

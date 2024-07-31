@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/29 15:53:54 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/31 14:39:38 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int	read_input(t_minishell *ms)
 {
-	int ec;
 	int	error_check;
 
 	if (initialize_lexer(ms) == 1)
@@ -22,12 +21,19 @@ int	read_input(t_minishell *ms)
 	while (true)
 	{
 		signal(SIGINT, &sigint_interactive);
-		//signal(SIGQUIT, &handle_signal);
 		signal(SIGTERM, SIG_IGN);
 		signal(SIGQUIT, SIG_IGN);
-		ms->lex->input = readline("./minishell$ ");
+		if (isatty(fileno(stdin)))
+			ms->lex->input = readline("./minishell$ ");
+		else
+		{
+			//char *line;
+			ms->lex->input = get_next_line(fileno(stdin));
+			// ms->lex->input = ft_strtrim(line, "\n");
+			// free(line);
+		}
 		if (ms->lex->input == NULL)
-			return (ft_putendl_fd("exit", 2), 1);
+			return (1);
 		//global_code = 2;
 		//signal(SIGINT, &sigint_process);
 		if (ft_are_str_indentical("./minishell", ms->lex->input))
@@ -41,13 +47,14 @@ int	read_input(t_minishell *ms)
 			break ;
 	}
 	add_history(ms->lex->input);
+	// if (ms->lex->input[ft_strlen(ms->lex->input) - 1] == '\\')
+	// 	return (ft_putendl_fd("Input cannot end on '\\'", 2), free_lexer(ms->lex), 2);
 	error_check = tokenize_input(ms->lex);
 	if (error_check == 1)
 		return (1);
 	if (error_check == 2)
 		return (free_lexer(ms->lex), 2);
-	ec = global_code;
-	if (check_for_expansion(&ms->lex->token_list, ms->envp, ec) == 1)
+	if (check_for_expansion(&ms->lex->token_list, ms->envp, ms->last_exit_code) == 1)
 		return (1);
 	return (0);
 }

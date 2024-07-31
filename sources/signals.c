@@ -3,14 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 17:49:44 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/29 15:54:14 by juitz            ###   ########.fr       */
+/*   Updated: 2024/07/31 14:24:29 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+void	handle_signals(int mode)
+{
+	if (mode == 1)
+	{
+		//input
+	}
+	if (mode == 2)
+	{
+		
+	}
+	if (mode == 3)
+	{
+		//here_doc
+	}
+	if (mode == 4)
+	{
+		//
+	}
+}
 
 void	sigint_interactive(int sig_num)
 {

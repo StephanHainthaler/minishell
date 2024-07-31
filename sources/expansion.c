@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:44:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/27 13:28:36 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/31 11:51:03 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	check_for_expansion(t_list **token_list, char **envp, int ec)
 			{
 				if (cur_node->attr[i] == '\'' || cur_node->attr[i] == '"')
 					handle_quotes_in_expansion(cur_node, cur_node->attr[i]);
-				if (cur_node->attr[i] == '$' && cur_node->in_squotes == false)
+				if (cur_node->attr[i] == '$' && cur_node->in_squotes == false) //&& cur_node->attr[i - 1] != '\\')
 				{
 					cur_node->attr = handle_expansion(cur_node, envp, ec, &i);
 					if (cur_node->attr == NULL)
@@ -78,8 +78,7 @@ char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i)
 	if (node->attr[*i + 1] == '?')
 		return (node->attr = handle_exit_code_expansion(node->attr, exit_code, i));
 	if (ft_isspace(node->attr[*i + 1]) == true || node->attr[*i + 1] == '\0'
-		|| node->attr[*i + 1] == '$' || node->attr[*i + 1] == '"'
-		|| node->attr[*i + 1] == '\'')
+		|| node->attr[*i + 1] == '$')// || node->attr[*i + 1] == '\\')
 		return (node->attr);
 	pos = *i;
 	len = get_envname_len(node->attr, i);

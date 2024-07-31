@@ -6,11 +6,52 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/29 11:14:30 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/31 10:02:36 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+// char	**ft_export2(char **simp_cmd, char **envp)
+// {
+// 	int		i;
+// 	int		pos;
+// 	bool	found;
+
+// 	if (ft_strarrlen(simp_cmd) == 1)
+// 	{
+// 		if (sort_strarray(envp) == 1)
+// 			return (NULL);
+// 		return (envp);
+// 	}
+// 	i = 1;
+// 	while (i < (int)ft_strarrlen(simp_cmd))
+// 	{
+// 		pos = 0;
+// 		while (envp[pos] != NULL)
+// 		{
+// 			found = false;
+// 			if (is_replacable(envp[pos], simp_cmd[i]) == false)
+// 			{
+// 				pos++;
+// 				continue ;
+// 			}
+// 			found = true;
+// 			envp = ft_strreplace_instrarr(envp, simp_cmd[i], pos);
+// 			if (envp[pos] == NULL)
+// 				return (NULL);
+// 			break ;
+// 		}
+// 		if (found == false)
+// 		{
+// 			envp = ft_stradd_tostrarr(envp, simp_cmd[i]);
+// 			if (envp == NULL)
+// 				return (NULL);
+// 		}
+// 		i++;
+// 	}
+// 	return (envp);
+// }
 
 // void	multi_child_proc2(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
 // {

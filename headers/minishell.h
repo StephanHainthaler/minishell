@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/31 09:03:01 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/31 15:48:36 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ int		ft_exit(t_minishell *ms, char **simp_cmd);
 
 //builtins_2.c
 void	ft_echo(char **simp_cmd);
-void	ft_cd(char **simp_cmd);
+void	ft_cd(char **simp_cmd, char **envp);
 void	ft_pwd(char **simp_cmd);
 char	**ft_export(char **simp_cmd, char **envp);
 char	**ft_unset(char **simp_cmd, char **envp);
@@ -175,7 +175,7 @@ char	**ft_unset(char **simp_cmd, char **envp);
 int		sort_strarray(char **strarray);
 bool	ft_are_str_indentical(char *str1, char *str2);
 bool	is_replacable(char *str1, char *str2);
-int		get_exitcode(char **simp_cmd);
+int		get_exitcode(char **simp_cmd, int last_exit_code);
 
 //signals.c
 void	sigint_interactive(int sig_num);
