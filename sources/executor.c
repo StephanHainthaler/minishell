@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/29 11:20:35 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/31 09:04:13 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ int	execute_input(t_minishell *ms)
 			return (free_executor(ms->exec), ms->last_exit_code = 1, 2);
 		error_check
 		if (handle_builtins_non_pipable(ms) == 0)
-			return (ms->last_exit_code = ms->exec->exit_status, 0);
+			return (global_code = ms->exec->exit_status, 0);
 		if (single_execution(ms->exec) == 1)
-			return (ms->last_exit_code = ms->exec->exit_status, 1);
-		return (ms->last_exit_code = ms->exec->exit_status, 0);
+			return (global_code = ms->exec->exit_status, 1);
+		return (global_code = ms->exec->exit_status, 0);
 	}
 	if (multiple_execution(ms->exec) == 1)
-		return (ms->last_exit_code = ms->exec->exit_status, 1);
-	return (ms->last_exit_code = ms->exec->exit_status, 0);
+		return (global_code = ms->exec->exit_status, 1);
+	return (global_code = ms->exec->exit_status, 0);
 }
 
 int	single_execution(t_executor *exec)

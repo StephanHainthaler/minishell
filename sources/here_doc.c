@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:24:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/29 10:48:54 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:02:17 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,16 @@ int handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code)
 		return (1);
     while (true)
 	{
-		global_state = 1;
-		signal(SIGINT, &handle_sigint);
+		global_code = 1;
+		signal(SIGINT, &sigint_heredoc);
 		signal(SIGQUIT, SIG_IGN);
 		temp_str = readline("> ");
-		if (global_state == 2)
-			return (free(deq_delim), 2);
 		if (temp_str == NULL)
+			return (ft_putendl_fd("warning: here-doc delimited by EOF", 2), 2);
+		if (global_code == 130)
+			return (free(deq_delim), 2);
+        if (ft_strnstr(temp_str, delim, ft_strlen(delim)) != NULL \
+            && ft_strlen(temp_str) == ft_strlen(delim))
 			return (free(deq_delim), ft_putendl_fd("warning: here-doc delimited by EOF", 2), 2);
         if (ft_strnstr(temp_str, deq_delim, ft_strlen(deq_delim)) != NULL \
             && ft_strlen(temp_str) == ft_strlen(deq_delim))

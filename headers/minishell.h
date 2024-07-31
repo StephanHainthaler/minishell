@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/29 15:35:02 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/31 09:03:01 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ typedef struct s_minishell
 	char		**envp;
 }				t_minishell;
 
-extern int	global_state;
+extern int	global_code;
 
 //initialization.c 
 int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
@@ -178,7 +178,10 @@ bool	is_replacable(char *str1, char *str2);
 int		get_exitcode(char **simp_cmd);
 
 //signals.c
-void	handle_sigint(int sig_num);
+void	sigint_interactive(int sig_num);
+void	sigint_heredoc(int sig_num);
+void	sigint_process(int sig_num);
+void	sigint_subshell(int	sig_num);
 void	handle_sigquit(int sig_num);
 
 //free.c
