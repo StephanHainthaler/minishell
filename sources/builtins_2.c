@@ -49,75 +49,48 @@ void	ft_echo(char **simp_cmd)
 		ft_putstr_fd("\n", 1);
 }
 
-void	ft_cd(char **simp_cmd, char **envp)
-{
-    char *oldpwd;
-	char *pwd;
-	int		i;
-	
-	oldpwd = getcwd(NULL, 0);
-	//ERROR_CHECK
-	if (ft_strarrlen(simp_cmd) == 1)
-    {
-        if (chdir(getenv("HOME")) == -1)
-            ft_putendl_fd("cd: HOME not set\n", 2);
-    }
-	else if (ft_strarrlen(simp_cmd) == 2)
-    {
-        if (chdir(simp_cmd[1]) == -1)
-        {
-            ft_putendl_fd("cd: no such file or directory\n", 2);
-            return (free(oldpwd));
-        }
-    }
-	else
-    {
-        ft_putendl_fd("cd: too many arguments", 2);
-		return (free(oldpwd));
-    }
-	i = 0;
-	while (envp[i] != NULL) 
-	{	
-		if (ft_strncmp("OLDPWD=", envp[i], 7) == false)
-			break ;
-		i++;
-	}
-	oldpwd = ft_strjoin("OLDPWD=", oldpwd);
-	//NULL CHECK
-	envp = ft_strreplace_instrarr(envp, oldpwd, i);
-	//NULL CHECK
-    free(oldpwd);
-	
-    pwd = getcwd(NULL, 0);
-	//ERROR CHECK
-	i = 0;
-	while (envp[i] != NULL)
-	{
-		if (ft_strncmp("PWD=", envp[i], 4) == false)
-			break ;
-		i++;
-	}
-	pwd = ft_strjoin("PWD=", pwd);
-	//NULL CHECK
-	envp = ft_strreplace_instrarr(envp, pwd, i);
-	//NULL CHECK
-    free(pwd);
-}
-
-//char	**update_pwds_in_env(char **envp, )
-
-int	ft_pwd(void)
+int		ft_pwd(void)
 {
 	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
 	if (pwd == NULL)
 	{
-		ft_putendl_fd("pwd: fatal error", 2);
+		ft_putendl_fd("pwd: fatal error", 1);
 		return (1);
 	}
 	ft_putendl_fd(pwd, 1);
 	free(pwd);
+	return (0);
+}
+
+int		ft_cd(char **simp_cmd, char **envp)
+{
+	char	*pwd;
+    char	*oldpwd;
+
+	pwd = NULL;
+	if (ft_strarrlen(simp_cmd) > 2)
+		return (ft_putendl_fd("cd: too many arguments", 2), 2);
+	oldpwd = getcwd(NULL, 0);
+	if (oldpwd == NULL)
+		return (ft_putendl_fd("cd: fatal error", 2), 1);
+	if (ft_strarrlen(simp_cmd) == 1)
+    {
+		if (is_env_set(envp, "HOME=") == false)
+			return (free(oldpwd), ft_putendl_fd("cd: HOME not set", 2), 2);
+		pwd = get_env(envp, "HOME=");
+		if (pwd == NULL)
+			return (free(oldpwd), ft_putendl_fd("cd: fatal error", 2), 1);
+        if (chdir(pwd) == -1) //fatal or not?  if not change exit to 2
+            return (free(pwd), free(oldpwd), ft_putendl_fd("cd: fatal error", 2), 1);
+    }
+	if (ft_strarrlen(simp_cmd) == 2)
+        if (chdir(simp_cmd[1]) == -1) //fatal or not? if not change exit to 2
+            return (free(oldpwd), ft_putendl_fd("cd: no such file or directory", 2), 1);
+	envp = update_pwds_in_env(envp, pwd, oldpwd);
+	if (envp == NULL)
+		return (ft_putendl_fd("cd: fatal error", 2), 1);
 	return (0);
 }
 

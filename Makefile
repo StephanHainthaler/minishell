@@ -21,7 +21,6 @@ VFLAGS := --suppressions=./supp.supp \
 --read-var-info=yes \
 --show-error-list=yes \
 --show-leak-kinds=all \
---suppressions=./supp.supp \
 --trace-children=yes \
 --track-origins=yes
 #--track-fds=yes
@@ -32,12 +31,11 @@ LIBFT_DIR := libft
 MAIN_DIR := main
 
 SRCS := $(SRC_DIR)/main.c \
+$(SRC_DIR)/initialization.c \
 $(SRC_DIR)/lexer.c \
 $(SRC_DIR)/expansion.c \
 $(SRC_DIR)/expansion_utils.c \
 $(SRC_DIR)/quotation.c \
-$(SRC_DIR)/initialization.c \
-$(SRC_DIR)/free.c \
 $(SRC_DIR)/parser.c \
 $(SRC_DIR)/parser_utils.c \
 $(SRC_DIR)/here_doc.c \
@@ -46,8 +44,10 @@ $(SRC_DIR)/executor_utils.c \
 $(SRC_DIR)/child.c \
 $(SRC_DIR)/builtins_1.c \
 $(SRC_DIR)/builtins_2.c \
-$(SRC_DIR)/builtins_utils.c \
-$(SRC_DIR)/signals.c
+$(SRC_DIR)/builtins_utils_1.c \
+$(SRC_DIR)/builtins_utils_2.c \
+$(SRC_DIR)/signals.c \
+$(SRC_DIR)/free.c
 
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 

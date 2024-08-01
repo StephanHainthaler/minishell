@@ -91,14 +91,14 @@ int	get_fd(char *file, bool is_in_fd, bool is_append)
 	return (fd);
 }
 
-bool	is_path_set(char *envp[])
+bool	is_env_set(char *envp[], char *env_name)
 {
 	int	i;
 
 	i = 0;
 	while (envp[i] != NULL)
 	{
-		if (ft_strnstr(envp[i], "PATH=", 5) == NULL)
+		if (ft_strnstr(envp[i], env_name, ft_strlen(env_name)) == NULL)
 			i++;
 		else
 			return (true);

@@ -149,7 +149,7 @@ int		last_pipe(t_executor *exec, int prevpipe, int i);
 char	**get_paths(t_executor *exec, int *error_flag);
 char	*get_cmd_path(t_executor *exec, t_cmd *cmd);
 int		get_fd(char *file, bool is_in_fd, bool is_append);
-bool	is_path_set(char *envp[]);
+bool	is_env_set(char *envp[], char *env_name);
 int		handle_redirection(t_cmd *cmd, int in, int out);
 
 //child.c
@@ -167,16 +167,22 @@ int		ft_exit(t_minishell *ms, char **simp_cmd);
 
 //builtins_2.c
 void	ft_echo(char **simp_cmd);
-void	ft_cd(char **simp_cmd, char **envp);
 int		ft_pwd(void);
+int		ft_cd(char **simp_cmd, char **envp);
 char	**ft_export(char **simp_cmd, char **envp);
 char	**ft_unset(char **simp_cmd, char **envp);
 
-//builtins_utils.c
+//builtins_utils_1.c
 int		sort_strarray(char **strarray);
 bool	ft_are_str_indentical(char *str1, char *str2);
 bool	is_replacable(char *str1, char *str2);
 int		get_exitcode(char **simp_cmd, int last_exit_code);
+
+//builtins_utils_2.c
+char	*get_env(char **envp, char *env_name);
+char	**update_pwds_in_env(char **envp, char *pwd, char *oldpwd);
+char	**update_pwd(char **envp, char *pwd);
+char	**update_oldpwd(char **envp, char *oldpwd);
 
 //signals.c
 void	sigint_interactive(int sig_num);

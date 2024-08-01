@@ -12,12 +12,15 @@
 
 #include "../headers/minishell.h"
 
-//WORK IN PROGRESS - function for child process only PART 2
+//WORK IN PROGRESS - function for child process only PART 1 (check at cd for errors)
 int	handle_builtins_1(t_executor *exec, char **simp_cmd)
 {
 	if (ft_are_str_indentical(simp_cmd[0], "cd") == true)
-	//ERROR_HANDLE
-		return (ft_cd(simp_cmd, exec->envp), 0);
+	{
+		if (ft_cd(simp_cmd, exec->envp) == 1)
+			return (exec->exit_status = 1, 0);
+		return (exec->exit_status = ft_cd(simp_cmd, exec->envp), 0);
+	}
 	if (ft_are_str_indentical(simp_cmd[0], "export") == true)
 	{
 		exec->envp = ft_export(simp_cmd, exec->envp);

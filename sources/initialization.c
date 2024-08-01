@@ -57,7 +57,7 @@ int	initialize_executor(t_minishell *ms)
 			return (free_cmds(ms->exec->cmds, i), free(ms->exec), 1);
 		i++;
 	}
-	ms->exec->is_path_set = is_path_set(ms->envp);
+	ms->exec->is_path_set = is_env_set(ms->envp, "PATH=");
 	ms->exec->paths = NULL;
 	ms->exec->exit_status = ms->last_exit_code;
 	ms->exec->envp = ms->envp;
@@ -69,7 +69,7 @@ int	initialize_executor_2(t_minishell *ms)
 	int	error_flag;
 
 	error_flag = 0;
-	if (is_path_set(ms->envp) == true)
+	if (ms->exec->is_path_set == true)
 	{
 		ms->exec->paths = get_paths(ms->exec, &error_flag);
 		if (ms->exec->paths == NULL && error_flag == 1)
