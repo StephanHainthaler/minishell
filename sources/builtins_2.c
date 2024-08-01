@@ -106,21 +106,19 @@ void	ft_cd(char **simp_cmd, char **envp)
 
 //char	**update_pwds_in_env(char **envp, )
 
-int	ft_pwd(char **simp_cmd)
+int	ft_pwd(void)
 {
 	char	*pwd;
 
-	if (ft_strarrlen(simp_cmd) == 1)
+	pwd = getcwd(NULL, 0);
+	if (pwd == NULL)
 	{
-		pwd = getcwd(NULL, 0);
-		if (pwd == NULL)
-			return (ft_putendl_fd("Error: Malloc Error", 2), 1);
-		ft_putendl_fd(pwd, 1);
-		return (free(pwd), 0);
+		ft_putendl_fd("pwd: fatal error", 2);
+		return (1);
 	}
-	else
-		ft_putendl_fd("pwd: too many arguments", 2);
-	return (2);
+	ft_putendl_fd(pwd, 1);
+	free(pwd);
+	return (0);
 }
 
 char	**ft_export(char **simp_cmd, char **envp)

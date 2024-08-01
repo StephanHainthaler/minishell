@@ -168,7 +168,7 @@ int		ft_exit(t_minishell *ms, char **simp_cmd);
 //builtins_2.c
 void	ft_echo(char **simp_cmd);
 void	ft_cd(char **simp_cmd, char **envp);
-int		ft_pwd(char **simp_cmd);
+int		ft_pwd(void);
 char	**ft_export(char **simp_cmd, char **envp);
 char	**ft_unset(char **simp_cmd, char **envp);
 

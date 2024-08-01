@@ -12,11 +12,7 @@
 
 #include "../headers/minishell.h"
 
-//RETURN VALUES:
-// 0 == FOUND BUILT_IN -> ON SUCCESS -> NEW CYCLE
-// 1 == NO BUILT_IN -> nothing happens/continue program
-// 2 == FOUND BUILT_IN -> ON ERROR (non-fatal) -> NEW CYCLE
-//-1 == FOUND BUILT_IN -> ON ERROR (FATAL) -> Quit minishell
+//WORK IN PROGRESS - function for child process only PART 2
 int	handle_builtins_1(t_executor *exec, char **simp_cmd)
 {
 	if (ft_are_str_indentical(simp_cmd[0], "cd") == true)
@@ -41,14 +37,17 @@ int	handle_builtins_1(t_executor *exec, char **simp_cmd)
 	return (1);
 }
 
-
+//DONE - function for child process only PART 2
 int	handle_builtins_2(t_executor *exec, char **simp_cmd)
 {
 	if (ft_are_str_indentical(simp_cmd[0], "echo") == true)
-		return (ft_echo(simp_cmd), 0);
+		return (ft_echo(simp_cmd), exec->exit_status = 0, 0);
 	if (ft_are_str_indentical(simp_cmd[0], "pwd") == true)
-	//ERROR HANDLING
-		return (ft_pwd(simp_cmd), 0);
+	{
+		if (ft_pwd() == 1)
+			return (exec->exit_status = 1, 0);
+		return (exec->exit_status = 0, 0);
+	}
 	if (ft_are_str_indentical(simp_cmd[0], "env") == true)
 	{
 		if (ft_strarrlen(simp_cmd) > 1)
