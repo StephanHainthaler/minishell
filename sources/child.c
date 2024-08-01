@@ -16,9 +16,10 @@ void	execute_cmd(t_executor *exec, t_cmd *cmd)
 {
 	if (cmd->simp_cmd == NULL)
 		exit_child(exec, -1, -1, 0);
-	if (handle_builtin(cmd->simp_cmd, exec) == 0)
-		exit_child(exec, -1, -1, 0);
-	//ft_putendl_fd(cmd->cmd_path, 1);
+	if (handle_builtins_1(exec, cmd->simp_cmd) == 0)
+		exit_child(exec, -1, -1, exec->exit_status);
+	if (handle_builtins_2(exec, cmd->simp_cmd) == 0)
+		exit_child(exec, -1, -1, exec->exit_status);
 	if (access(cmd->cmd_path, F_OK) != 0)
 	{
 		ft_putstr_fd(cmd->cmd_path, 2);

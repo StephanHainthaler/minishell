@@ -83,5 +83,5 @@ void	free_and_exit(t_minishell *ms)
 	free_executor(ms->exec);
 	rl_clear_history();
 	//exit(global_code);
-	exit(0);
+	exit(1);
 }

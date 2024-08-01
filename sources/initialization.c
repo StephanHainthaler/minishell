@@ -59,6 +59,7 @@ int	initialize_executor(t_minishell *ms)
 	}
 	ms->exec->is_path_set = is_path_set(ms->envp);
 	ms->exec->paths = NULL;
+	ms->exec->exit_status = ms->last_exit_code;
 	ms->exec->envp = ms->envp;
 	return (0);
 }

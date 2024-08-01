@@ -27,7 +27,6 @@ void	ft_echo(char **simp_cmd)
 		if (ft_strncmp(simp_cmd[i], "-n", 2) == 0)
 		{
 			j = 2;
-			j = 2;
 			while (simp_cmd[i][j] == 'n')
 				j++;
 			if (simp_cmd[i][j] == '\0')
@@ -105,13 +104,23 @@ void	ft_cd(char **simp_cmd, char **envp)
     free(pwd);
 }
 
-void	ft_pwd(char **simp_cmd)
+//char	**update_pwds_in_env(char **envp, )
+
+int	ft_pwd(char **simp_cmd)
 {
+	char	*pwd;
+
 	if (ft_strarrlen(simp_cmd) == 1)
-		ft_putendl_fd(getcwd(NULL, 0), 1);
-	//ERROR_CHECK
+	{
+		pwd = getcwd(NULL, 0);
+		if (pwd == NULL)
+			return (ft_putendl_fd("Error: Malloc Error", 2), 1);
+		ft_putendl_fd(pwd, 1);
+		return (free(pwd), 0);
+	}
 	else
 		ft_putendl_fd("pwd: too many arguments", 2);
+	return (2);
 }
 
 char	**ft_export(char **simp_cmd, char **envp)

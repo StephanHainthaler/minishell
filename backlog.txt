@@ -24,3 +24,4 @@ cannot end on \
 
 env -i ./minishell + CRTL+D
 REMOVE SET_ENV
+check if when child has fatal error that minishell ends

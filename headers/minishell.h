@@ -160,14 +160,15 @@ void	last_child_proc(t_executor *exec, t_cmd *cmd, int old_end);
 void	exit_child(t_executor *exec, int end1, int end2, int exit_status);
 
 //builtins_1.c
-int		handle_builtin(char **simp_cmd, t_executor *exec);
-int		handle_builtins_non_pipable(t_minishell *ms);
+int		handle_builtins_1(t_executor *exec, char **simp_cmd);
+int		handle_builtins_2(t_executor *exec, char **simp_cmd);
+int		handle_builtins_non_pipable(t_minishell *ms, char **simp_cmd);
 int		ft_exit(t_minishell *ms, char **simp_cmd);
 
 //builtins_2.c
 void	ft_echo(char **simp_cmd);
 void	ft_cd(char **simp_cmd, char **envp);
-void	ft_pwd(char **simp_cmd);
+int		ft_pwd(char **simp_cmd);
 char	**ft_export(char **simp_cmd, char **envp);
 char	**ft_unset(char **simp_cmd, char **envp);
 
