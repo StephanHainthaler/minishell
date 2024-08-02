@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/29 15:53:54 by juitz            ###   ########.fr       */
+/*   Updated: 2024/08/02 11:20:47 by julian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,15 @@ int	read_input(t_minishell *ms)
 		return (1);
 	while (true)
 	{
-		signal(SIGINT, &sigint_interactive);
-		//signal(SIGQUIT, &handle_signal);
-		signal(SIGTERM, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
+		signals_interactive();
 		ms->lex->input = readline("./minishell$ ");
 		if (ms->lex->input == NULL)
 			return (ft_putendl_fd("exit", 2), 1);
-		//global_code = 2;
-		//signal(SIGINT, &sigint_process);
 		if (ft_are_str_indentical("./minishell", ms->lex->input))
-			global_code = 3;
-		signal(SIGINT, &sigint_subshell);
+			signal(SIGINT, &sigint_subshell);
 		signal(SIGQUIT, &handle_sigquit);
 		if (ft_are_str_indentical("cat", ms->lex->input))
-			global_code = 2;
-		signal(SIGINT, &sigint_process);
+			signal(SIGINT, &sigint_process);
 		if (ft_isspace_str(ms->lex->input) == false)
 			break ;
 	}
@@ -46,6 +39,8 @@ int	read_input(t_minishell *ms)
 		return (1);
 	if (error_check == 2)
 		return (free_lexer(ms->lex), 2);
+	if (global_code == 2)
+		global_code = 130;
 	ec = global_code;
 	if (check_for_expansion(&ms->lex->token_list, ms->envp, ec) == 1)
 		return (1);
