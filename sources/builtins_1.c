@@ -12,27 +12,26 @@
 
 #include "../headers/minishell.h"
 
-//WORK IN PROGRESS - function for child process only PART 1 (check at cd for errors)
+//The first builtin handler for child processes.
+//Sets this childs exit code accordingly.
+//<PARAM> The executor struct & the current simple command.
+//<RETURN> 0 on SUCCESS; 1 on NOT FOUND
 int	handle_builtins_1(t_executor *exec, char **simp_cmd)
 {
 	if (ft_are_str_indentical(simp_cmd[0], "cd") == true)
-	{
-		if (ft_cd(simp_cmd, exec->envp) == 1)
-			return (exec->exit_status = 1, 0);
 		return (exec->exit_status = ft_cd(simp_cmd, exec->envp), 0);
-	}
 	if (ft_are_str_indentical(simp_cmd[0], "export") == true)
 	{
 		exec->envp = ft_export(simp_cmd, exec->envp);
 		if (exec->envp == NULL)
-			return (exec->exit_status = 1, 0); // -1 for FATAL ERROR?
+			return (exec->exit_status = 1, 0);
 		return (exec->exit_status = 0, 0);
 	}
 	if (ft_are_str_indentical(simp_cmd[0], "unset") == true)
 	{
 		exec->envp = ft_unset(simp_cmd, exec->envp);
 		if (exec->envp == NULL)
-			return (exec->exit_status = 1, 0); // -1 for FATAL ERROR?
+			return (exec->exit_status = 1, 0);
 		return (exec->exit_status = 0, 0);
 	}
 	if (ft_are_str_indentical(simp_cmd[0], "exit") == true)
@@ -40,7 +39,10 @@ int	handle_builtins_1(t_executor *exec, char **simp_cmd)
 	return (1);
 }
 
-//DONE - function for child process only PART 2
+//The second builtin handler for child processes.
+//Sets this childs exit code accordingly.
+//<PARAM> The executor struct & the current simple command.
+//<RETURN> 0 on SUCCESS; 1 on NOT FOUND
 int	handle_builtins_2(t_executor *exec, char **simp_cmd)
 {
 	if (ft_are_str_indentical(simp_cmd[0], "echo") == true)
@@ -66,18 +68,16 @@ int	handle_builtins_2(t_executor *exec, char **simp_cmd)
 	return (1);
 }
 
-//RETURN VALUES:
-// 0 == NO BUILT_IN -> nothing happens/continue program
-// 1 == FOUND BUILT_IN -> ON SUCCESS -> NEW CYCLE
-// 2 == FOUND BUILT_IN -> ON ERROR (non-fatal) -> NEW CYCLE
-//-1 == FOUND BUILT_IN -> ON ERROR (FATAL) -> Quit minishell
+//The builtin handler for the main process.
+//Only handles the builtins that cannot be used in a child process.
+//<PARAM> The main struct of the program & the current simple command.
+//<RETURN> 0 on SUCCESS; 1 on NOT FOUND; 2 on standard ERROR; -1 on FATAL ERROR
 int	handle_builtins_non_pipable(t_minishell *ms, char **simp_cmd)
 {
 	if (simp_cmd == NULL)
 		return (1);
 	if (ft_are_str_indentical(simp_cmd[0], "cd") == true)
-	//ERROR HANDLING
-		return (ft_cd(simp_cmd, ms->exec->envp), 0);
+		return (ft_cd(simp_cmd, ms->exec->envp));
 	if (ft_are_str_indentical(simp_cmd[0], "export") == true)
 	{
 		ms->envp = ft_export(simp_cmd, ms->envp);
@@ -98,16 +98,21 @@ int	handle_builtins_non_pipable(t_minishell *ms, char **simp_cmd)
 	return (1);
 }
 
+//Exits the main process after freeing allocated memory.
+//Only ends the program on non-ERROR.
+//<PARAM> The main struct of the program & the current simple command.
+//<RETURN> 0 on SUCCESS; 1 on standard ERROR
 int	ft_exit(t_minishell *ms, char **simp_cmd)
 {
 	int	exitcode;
 
 	exitcode = get_exitcode(simp_cmd, ms->last_exit_code);
 	if (exitcode == -1)
-		return (0);
+		return (1);
 	if (ms->envp != NULL)
 		ft_free_strarr(ms->envp);
 	free_executor(ms->exec);
 	rl_clear_history();
 	exit(exitcode);
+	return (0);
 }

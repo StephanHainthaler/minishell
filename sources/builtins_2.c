@@ -21,7 +21,6 @@ void	ft_echo(char **simp_cmd)
 	i = 1;
 	j = 0;
 	flag_n = 0;
-
 	while (simp_cmd[i])
 	{
 		if (ft_strncmp(simp_cmd[i], "-n", 2) == 0)
@@ -83,12 +82,18 @@ int		ft_cd(char **simp_cmd, char **envp)
 		if (pwd == NULL)
 			return (free(oldpwd), ft_putendl_fd("cd: fatal error", 2), 1);
         if (chdir(pwd) == -1) //fatal or not?  if not change exit to 2
-            return (free(pwd), free(oldpwd), ft_putendl_fd("cd: fatal error", 2), 1);
+            return (free(pwd), free(oldpwd), ft_putendl_fd("cd: no such file or directory", 2), 2);
     }
 	if (ft_strarrlen(simp_cmd) == 2)
         if (chdir(simp_cmd[1]) == -1) //fatal or not? if not change exit to 2
-            return (free(oldpwd), ft_putendl_fd("cd: no such file or directory", 2), 1);
-	envp = update_pwds_in_env(envp, pwd, oldpwd);
+            return (free(oldpwd), ft_putendl_fd("cd: no such file or directory", 2), 2);
+	if (pwd == NULL)
+	{
+		pwd = getcwd(NULL, 0);
+		if (pwd == NULL)
+			return (1);
+	}
+	envp = update_pwds(envp, pwd, oldpwd);
 	if (envp == NULL)
 		return (ft_putendl_fd("cd: fatal error", 2), 1);
 	return (0);
@@ -97,8 +102,7 @@ int		ft_cd(char **simp_cmd, char **envp)
 char	**ft_export(char **simp_cmd, char **envp)
 {
 	int		i;
-	int		pos;
-	bool	found;
+	int		j;
 
 	if (ft_strarrlen(simp_cmd) == 1)
 	{
@@ -109,23 +113,15 @@ char	**ft_export(char **simp_cmd, char **envp)
 	i = 1;
 	while (i < (int)ft_strarrlen(simp_cmd))
 	{
-		found = false;
-		pos = 0;
-		while (envp[pos] != NULL && is_replacable(envp[pos], simp_cmd[i]) == false)
-			pos++;
-		if (is_replacable(envp[pos], simp_cmd[i]) == true)
-		{
-			found = true;
-			envp = ft_strreplace_instrarr(envp, simp_cmd[i], pos);
-			if (envp[pos] == NULL)
-				return (NULL);
-		}
-		if (found == false)
-		{
+		j = 0;
+		while (envp[j] != NULL && is_replacable(envp[j], simp_cmd[i]) == false)
+			j++;
+		if (is_replacable(envp[j], simp_cmd[i]) == true)
+			envp = ft_strreplace_instrarr(envp, simp_cmd[i], j);
+		else
 			envp = ft_stradd_tostrarr(envp, simp_cmd[i]);
-			if (envp == NULL)
-				return (NULL);
-		}
+		if (envp == NULL)
+			return (NULL);
 		i++;
 	}
 	return (envp);

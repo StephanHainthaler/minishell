@@ -12,6 +12,10 @@
 
 #include "../headers/minishell.h"
 
+//Handler for writing to the here_doc.
+//Possibly needs to dequote the delimiter for expansion purposes.
+//<PARAM> The here_doc fd, the delimiter, the environment pointers & the last exit code.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 2 on standard ERROR
 int handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code)
 {
     char    *temp_str;
@@ -27,31 +31,57 @@ int handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code)
 		signal(SIGQUIT, SIG_IGN);
 		temp_str = readline("> ");
 		if (temp_str == NULL)
-			return (ft_putendl_fd("warning: here-doc delimited by EOF", 2), 2);
+			return (free(deq_delim), ft_putendl_fd("warning: here-doc delimited by EOF", 2), 2);
 		if (global_code == 130)
 			return (free(deq_delim), 2);
-        if (ft_strnstr(temp_str, delim, ft_strlen(delim)) != NULL \
-            && ft_strlen(temp_str) == ft_strlen(delim))
-			return (free(deq_delim), ft_putendl_fd("warning: here-doc delimited by EOF", 2), 2);
+        // if (ft_strnstr(temp_str, delim, ft_strlen(delim)) != NULL && ft_strlen(temp_str) == ft_strlen(delim))
+		// 	return (free(deq_delim), ft_putendl_fd("warning: here-doc delimited by EOF", 2), 2);
         if (ft_strnstr(temp_str, deq_delim, ft_strlen(deq_delim)) != NULL \
             && ft_strlen(temp_str) == ft_strlen(deq_delim))
 			break ;
-		if (!(ft_strchr(delim, '\'') || ft_strchr(delim, '"')))
-        {
-			temp_str = check_for_here_doc_expansion(temp_str, envp, exit_code);
-            if (temp_str == NULL)
-                return (free(deq_delim), 1);
-        }
+		temp_str = check_for_here_doc_expansion(temp_str, delim, envp, exit_code);
+         if (temp_str == NULL)
+            return (free(deq_delim), 1);
         ft_putendl_fd(temp_str, here_doc_fd);
 		free(temp_str);
 	}
     return (free(deq_delim), 0);
 }
 
-char	*check_for_here_doc_expansion(char *str, char **envp, int ec)
+//Allocates a random string for a non-existing file in the current directory.
+//<PARAM> void
+//<RETURN> The temp_name on SUCCESS; NULL on FATAL ERROR
+char    *get_random_temp_name(void)
 {
-	int		i;
+	char    *temp_str;
+	int		fd_random;
 
+	fd_random = open("/dev/random", O_RDONLY, 0777);
+	if (fd_random == -1)
+		return (NULL);
+	temp_str = (char *)malloc((10 + 1) * sizeof(char));
+	if (temp_str == NULL)
+		return (close(fd_random), NULL);
+	while (true)
+	{
+		if (read(fd_random, temp_str, 10) == -1)
+			return (close(fd_random), free(temp_str), NULL);
+		temp_str[10] = '\0';
+		if (access(temp_str, F_OK) == -1 && ft_isspace_str(temp_str) == false)
+			break ;
+	}
+	return (close(fd_random), temp_str);
+}
+
+//Checks the input string for possible expansion.
+//<PARAM> The input string, the delimiter, the environment pointers & the last exit code.
+//<RETURN> The input string on SUCCESS; NULL on FATAL ERROR
+char	*check_for_here_doc_expansion(char *str, char *delim, char **envp, int ec)
+{
+	int	i;
+
+	if (ft_strchr(delim, '\'') || ft_strchr(delim, '"'))
+		return (str);
 	i = 0;
 	while (str[i] != '\0')
 	{
@@ -65,6 +95,10 @@ char	*check_for_here_doc_expansion(char *str, char **envp, int ec)
 	}
 	return (str);
 }
+
+//Expands the input string for the here_doc.
+//<PARAM> The input string, the environment pointers, the last exit code & the position in the string.
+//<RETURN> The expanded string on SUCCESS; NULL on FATAL ERROR
 char    *expand_here_doc(char *str, char **envp, int exit_code, int *i)
 {
 	int		len;
@@ -89,130 +123,3 @@ char    *expand_here_doc(char *str, char **envp, int exit_code, int *i)
 	}
 	return (*i = pos - 1, handle_invalid_expansion(str, len, pos));
 }
-
-char    *get_temp_name(void)
-{
-	char	*temp_name;
-	char    *temp_str;
-	char    *temp_nbr;
-	int     i;
-
-	temp_str = ".temp";
-	
-	temp_nbr = NULL;
-	temp_name = NULL;
-	i = 0;
-	while (i < INT_MAX - 1)
-	{
-		temp_nbr = ft_itoa(i);
-		if (temp_nbr == NULL)
-			return (ft_free(temp_nbr), ft_free(temp_name), NULL);
-		temp_name = ft_strjoin(temp_str, temp_nbr);
-		if (temp_name == NULL)
-			return (ft_free(temp_nbr), ft_free(temp_name), NULL);
-		if (access(temp_name, F_OK) == -1)
-			return (free(temp_nbr), temp_name);
-		free(temp_nbr);
-		free(temp_name);
-		i++;
-	}
-	return (free(temp_nbr), free(temp_name), NULL);
-}
-
-char    *get_random_temp_name(void)
-{
-	char    *temp_str;
-	int		fd_random;
-
-	fd_random = open("/dev/random", O_RDONLY, 0777);
-	if (fd_random == -1)
-		return (NULL);
-	temp_str = (char *)malloc((10 + 1) * sizeof(char));
-	if (temp_str == NULL)
-		return (close(fd_random), NULL);
-	while (true)
-	{
-		if (read(fd_random, temp_str, 10) == -1)
-			return (close(fd_random), free(temp_str), NULL);
-		temp_str[10] = '\0';
-		if (access(temp_str, F_OK) == -1 && ft_isspace_str(temp_str) == false)
-			break ;
-	}
-	return (close(fd_random), temp_str);
-}
-/* char    *expand_here_doc(char *str, char **envp, int exit_code, int *i)
-{
-	int		len;
-	int		pos;
-	int		j;
-
-	if (str[*i + 1] == '?')
-		return (str = handle_exit_code_expansion(str, exit_code, i));
-	if (ft_isspace(str[*i + 1]) == true || str[*i + 1] == '\0'
-		|| str[*i + 1] == '$' || str[*i + 1] == '"'
-		|| str[*i + 1] == '\'')
-		return (str);
-	pos = *i;
-	len = get_envname_len(str, i);
-	j = 0;
-	while (envp[j] != NULL)
-	{
-		if (check_for_env(envp[j], str + pos + 1, len - 1) == true)
-			return (*i = pos - 1,
-				handle_valid_expansion(str, envp[j], len, pos));
-		j++;
-	}
-	return (*i = pos - 1, handle_invalid_expansion(str, len, pos));
-}
-
-char    *get_temp_name(void)
-{
-	char	*temp_name;
-	char    *temp_str;
-	char    *temp_nbr;
-	int     i;
-
-	temp_str = ".temp";
-	
-	temp_nbr = NULL;
-	temp_name = NULL;
-	i = 0;
-	while (i < INT_MAX - 1)
-	{
-		temp_nbr = ft_itoa(i);
-		if (temp_nbr == NULL)
-			return (ft_free(temp_nbr), ft_free(temp_name), NULL);
-		temp_name = ft_strjoin(temp_str, temp_nbr);
-		if (temp_name == NULL)
-			return (ft_free(temp_nbr), ft_free(temp_name), NULL);
-		if (access(temp_name, F_OK) == -1)
-			return (free(temp_nbr), temp_name);
-		free(temp_nbr);
-		free(temp_name);
-		i++;
-	}
-	return (free(temp_nbr), free(temp_name), NULL);
-}
-
-char    *get_random_temp_name(void)
-{
-	char    *temp_str;
-	int		fd_random;
-
-	fd_random = open("/dev/random", O_RDONLY, 0777);
-	if (fd_random == -1)
-		return (NULL);
-	temp_str = (char *)malloc((10 + 1) * sizeof(char));
-	if (temp_str == NULL)
-		return (close(fd_random), NULL);
-	while (true)
-	{
-		if (read(fd_random, temp_str, 10) == -1)
-			return (close(fd_random), free(temp_str), NULL);
-		temp_str[10] = '\0';
-		//ft_putendl_fd(temp_str, 1);
-		if (access(temp_str, F_OK) == -1 && ft_isspace_str(temp_str) == false)
-			break ;
-	}
-	return (close(fd_random), temp_str);
-} */

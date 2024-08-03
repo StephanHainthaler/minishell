@@ -12,6 +12,9 @@
 
 #include "../headers/minishell.h"
 
+//Initializes the main struct of the program.
+//<PARAM> The to be initialzed main struct, the number of main args, the main args & environment pointers.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
 int	initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[])
 {
 	ms->argc = argc;
@@ -19,12 +22,21 @@ int	initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[])
 	ms->envp = ft_strarrdup(env);
 	if (ms->envp == NULL)
 		return (1);
+	// if (env != NULL && is_env_set(env, "SHLVL=") == true)
+	// {
+	// 	ms->envp = increase_shlvl(ms->envp);
+	// 	if (ms->envp == NULL)
+	// 		return (1);
+	// }
 	ms->lex = NULL;
 	ms->exec = NULL;
 	ms->last_exit_code = 0;
 	return (0);
 }
 
+//Initializes the lexer struct.
+//<PARAM> The main struct of the program.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
 int	initialize_lexer(t_minishell *ms)
 {
 	ms->lex = (t_lexer *)malloc(sizeof(t_lexer));
@@ -37,6 +49,9 @@ int	initialize_lexer(t_minishell *ms)
 	return (0);
 }
 
+//Initializes the first part of the executor struct.
+//<PARAM> The main struct of the program.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
 int	initialize_executor(t_minishell *ms)
 {
 	int	i;
@@ -64,6 +79,9 @@ int	initialize_executor(t_minishell *ms)
 	return (0);
 }
 
+//Initializes the second part of the executor struct.
+//<PARAM> The main struct of the program.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
 int	initialize_executor_2(t_minishell *ms)
 {
 	int	error_flag;
@@ -78,6 +96,9 @@ int	initialize_executor_2(t_minishell *ms)
 	return (0);
 }
 
+//Initializes a cmd struct.
+//<PARAM> The to be initialzed cmd struct & the number of the cmd.
+//<RETURN> The cmd on SUCCESS; NULL on FATAL ERROR
 t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr)
 {	
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));

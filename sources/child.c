@@ -12,6 +12,10 @@
 
 #include "../headers/minishell.h"
 
+//Executes a command inside a child process.
+//Exits the child either via execve() or exit_child().
+//<PARAM> The executor struct & the to be executed cmd.
+//<RETURN> void
 void	execute_cmd(t_executor *exec, t_cmd *cmd)
 {
 	if (cmd->simp_cmd == NULL)
@@ -40,6 +44,11 @@ void	execute_cmd(t_executor *exec, t_cmd *cmd)
 	}
 }
 
+//Enters a child process on singular execution.
+//Checks for invalid in/out file descriptors
+//and handles possible infile/oufile redirections.
+//<PARAM> The executor struct & the to be executed cmd.
+//<RETURN> void
 void	single_child_proc(t_executor *exec, t_cmd *cmd)
 {	
 	cmd->is_parent = false;
@@ -47,7 +56,6 @@ void	single_child_proc(t_executor *exec, t_cmd *cmd)
 		exit_child(exec, -1, -1, 1);
 	if (handle_redirection(cmd, 0 ,1) == 1)
 		exit_child(exec, -1, -1, 1);
-	//if (exec->paths != NULL && cmd->simp_cmd != NULL)
 	if (cmd->simp_cmd != NULL)
 	{
 		cmd->cmd_path = get_cmd_path(exec, exec->cmds[0]);
@@ -60,6 +68,12 @@ void	single_child_proc(t_executor *exec, t_cmd *cmd)
 	execute_cmd(exec, exec->cmds[0]);
 }
 
+//Enters a child process on a pipeline execution.
+//Checks for invalid in/out file descriptors
+//and handles possible infile/oufile redirections.
+//<PARAM> The executor struct, the to be executed cmd,
+//<PARAM> the current pipe ends & the pointer to the output end of the previous pipe.
+//<RETURN> void
 void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
 {
 	cmd->is_parent = false;
@@ -80,7 +94,6 @@ void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
 		exit_child(exec, ends[1], -1, 1);
 	}
 	close(ends[1]);
-	//if (exec->paths != NULL && cmd->simp_cmd != NULL)
 	if (cmd->simp_cmd != NULL)
 	{
 		cmd->cmd_path = get_cmd_path(exec, cmd);
@@ -90,6 +103,12 @@ void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
 	execute_cmd(exec, cmd);
 }
 
+//Enters the last child process on a pipeline execution.
+//Checks for invalid in/out file descriptors
+//and handles possible infile/oufile redirections.
+//<PARAM> The executor struct, the to be executed cmd &
+//<PARAM> the output end of the previous pipe.
+//<RETURN> void
 void	last_child_proc(t_executor *exec, t_cmd *cmd, int old_end)
 {
 	cmd->is_parent = false;
@@ -112,6 +131,10 @@ void	last_child_proc(t_executor *exec, t_cmd *cmd, int old_end)
 	execute_cmd(exec, cmd);	
 }	
 
+//Frees memory and exits the child process with the given exit code.
+//<PARAM> The executor struct, two possible file descriptors
+//<PARAM> to be closed & the exit status of the child.
+//<RETURN> void
 void	exit_child(t_executor *exec, int end1, int end2, int exit_status)
 {
 	if (end1 != -1)

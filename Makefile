@@ -21,6 +21,7 @@ VFLAGS := --suppressions=./supp.supp \
 --read-var-info=yes \
 --show-error-list=yes \
 --show-leak-kinds=all \
+--suppressions=./supp.supp \
 --trace-children=yes \
 --track-origins=yes
 #--track-fds=yes
@@ -33,6 +34,7 @@ MAIN_DIR := main
 SRCS := $(SRC_DIR)/main.c \
 $(SRC_DIR)/initialization.c \
 $(SRC_DIR)/lexer.c \
+$(SRC_DIR)/lexer_utils.c \
 $(SRC_DIR)/expansion.c \
 $(SRC_DIR)/expansion_utils.c \
 $(SRC_DIR)/quotation.c \

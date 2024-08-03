@@ -12,6 +12,10 @@
 
 #include "../headers/minishell.h"
 
+//Takes the input and converts it to be usable for the executor.
+//The information and memory will be stored in the executor struct.
+//<PARAM> The main struct of the program.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 2 on standard ERROR
 int	parse_input(t_minishell *ms)
 {
 	int	error_check;
@@ -19,44 +23,20 @@ int	parse_input(t_minishell *ms)
 	if (initialize_executor(ms) == 1)
 		return (1);
 	if (is_valid_input(ms->lex) == false)
-		return (free_lexer(ms->lex), free_executor(ms->exec), 2);
+		return (ms->last_exit_code = 1, free_lexer(ms->lex),
+			free_executor(ms->exec), 2);
 	error_check = get_cmds(ms->exec, &ms->lex->token_list, 0, 0);
 	if (error_check == 1)
 		return (free_executor(ms->exec), 1);
 	if (error_check == 2)
-		return (free_executor(ms->exec), free_lexer(ms->lex), 2);
+		return (ms->last_exit_code = 1, free_lexer(ms->lex),
+			free_executor(ms->exec), 2);
 	return (0);
 }
 
-int	get_cmds(t_executor *exec, t_list **list, int error_check, int i)
-{
-	t_list	*cur;
-
-	cur = *list;
-	while (cur)
-	{
-		if (cur->type == WORD)
-			error_check = get_word(exec, cur->attr, i);
-		if (cur->type != WORD && cur->type != PIPE)
-		{
-			if (cur->type == RE_IN)
-				error_check = get_infile_redir(exec, cur->next->attr, i);
-			if (cur->type == RE_OUT || cur->type == APPEND)
-				error_check = get_outfile_redir(exec, cur->next->attr, \
-					cur->type, i);
-			if (cur->type == HERE_DOC)
-				error_check = get_here_doc(exec, cur->next->attr, i);
-			cur = cur->next;
-		}
-		if (error_check == 1 || error_check == 2)
-			return (error_check);
-		if (cur->type == PIPE)
-			i++;
-		cur = cur->next;
-	}
-	return (0);
-}
-
+//Reads the entire linked list and counts the total amount of commands.
+//<PARAM> The executor struct, the list, an error indicator & an iterator at 0
+//<RETURN> total number of cmds on SUCCESS
 int	count_cmds(t_list **list)
 {
 	t_list	*current_node;
@@ -73,6 +53,9 @@ int	count_cmds(t_list **list)
 	return (num_of_cmds);
 }
 
+//Checks the entire list for allowed order of tokens.
+//<PARAM> The lexer struct
+//<RETURN> bool
 bool	is_valid_input(t_lexer *lex)
 {
 	t_list	*cur;
@@ -102,20 +85,34 @@ bool	is_valid_input(t_lexer *lex)
 	return (true);
 }
 
-void	ft_print_cmd(t_cmd *cmd)
+//Converts every node of the linked list into a command struct.
+//<PARAM> The executor struct, the list, an error indicator & an iterator at 0
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 2 on standard ERROR
+int	get_cmds(t_executor *exec, t_list **list, int error_check, int i)
 {
-	size_t	i;
+	t_list	*cur;
 
-	i = 0;
-	while (i < ft_strarrlen(cmd->simp_cmd))
+	cur = *list;
+	while (cur)
 	{
-		printf("cmd->simp_cmd[%zu]: %s\n", i, cmd->simp_cmd[i]);
-		i++;
+		if (cur->type == WORD)
+			error_check = get_word(exec, cur->attr, i);
+		if (cur->type != WORD && cur->type != PIPE)
+		{
+			if (cur->type == RE_IN)
+				error_check = get_infile_redir(exec, cur->next->attr, i);
+			if (cur->type == RE_OUT || cur->type == APPEND)
+				error_check = get_outfile_redir(exec, cur->next->attr, \
+					cur->type, i);
+			if (cur->type == HERE_DOC)
+				error_check = get_here_doc(exec, cur->next->attr, i);
+			cur = cur->next;
+		}
+		if (error_check == 1 || error_check == 2)
+			return (error_check);
+		if (cur->type == PIPE)
+			i++;
+		cur = cur->next;
 	}
-	printf("cmd->infile: %s\n", cmd->infile);
-	printf("cmd->outfile: %s\n", cmd->outfile);
-	printf("cmd->in_fd: %d\n", cmd->in_fd);
-	printf("cmd->out_fd: %d\n", cmd->out_fd);
-	printf("cmd->cmd_nbr: %d\n", cmd->cmd_nbr);
-	printf("cmd->cmd_path: %s\n", cmd->cmd_path);
+	return (0);
 }

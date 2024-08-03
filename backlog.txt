@@ -18,10 +18,20 @@ echo $"" should print newline -> $"" should expand to ""
 print individual delim error when pressing ctrl+d
 possible issue if child free executor and UNLINKS the temp file serval times? - done
 SHLVL + 1 ?
-echo '' -n
+echo '' -n - done
 handle \ in lexer part - ignore
 cannot end on \ - ignore
 
 env -i ./minishell + CRTL+D - to test
 REMOVE SET_ENV - done
 check if when child has fatal error that minishell ends ?
+Get rid of that cd [PATH] leak
+cd -> name to long error (exit 1)
+cd -> check for directoies (exit 1)
+cd -> permissions?
+
+handle non-pipeable buzltins CHECK the exit code logic!
+handle exit codes if return 2 to amin loop (lexer done / parser / executor)
+cat << here is broken!
+readline here_doc NULL check and ctrl+D same exit?
+"" --> gives weird output

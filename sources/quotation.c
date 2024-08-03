@@ -12,6 +12,10 @@
 
 #include "../headers/minishell.h"
 
+//Takes a string and duplicates it in dequoted from.
+//The dequoted string needs to be freed.
+//<PARAM> The to be dequoted string.
+//<RETURN> The string on SUCCESS; NULL on FATAL ERROR
 char	*dequote(char *str)
 {
 	char	*new_str;
@@ -40,53 +44,9 @@ char	*dequote(char *str)
 	return (new_str);
 }
 
-int	handle_quote_closure(t_lexer *lex, char quote, int *len)
-{
-	bool	is_closed;
-
-	is_closed = false;
-	lex->i++;
-	*len += 1;
-	while (lex->input[lex->i] != '\0')
-	{
-		if (lex->input[lex->i] == quote)
-		{
-			is_closed = true;
-			break ;
-		}
-		lex->i++;
-		*len += 1;
-	}
-	if (is_closed == false)
-		return (1);
-	return (0);
-}
-
-char	*handle_dequotation(char *to_trim, int i, int j)
-{
-	char	*trim_str;
-	char	quote;
-
-	trim_str = (char *)malloc(
-			(get_dequoted_strlen(to_trim) + 1) * (sizeof(char)));
-	if (trim_str == NULL)
-		return (NULL);
-	while (to_trim[i] != '\0')
-	{
-		if (to_trim[i] == '\'' || to_trim[i] == '"')
-		{
-			quote = to_trim[i++];
-			while (to_trim[i] != quote)
-				trim_str[j++] = to_trim[i++];
-			i++;
-		}
-		else
-			trim_str[j++] = to_trim[i++];
-	}
-	trim_str[j] = '\0';
-	return (free(to_trim), trim_str);
-}
-
+//Takes a string and counts its length in dequoted from.
+//<PARAM> The to be dequoted string.
+//<RETURN> The lenght of the dequoted string on SUCCESS
 int	get_dequoted_strlen(char *str)
 {
 	char	quote;
@@ -116,6 +76,34 @@ int	get_dequoted_strlen(char *str)
 	return (ft_strlen(str) - num_of_quotes);
 }
 
+//During tokenizing, keeps check, if there no open quotes.
+//<PARAM> The lexer struct, the opened quote, the current position in the string.
+//<RETURN> 0 on SUCCESS; 1 on standard ERROR
+int	handle_quote_closure(t_lexer *lex, char quote, int *len)
+{
+	bool	is_closed;
+
+	is_closed = false;
+	lex->i++;
+	*len += 1;
+	while (lex->input[lex->i] != '\0')
+	{
+		if (lex->input[lex->i] == quote)
+		{
+			is_closed = true;
+			break ;
+		}
+		lex->i++;
+		*len += 1;
+	}
+	if (is_closed == false)
+		return (1);
+	return (0);
+}
+
+//During expansion process, keeps check of current state of quotes.
+//<PARAM> The current node, the quote to be verified.
+//<RETURN> void
 void	handle_quotes_in_expansion(t_list *node, char quote)
 {
 	if (quote == '\'')
@@ -127,19 +115,5 @@ void	handle_quotes_in_expansion(t_list *node, char quote)
 	{
 		if (node->in_squotes == false)
 			node->in_dquotes = !(node->in_dquotes);
-	}
-}
-
-void	handle_quotes_in_expansion2(char quote, bool *in_sq, bool *in_dq)
-{
-	if (quote == '\'')
-	{
-		if (*in_dq == false)
-			*in_sq = !(*in_sq);
-	}
-	if (quote == '"')
-	{
-		if (*in_sq == false)
-			*in_dq = !(*in_dq);
 	}
 }

@@ -12,6 +12,9 @@
 
 #include "../headers/minishell.h"
 
+//Frees the allocated memory for the lexer struct.
+//<PARAM> The lexer to be freed.
+//<RETURN> void
 void	free_lexer(t_lexer *lex)
 {
 	if (lex == NULL)
@@ -24,6 +27,9 @@ void	free_lexer(t_lexer *lex)
 	lex = NULL;
 }
 
+//Frees the allocated memory for the executor struct.
+//<PARAM> The executor to be freed.
+//<RETURN> void
 void	free_executor(t_executor *exec)
 {
 	if (exec == NULL)
@@ -35,6 +41,9 @@ void	free_executor(t_executor *exec)
 	exec = NULL;
 }
 
+//Frees the allocated memory for all cmd structs.
+//<PARAM> The cmds to be freed & the total amount of cmds.
+//<RETURN> void
 void	free_cmds(t_cmd **cmds, int num_of_cmds)
 {
 	int	i;
@@ -51,6 +60,9 @@ void	free_cmds(t_cmd **cmds, int num_of_cmds)
 	cmds = NULL;
 }
 
+//Frees the allocated memory for a single cmd struct.
+//<PARAM> The cmd to be freed.
+//<RETURN> void
 void	free_cmd(t_cmd *cmd)
 {
 	if (cmd->cmd_path != NULL)
@@ -73,6 +85,9 @@ void	free_cmd(t_cmd *cmd)
 	cmd = NULL;
 }
 
+//Frees the allocated memory and exits the program.
+//<PARAM> The main struct of the program.
+//<RETURN> void
 void	free_and_exit(t_minishell *ms)
 {
 	// int	exitcode;

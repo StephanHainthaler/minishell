@@ -82,7 +82,8 @@ typedef struct s_minishell
 
 extern int	global_code;
 
-//initialization.c 
+//initialization.c
+
 int		initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[]);
 int		initialize_lexer(t_minishell *ms);
 int		initialize_executor(t_minishell *ms);
@@ -90,41 +91,48 @@ int		initialize_executor_2(t_minishell *ms);
 t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr);
 
 //lexer.c
-int		read_input(t_minishell *ms);
+
+int		get_input(t_minishell *ms);
+int		read_input(t_lexer *lex);
 int		tokenize_input(t_lexer *lex);
+
+//lexer_utils.c
+
 bool	is_token(char c);
 t_list	*get_word_token(t_lexer *lex, int *error);
 t_list	*get_non_word_token(t_lexer *lex);
 
 //expansion.c
+
 int		check_for_expansion(t_list **token_list, char **envp, int ec);
 char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i);
-char	*handle_expansion2(char *to_expand, char **envp, int exit_code, int *i);
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos);
 char	*handle_invalid_expansion(char *str, int len, int pos);
 char	*handle_exit_code_expansion(char *to_expand, int exit_code, int *i);
 
 //expansion_utils.c
+
+int		handle_special_expansion(t_list *node, int exit_code, int *i);
 int		get_envname_len(char *str, int *i);
 bool	check_for_env(char *str1, char *str2, int len);
 bool	is_str_expandable(char *str);
 
 //quotation.c
+
 char	*dequote(char *str);
-int		handle_quote_closure(t_lexer *lex, char quote, int *len);
-char	*handle_dequotation(char *to_trim, int i, int j);
 int		get_dequoted_strlen(char *str);
+int		handle_quote_closure(t_lexer *lex, char quote, int *len);
 void	handle_quotes_in_expansion(t_list *node, char quote);
-void	handle_quotes_in_expansion2(char quote, bool *in_sq, bool *in_dq);
 
 //parser.c
+
 int		parse_input(t_minishell *ms);
-bool	is_valid_input(t_lexer *lex);
 int		count_cmds(t_list **list);
+bool	is_valid_input(t_lexer *lex);
 int		get_cmds(t_executor *exec, t_list **list, int error_check, int i);
-void	ft_print_cmd(t_cmd *cmd);
 
 //parser_utils.c
+
 int		get_word(t_executor *exec, char *word, int i);
 int		get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i);
 int		get_infile_redir(t_executor *exec, char *infile, int i);
@@ -132,13 +140,14 @@ int		get_here_doc(t_executor *exec, char *delim, int i);
 bool	is_file_ambigious(char *file);
 
 //here_doc.c
+
 int 	handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code);
-char	*check_for_here_doc_expansion(char *str, char **envp, int ec);
-char    *expand_here_doc(char *str, char **envp, int exit_code, int *i);
-char    *get_temp_name(void);
 char    *get_random_temp_name(void);
+char	*check_for_here_doc_expansion(char *str, char *delim, char **envp, int ec);
+char    *expand_here_doc(char *str, char **envp, int exit_code, int *i);
 
 //executor.c
+
 int		execute_input(t_minishell *ms);
 int		single_execution(t_executor *exec);
 int		multiple_execution(t_executor *exec);
@@ -146,6 +155,7 @@ int		multi_pipe(t_executor *exec, int *prevpipe, int i);
 int		last_pipe(t_executor *exec, int prevpipe, int i);
 
 //executor_utils.c
+
 char	**get_paths(t_executor *exec, int *error_flag);
 char	*get_cmd_path(t_executor *exec, t_cmd *cmd);
 int		get_fd(char *file, bool is_in_fd, bool is_append);
@@ -153,6 +163,7 @@ bool	is_env_set(char *envp[], char *env_name);
 int		handle_redirection(t_cmd *cmd, int in, int out);
 
 //child.c
+
 void	execute_cmd(t_executor *exec, t_cmd *cmd);
 void	single_child_proc(t_executor *exec, t_cmd *cmd);
 void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end);
@@ -160,12 +171,14 @@ void	last_child_proc(t_executor *exec, t_cmd *cmd, int old_end);
 void	exit_child(t_executor *exec, int end1, int end2, int exit_status);
 
 //builtins_1.c
+
 int		handle_builtins_1(t_executor *exec, char **simp_cmd);
 int		handle_builtins_2(t_executor *exec, char **simp_cmd);
 int		handle_builtins_non_pipable(t_minishell *ms, char **simp_cmd);
 int		ft_exit(t_minishell *ms, char **simp_cmd);
 
 //builtins_2.c
+
 void	ft_echo(char **simp_cmd);
 int		ft_pwd(void);
 int		ft_cd(char **simp_cmd, char **envp);
@@ -173,18 +186,23 @@ char	**ft_export(char **simp_cmd, char **envp);
 char	**ft_unset(char **simp_cmd, char **envp);
 
 //builtins_utils_1.c
+
 int		sort_strarray(char **strarray);
 bool	ft_are_str_indentical(char *str1, char *str2);
 bool	is_replacable(char *str1, char *str2);
 int		get_exitcode(char **simp_cmd, int last_exit_code);
 
 //builtins_utils_2.c
+
 char	*get_env(char **envp, char *env_name);
-char	**update_pwds_in_env(char **envp, char *pwd, char *oldpwd);
+int		get_env_pos(char **envp, char *env_name);
+char	**update_pwds(char **envp, char *pwd, char *oldpwd);
 char	**update_pwd(char **envp, char *pwd);
-char	**update_oldpwd(char **envp, char *oldpwd);
+char	**update_oldpwd(char **envp, char *oldpwd, bool is_first);
+char	**increase_shlvl(char **envp);
 
 //signals.c
+
 void	sigint_interactive(int sig_num);
 void	sigint_heredoc(int sig_num);
 void	sigint_process(int sig_num);
@@ -192,6 +210,7 @@ void	sigint_subshell(int	sig_num);
 void	handle_sigquit(int sig_num);
 
 //free.c
+
 void	free_lexer(t_lexer *lex);
 void	free_executor(t_executor *exec);
 void	free_cmds(t_cmd **cmds, int num_of_cmds);

@@ -12,6 +12,356 @@
 
 #include "../headers/minishell.h"
 
+int	read_input(t_minishell *ms)
+{
+	int	error_check;
+
+	if (initialize_lexer(ms) == 1)
+		return (1);
+	while (true)
+	{
+		signal(SIGINT, &sigint_interactive);
+		signal(SIGTERM, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
+		if (isatty(fileno(stdin)))
+			ms->lex->input = readline("./minishell$ ");
+		else
+		{
+			//char *line;
+			ms->lex->input = get_next_line(fileno(stdin));
+			// ms->lex->input = ft_strtrim(line, "\n");
+			// free(line);
+		}
+		if (ms->lex->input == NULL)
+			return (1);
+		//global_code = 2;
+		//signal(SIGINT, &sigint_process);
+		if (ft_are_str_indentical("./minishell", ms->lex->input))
+			global_code = 3;
+		signal(SIGINT, &sigint_subshell);
+		signal(SIGQUIT, &handle_sigquit);
+		if (ft_are_str_indentical("cat", ms->lex->input))
+			global_code = 2;
+		signal(SIGINT, &sigint_process);
+		if (ft_isspace_str(ms->lex->input) == false)
+			break ;
+	}
+	add_history(ms->lex->input);
+	// if (ms->lex->input[ft_strlen(ms->lex->input) - 1] == '\\')
+	// 	return (ft_putendl_fd("Input cannot end on '\\'", 2), free_lexer(ms->lex), 2);
+	error_check = tokenize_input(ms->lex);
+	if (error_check == 1)
+		return (1);
+	if (error_check == 2)
+		return (ms->last_exit_code = 1, free_lexer(ms->lex), 2);
+	if (check_for_expansion(&ms->lex->token_list, ms->envp, ms->last_exit_code) == 1)
+		return (1);
+	return (0);
+}
+
+char    *get_temp_name(void)
+{
+	char	*temp_name;
+	char    *temp_str;
+	char    *temp_nbr;
+	int     i;
+
+	temp_str = ".temp";
+	
+	temp_nbr = NULL;
+	temp_name = NULL;
+	i = 0;
+	while (i < INT_MAX - 1)
+	{
+		temp_nbr = ft_itoa(i);
+		if (temp_nbr == NULL)
+			return (ft_free(temp_nbr), ft_free(temp_name), NULL);
+		temp_name = ft_strjoin(temp_str, temp_nbr);
+		if (temp_name == NULL)
+			return (ft_free(temp_nbr), ft_free(temp_name), NULL);
+		if (access(temp_name, F_OK) == -1)
+			return (free(temp_nbr), temp_name);
+		free(temp_nbr);
+		free(temp_name);
+		i++;
+	}
+	return (free(temp_nbr), free(temp_name), NULL);
+}
+
+void	ft_print_cmd(t_cmd *cmd)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < ft_strarrlen(cmd->simp_cmd))
+	{
+		printf("cmd->simp_cmd[%zu]: %s\n", i, cmd->simp_cmd[i]);
+		i++;
+	}
+	printf("cmd->infile: %s\n", cmd->infile);
+	printf("cmd->outfile: %s\n", cmd->outfile);
+	printf("cmd->in_fd: %d\n", cmd->in_fd);
+	printf("cmd->out_fd: %d\n", cmd->out_fd);
+	printf("cmd->cmd_nbr: %d\n", cmd->cmd_nbr);
+	printf("cmd->cmd_path: %s\n", cmd->cmd_path);
+}
+
+// char	**ft_export2(char **simp_cmd, char **envp)
+// {
+// 	int		i;
+// 	int		j;
+// 	bool	found;
+
+// 	if (ft_strarrlen(simp_cmd) == 1)
+// 	{
+// 		if (sort_strarray(envp) == 1)
+// 			return (NULL);
+// 		return (envp);
+// 	}
+// 	i = 1;
+// 	while (i < (int)ft_strarrlen(simp_cmd))
+// 	{
+// 		found = false;
+// 		j = 0;
+// 		while (envp[j] != NULL && is_replacable(envp[j], simp_cmd[i]) == false)
+// 			j++;
+// 		if (is_replacable(envp[j], simp_cmd[i]) == true)
+// 		{
+// 			found = true;
+// 			envp = ft_strreplace_instrarr(envp, simp_cmd[i], j);
+// 			if (envp[j] == NULL)
+// 				return (NULL);
+// 		}
+// 		if (found == false)
+// 		{
+// 			envp = ft_stradd_tostrarr(envp, simp_cmd[i]);
+// 			if (envp == NULL)
+// 				return (NULL);
+// 		}
+// 		i++;
+// 	}
+// 	return (envp);
+// }
+
+// int handle_here_doc2(int here_doc_fd, char *delim, char **envp, int exit_code)
+// {
+//     char    *temp_str;
+// 	char	*deq_delim;
+
+// 	deq_delim = dequote(delim);
+// 	if (deq_delim == NULL)
+// 		return (1);
+//     while (true)
+// 	{
+// 		global_code = 1;
+// 		signal(SIGINT, &sigint_heredoc);
+// 		signal(SIGQUIT, SIG_IGN);
+// 		temp_str = readline("> ");
+// 		if (temp_str == NULL)
+// 			return (ft_putendl_fd("warning: here-doc delimited by EOF", 2), 2);
+// 		if (global_code == 130)
+// 			return (free(deq_delim), 2);
+//         if (ft_strnstr(temp_str, delim, ft_strlen(delim)) != NULL \
+//             && ft_strlen(temp_str) == ft_strlen(delim))
+// 			return (free(deq_delim), ft_putendl_fd("warning: here-doc delimited by EOF", 2), 2);
+//         if (ft_strnstr(temp_str, deq_delim, ft_strlen(deq_delim)) != NULL \
+//             && ft_strlen(temp_str) == ft_strlen(deq_delim))
+// 			break ;
+// 		if (!(ft_strchr(delim, '\'') || ft_strchr(delim, '"')))
+//         {
+// 			temp_str = check_for_here_doc_expansion(temp_str, delim, envp, exit_code);
+//             if (temp_str == NULL)
+//                 return (free(deq_delim), 1);
+//         }
+//         ft_putendl_fd(temp_str, here_doc_fd);
+// 		free(temp_str);
+// 	}
+//     return (free(deq_delim), 0);
+// }
+
+/* char    *expand_here_doc(char *str, char **envp, int exit_code, int *i)
+{
+	int		len;
+	int		pos;
+	int		j;
+
+	if (str[*i + 1] == '?')
+		return (str = handle_exit_code_expansion(str, exit_code, i));
+	if (ft_isspace(str[*i + 1]) == true || str[*i + 1] == '\0'
+		|| str[*i + 1] == '$' || str[*i + 1] == '"'
+		|| str[*i + 1] == '\'')
+		return (str);
+	pos = *i;
+	len = get_envname_len(str, i);
+	j = 0;
+	while (envp[j] != NULL)
+	{
+		if (check_for_env(envp[j], str + pos + 1, len - 1) == true)
+			return (*i = pos - 1,
+				handle_valid_expansion(str, envp[j], len, pos));
+		j++;
+	}
+	return (*i = pos - 1, handle_invalid_expansion(str, len, pos));
+}
+
+char    *get_temp_name(void)
+{
+	char	*temp_name;
+	char    *temp_str;
+	char    *temp_nbr;
+	int     i;
+
+	temp_str = ".temp";
+	
+	temp_nbr = NULL;
+	temp_name = NULL;
+	i = 0;
+	while (i < INT_MAX - 1)
+	{
+		temp_nbr = ft_itoa(i);
+		if (temp_nbr == NULL)
+			return (ft_free(temp_nbr), ft_free(temp_name), NULL);
+		temp_name = ft_strjoin(temp_str, temp_nbr);
+		if (temp_name == NULL)
+			return (ft_free(temp_nbr), ft_free(temp_name), NULL);
+		if (access(temp_name, F_OK) == -1)
+			return (free(temp_nbr), temp_name);
+		free(temp_nbr);
+		free(temp_name);
+		i++;
+	}
+	return (free(temp_nbr), free(temp_name), NULL);
+}
+
+char    *get_random_temp_name(void)
+{
+	char    *temp_str;
+	int		fd_random;
+
+	fd_random = open("/dev/random", O_RDONLY, 0777);
+	if (fd_random == -1)
+		return (NULL);
+	temp_str = (char *)malloc((10 + 1) * sizeof(char));
+	if (temp_str == NULL)
+		return (close(fd_random), NULL);
+	while (true)
+	{
+		if (read(fd_random, temp_str, 10) == -1)
+			return (close(fd_random), free(temp_str), NULL);
+		temp_str[10] = '\0';
+		//ft_putendl_fd(temp_str, 1);
+		if (access(temp_str, F_OK) == -1 && ft_isspace_str(temp_str) == false)
+			break ;
+	}
+	return (close(fd_random), temp_str);
+} */
+
+
+// char	*handle_dequotation(char *to_trim, int i, int j)
+// {
+// 	char	*trim_str;
+// 	char	quote;
+
+// 	trim_str = (char *)malloc(
+// 			(get_dequoted_strlen(to_trim) + 1) * (sizeof(char)));
+// 	if (trim_str == NULL)
+// 		return (NULL);
+// 	while (to_trim[i] != '\0')
+// 	{
+// 		if (to_trim[i] == '\'' || to_trim[i] == '"')
+// 		{
+// 			quote = to_trim[i++];
+// 			while (to_trim[i] != quote)
+// 				trim_str[j++] = to_trim[i++];
+// 			i++;
+// 		}
+// 		else
+// 			trim_str[j++] = to_trim[i++];
+// 	}
+// 	trim_str[j] = '\0';
+// 	return (free(to_trim), trim_str);
+// }
+
+
+// void	handle_quotes_in_expansion2(char quote, bool *in_sq, bool *in_dq)
+// {
+// 	if (quote == '\'')
+// 	{
+// 		if (*in_dq == false)
+// 			*in_sq = !(*in_sq);
+// 	}
+// 	if (quote == '"')
+// 	{
+// 		if (*in_sq == false)
+// 			*in_dq = !(*in_dq);
+// 	}
+// }
+
+//RETURN VALUES:
+// 0 == NO BUILT_IN -> nothing happens/continue program
+// 1 == FOUND BUILT_IN -> ON SUCCESS -> NEW CYCLE
+// 2 == FOUND BUILT_IN -> ON ERROR (non-fatal) -> NEW CYCLE
+//-1 == FOUND BUILT_IN -> ON ERROR (FATAL) -> Quit minishell
+
+// char	*handle_expansion2(char *to_expand, char **envp, int exit_code, int *i)
+// {
+// 	int		len;
+// 	int		pos;
+// 	int		j;
+
+// 	if (to_expand == NULL)
+// 		return (NULL);
+// 	if (to_expand[*i + 1] == '?')
+// 		return (to_expand = handle_exit_code_expansion(to_expand, exit_code, i));
+// 	if (ft_isspace(to_expand[*i + 1]) == true || to_expand[*i + 1] == '\0'
+// 		|| to_expand[*i + 1] == '$' || to_expand[*i + 1] == '"'
+// 		|| to_expand[*i + 1] == '\'')
+// 		return (to_expand);
+// 	pos = *i;
+// 	len = get_envname_len(to_expand, i);
+// 	// if (to_expand[*i] == '\'')
+// 	// {
+// 	// 	handle_quotes_in_expansion(node, to_expand[*i]);
+// 	// 	if (node->in_squotes == true)
+// 	// 		return (to_expand);
+// 	// }
+// 	j = 0;
+// 	while (envp[j] != NULL)
+// 	{
+// 		if (check_for_env(envp[j], to_expand + pos + 1, len - 1) == true)
+// 			return (*i = pos - 1,
+// 				handle_valid_expansion(to_expand, envp[j], len, pos));
+// 		j++;
+// 	}
+// 	return (*i = pos - 1, handle_invalid_expansion(to_expand, len, pos));
+// }
+
+// char	*expand_str(char *to_expand, char **envp, int exitcode)
+// {
+// 	bool	in_sq;
+// 	bool	in_dq;
+// 	int		i;
+
+// 	if (ft_strchr(to_expand, '$') == NULL)
+// 		return (to_expand);
+// 	in_sq = false;
+// 	in_dq = false;
+// 	i = 0;
+// 	while (to_expand[i] != '\0')
+// 	{
+// 		if (to_expand[i] == '\'' || to_expand[i] == '"')
+// 			handle_quotes_in_expansion2(to_expand[i], &in_sq, &in_dq);
+// 		if (to_expand[i] == '$' && in_sq == false)
+// 		{
+// 			to_expand = handle_expansion2(to_expand, envp, exitcode, &i);
+// 			if (to_expand == NULL)
+// 				return (NULL);
+// 		}
+// 		i++;
+// 	}
+// 	return (to_expand);
+// }
+
 // char	**ft_export2(char **simp_cmd, char **envp)
 // {
 // 	int		i;

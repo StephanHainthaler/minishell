@@ -12,6 +12,10 @@
 
 #include "../headers/minishell.h"
 
+//Stores a new word token in the current command struct.
+//In case of containing quotes, the word token will be dequoted.
+//<PARAM> The executor struct, the new word token & the current cmd number.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
 int	get_word(t_executor *exec, char *word, int i)
 {
 	char	*deq_word;
@@ -33,6 +37,11 @@ int	get_word(t_executor *exec, char *word, int i)
 	return (0);
 }
 
+//Stores a new outfile token in the current command struct.
+//The mode of the out will depend on the given type.
+//In case of containing quotes, the out token will be dequoted.
+//<PARAM> The executor struct, the new out token, the type of out & the current cmd number.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 2 on standard ERROR
 int	get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i)
 {
 	if (exec->cmds[i]->outfile != NULL)
@@ -54,6 +63,10 @@ int	get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i)
 	return (0);
 }
 
+//Stores a new infile token in the current command struct.
+//In case of containing quotes, the out token will be dequoted.
+//<PARAM> The executor struct, the new in token & the current cmd number.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 2 on standard ERROR
 int	get_infile_redir(t_executor *exec, char *infile, int i)
 {
 	if (exec->cmds[i]->infile != NULL)
@@ -75,6 +88,10 @@ int	get_infile_redir(t_executor *exec, char *infile, int i)
 	return (0);
 }
 
+//Stores a new here_doc token in the current command struct.
+//Creates a temporary infile in the directory for redirection.
+//<PARAM> The executor struct, the delimiter & the current cmd number.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 2 on standard ERROR
 int	get_here_doc(t_executor *exec, char *delim, int i)
 {
 	int	error_check;
@@ -103,6 +120,9 @@ int	get_here_doc(t_executor *exec, char *delim, int i)
 	return (0);
 }
 
+//Checks, if the redirection for the in/outfile is ambigious.
+//<PARAM> The file to be checked.
+//<RETURN> bool
 bool	is_file_ambigious(char *file)
 {
 	char	quote;
