@@ -12,6 +12,8 @@
 
 #include "../headers/minishell.h"
 
+//TO DO
+
 char	*get_env(char **envp, char *env_name)
 {
 	char	*env;

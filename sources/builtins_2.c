@@ -12,6 +12,8 @@
 
 #include "../headers/minishell.h"
 
+// TO DO
+
 void	ft_echo(char **simp_cmd)
 {
 	int	i;
