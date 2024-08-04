@@ -48,14 +48,14 @@ int	get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i)
 		free(exec->cmds[i]->outfile);
 	if (exec->cmds[i]->out_fd != -1 && exec->cmds[i]->out_fd != 1)
 		close(exec->cmds[i]->out_fd);
+	if (is_file_ambigious(outfile) == true)
+		return (2);
 	if (ft_strchr(outfile, '\'') || ft_strchr(outfile, '"'))
 		exec->cmds[i]->outfile = dequote(outfile);
 	else
 		exec->cmds[i]->outfile = ft_strdup(outfile);
 	if (exec->cmds[i]->outfile == NULL)
 		return (1);
-	if (is_file_ambigious(exec->cmds[i]->outfile) == true)
-		return (2);
 	if (type == RE_OUT)
 		exec->cmds[i]->out_fd = get_fd(exec->cmds[i]->outfile, false, false);
 	else
@@ -76,6 +76,8 @@ int	get_infile_redir(t_executor *exec, char *infile, int i)
 	if (exec->cmds[i]->has_here_doc == true)
 		unlink(exec->cmds[i]->here_doc);
 	exec->cmds[i]->has_here_doc = false;
+	if (is_file_ambigious(infile) == true)
+		return (2);
 	if (ft_strchr(infile, '\'') || ft_strchr(infile, '"'))
 		exec->cmds[i]->infile = dequote(infile);
 	else

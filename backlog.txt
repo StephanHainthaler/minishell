@@ -35,6 +35,9 @@ handle exit codes if return 2 to amin loop (lexer done / parser / executor)
 cat << here is broken!
 readline here_doc NULL check and ctrl+D same exit?
 "" --> gives weird output
+export =============123 may not strat with "="   !! () exit 
+export --> export a= "Hello World" ambigous check
+ambigous check needs to keep the quotes for possible spaces -DONE
 
 check multi-pipe for waitpid behavoir?
 ft_export: export a should inset a= not a

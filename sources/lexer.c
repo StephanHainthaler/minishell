@@ -30,8 +30,8 @@ int	get_input(t_minishell *ms)
 	if (error_check == 2)
 		return (ms->last_exit_code = 1, free_lexer(ms->lex), 2);
 	if (global_code == 2)
-		global_code = 130;
-	ec = global_code;
+		ms->last_exit_code = 130;
+	//ms->last_exit_code = global_code;
 	if (check_for_expansion(&ms->lex->token_list, ms->envp, ms->last_exit_code) == 1)
 		return (1);
 	return (0);
