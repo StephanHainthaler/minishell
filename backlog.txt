@@ -35,3 +35,24 @@ handle exit codes if return 2 to amin loop (lexer done / parser / executor)
 cat << here is broken!
 readline here_doc NULL check and ctrl+D same exit?
 "" --> gives weird output
+
+check multi-pipe for waitpid behavoir?
+ft_export: export a should inset a= not a
+
+
+Tested with tester:
+0_COMPARE PARSING - DONE
+	Only errors include \ that we dont need to handle
+
+10_PARSING HELL
+
+	Errors that include non-expansion for delimiter ($USER)
+
+	Splitting the expanded variables
+
+	When expansion results in a NULL string, read new input! exit_code 0
+
+BUILTINS
+
+	echo cd ~
+

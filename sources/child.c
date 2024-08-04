@@ -18,7 +18,7 @@
 //<RETURN> void
 void	execute_cmd(t_executor *exec, t_cmd *cmd)
 {
-	if (cmd->simp_cmd == NULL)
+	if (cmd->simp_cmd == NULL || ft_strncmp(cmd->simp_cmd[0], "", 1) == true)
 		exit_child(exec, -1, -1, 0);
 	if (handle_builtins_1(exec, cmd->simp_cmd) == 0)
 		exit_child(exec, -1, -1, exec->exit_status);

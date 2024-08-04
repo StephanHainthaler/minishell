@@ -54,9 +54,16 @@ int		get_env_pos(char **envp, char *env_name)
 
 char	**update_pwds(char **envp, char *pwd, char *oldpwd)
 {
+	// if (is_env_set(envp, "PWD=") == true && is_env_set(envp, "OLDPWD=") == false)
+	// {
+	// 	printf("PWD set && OLDPWD unset: SET OLDPWD!\n");
+	// 	envp = ft_stradd_tostrarr(envp, "OLDPWD=");
+	// 	if (envp == NULL)
+	// 		return (ft_free(pwd), free(oldpwd), NULL);
+	// }
 	// if (is_env_set(envp, "PWD=") == false && is_env_set(envp, "OLDPWD=") == true)
 	// {
-	// 	printf("delete OLDPWD FROM ENV!!!\n");
+	// 	printf("PWD unset && OLDPWD set: UNSET OLDPWD\n");
 	// 	envp = ft_strdel_fromstrarr(envp, get_env_pos(envp, "OLDPWD="));
 	// 	if (envp == NULL)
 	// 		return (ft_free_strarr(envp), ft_free(pwd), free(oldpwd), NULL);
@@ -67,12 +74,9 @@ char	**update_pwds(char **envp, char *pwd, char *oldpwd)
 		if (envp == NULL)
 			return (ft_free(pwd), free(oldpwd), NULL);
 	}
-	if (is_env_set(envp, "OLDPWD=") == true || is_env_set(envp, "OLDPWD\0") == true)
+	if (is_env_set(envp, "OLDPWD=") == true)
 	{
-		if (is_env_set(envp, "OLDPWD=") == true)
-			envp = update_oldpwd(envp, oldpwd, false);
-		else
-			envp = update_oldpwd(envp, oldpwd, true);
+		envp = update_oldpwd(envp, oldpwd);
 		if (envp == NULL)
 			return (ft_free(pwd), free(oldpwd), NULL);
 	}
@@ -107,22 +111,12 @@ char	**update_pwd(char **envp, char *pwd)
 	return (free(pwd_env), envp);
 }
 
-char	**update_oldpwd(char **envp, char *oldpwd, bool is_first)
+char	**update_oldpwd(char **envp, char *oldpwd)
 {
 	char	*oldpwd_env;
 	int 	i;
 
-	// i = 0;
-	// while (envp[i] != NULL) 
-	// {	
-	// 	if (ft_strncmp("OLDPWD=", envp[i], 7) == false)
-	// 		break ;
-	// 	i++;
-	// }
-	if (is_first == true)
-		i = get_env_pos(envp, "OLDPWD\0");
-	else
-		i = get_env_pos(envp, "OLDPWD=");
+	i = get_env_pos(envp, "OLDPWD=");
 	oldpwd_env = ft_strjoin("OLDPWD=", oldpwd);
 	if (oldpwd_env == NULL)
 		return (ft_free_strarr(envp), NULL);
@@ -155,3 +149,4 @@ char	**increase_shlvl(char **envp)
 		return (free(new_shlvl), NULL);
 	return (free(new_shlvl), envp);
 }
+

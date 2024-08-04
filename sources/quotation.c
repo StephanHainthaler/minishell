@@ -109,7 +109,7 @@ void	handle_quotes_in_expansion(t_list *node, char quote)
 	if (quote == '\'')
 	{
 		if (node->in_dquotes == false)
-			node->in_squotes = !(node->in_squotes);
+			node->in_squotes = !(node->in_squotes);		
 	}
 	if (quote == '"')
 	{

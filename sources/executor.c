@@ -12,8 +12,9 @@
 
 #include "../headers/minishell.h"
 
-//TO DO
-
+//Executes the parsed input in mostly child processes.
+//<PARAM> The main struct of the program.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 2 on standard ERROR
 int	execute_input(t_minishell *ms)
 {
 	int	error_check;
@@ -40,6 +41,10 @@ int	execute_input(t_minishell *ms)
 	return (ms->last_exit_code = ms->exec->exit_status, 0);
 }
 
+//Forks into a single child process for the execution.
+//The parent process waits for its child and its exit status.
+//<PARAM> The executor struct.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
 int	single_execution(t_executor *exec)
 {
 	int		status;
@@ -55,12 +60,13 @@ int	single_execution(t_executor *exec)
 	waitpid(cpid, &status, 0);
 	//if (WIFEXITED(status))
 	exec->exit_status = WEXITSTATUS(status);
-	//free_exec(exec);
-	//change last cmd status in ms
-	//exit(WEXITSTATUS(status));
 	return (0);
 }
 
+//Forks into mulitple child processes for the execution.
+//The parent process wait for its child and its exit status.
+//<PARAM> The executor struct.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
 int	multiple_execution(t_executor *exec)
 {
 	int	old_end;
@@ -81,6 +87,10 @@ int	multiple_execution(t_executor *exec)
 	return (0);
 }
 
+//Creates most of the pipeline for the execution.
+//It pipes all the commands except the last one.
+//<PARAM> The executor struct, the end of the previous pipe & the cmd number.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
 int	multi_pipe(t_executor *exec, int *old_end, int i)
 {
 	int		ends[2];
@@ -103,6 +113,9 @@ int	multi_pipe(t_executor *exec, int *old_end, int i)
 	return (0);
 }
 
+//Creates the end of the pipeline for the execution.
+//<PARAM> The executor struct, the end of the previous pipe & the cmd number.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
 int	last_pipe(t_executor *exec, int old_end, int i)
 {
 	int		status;

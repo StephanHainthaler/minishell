@@ -198,7 +198,7 @@ char	*get_env(char **envp, char *env_name);
 int		get_env_pos(char **envp, char *env_name);
 char	**update_pwds(char **envp, char *pwd, char *oldpwd);
 char	**update_pwd(char **envp, char *pwd);
-char	**update_oldpwd(char **envp, char *oldpwd, bool is_first);
+char	**update_oldpwd(char **envp, char *oldpwd);
 char	**increase_shlvl(char **envp);
 
 //signals.c

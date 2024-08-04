@@ -12,8 +12,10 @@
 
 #include "../headers/minishell.h"
 
-// TO DO
-
+//Allocates, sorts and prints an array of strings.
+//After printing, the allocated memory will be freed.
+//<PARAM> The array to be sorted.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
 int	sort_strarray(char **strarray)
 {
 	char	**arrdup;
@@ -43,6 +45,9 @@ int	sort_strarray(char **strarray)
 	return (ft_putstrarr_fd(arrdup, 1), ft_free_strarr(arrdup), 0);
 }
 
+//Compares two strings in its characters and its length.
+//<PARAM> The two strings to be compared.
+//<RETURN> bool
 bool	ft_are_str_indentical(char *str1, char *str2)
 {
 	if (ft_strlen(str1) != ft_strlen(str2))
@@ -52,6 +57,9 @@ bool	ft_are_str_indentical(char *str1, char *str2)
 	return (true);
 }
 
+//Checks for replacablility for ft_export().
+//<PARAM> The two strings to be compared.
+//<RETURN> bool
 bool	is_replacable(char *str1, char *str2)
 {
 	int	i;
@@ -64,6 +72,9 @@ bool	is_replacable(char *str1, char *str2)
 	return (check_for_env(str1, str2, i));
 }
 
+//Figures out the exit code for the ft_exit() function.
+//<PARAM> The current simple command & the last exit code.
+//<RETURN> The exit code on SUCCESS; -1 on standard ERROR
 int	get_exitcode(char **simp_cmd, int last_exit_code)
 {
 	char 	*exitcode_str;

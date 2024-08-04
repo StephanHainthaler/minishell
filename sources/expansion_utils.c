@@ -22,7 +22,9 @@ int	handle_special_expansion(t_list *node, int exit_code, int *i)
 	if (node->attr[*i + 1] == '?')
 		return (node->attr = handle_exit_code_expansion(node->attr, exit_code, i), 0);
 	if (ft_isspace(node->attr[*i + 1]) == true || node->attr[*i + 1] == '\0'
-		|| node->attr[*i + 1] == '$')
+		|| node->attr[*i + 1] == '$'
+		|| (node->attr[*i + 1] == '\'' && ((node->attr[*i + 2] == '\0') || ft_isspace((node->attr[*i + 2]) == true)))
+		|| (node->attr[*i + 1] == '"' && ((node->attr[*i + 2] == '\0') || ft_isspace((node->attr[*i + 2]) == true))))
 		return (0);
 	return (1);
 }

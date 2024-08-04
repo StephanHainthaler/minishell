@@ -77,7 +77,7 @@ int	handle_builtins_non_pipable(t_minishell *ms, char **simp_cmd)
 	if (simp_cmd == NULL)
 		return (1);
 	if (ft_are_str_indentical(simp_cmd[0], "cd") == true)
-		return (ft_cd(simp_cmd, ms->exec->envp));
+		return (ft_cd(simp_cmd, ms->envp));
 	if (ft_are_str_indentical(simp_cmd[0], "export") == true)
 	{
 		ms->envp = ft_export(simp_cmd, ms->envp);

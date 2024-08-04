@@ -5,15 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/22 09:01:17 by juitz             #+#    #+#             */
+/*   Created: 2024/07/22 15:35:25 by juitz             #+#    #+#             */
 /*   Updated: 2024/07/31 15:58:56 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-// TO DO
-
+//
+//<PARAM> The current simple command.
+//<RETURN> void
 void	ft_echo(char **simp_cmd)
 {
 	int	i;
@@ -50,6 +51,9 @@ void	ft_echo(char **simp_cmd)
 		ft_putstr_fd("\n", 1);
 }
 
+//
+//<PARAM> The current simple command.
+//<RETURN> void
 int		ft_pwd(void)
 {
 	char	*pwd;
@@ -65,6 +69,9 @@ int		ft_pwd(void)
 	return (0);
 }
 
+//
+//<PARAM> The current simple command.
+//<RETURN> void
 int		ft_cd(char **simp_cmd, char **envp)
 {
 	char	*pwd;
@@ -101,6 +108,9 @@ int		ft_cd(char **simp_cmd, char **envp)
 	return (0);
 }
 
+//
+//<PARAM> The current simple command.
+//<RETURN> void
 char	**ft_export(char **simp_cmd, char **envp)
 {
 	int		i;
@@ -129,6 +139,9 @@ char	**ft_export(char **simp_cmd, char **envp)
 	return (envp);
 }
 
+//
+//<PARAM> The current simple command.
+//<RETURN> void
 char	**ft_unset(char **simp_cmd, char **envp)
 {
 	int		i;
