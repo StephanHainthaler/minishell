@@ -29,6 +29,9 @@ int	get_input(t_minishell *ms)
 		return (1);
 	if (error_check == 2)
 		return (ms->last_exit_code = 1, free_lexer(ms->lex), 2);
+	if (global_code == 2)
+		global_code = 130;
+	ec = global_code;
 	if (check_for_expansion(&ms->lex->token_list, ms->envp, ms->last_exit_code) == 1)
 		return (1);
 	return (0);
@@ -41,9 +44,7 @@ int	read_input(t_lexer *lex)
 {
 	while (true)
 	{
-		signal(SIGINT, &sigint_interactive);
-		signal(SIGTERM, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
+		signals_interactive();
 		if (isatty(fileno(stdin)))
 			lex->input = readline("./minishell$ ");
 		else
@@ -58,12 +59,10 @@ int	read_input(t_lexer *lex)
 		//global_code = 2;
 		//signal(SIGINT, &sigint_process);
 		if (ft_are_str_indentical("./minishell", lex->input))
-			global_code = 3;
-		signal(SIGINT, &sigint_subshell);
+			signal(SIGINT, &sigint_subshell);
 		signal(SIGQUIT, &handle_sigquit);
 		if (ft_are_str_indentical("cat", lex->input))
-			global_code = 2;
-		signal(SIGINT, &sigint_process);
+			signal(SIGINT, &sigint_process);
 		if (ft_isspace_str(lex->input) == false)
 			break ;
 	}

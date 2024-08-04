@@ -209,6 +209,9 @@ void	sigint_process(int sig_num);
 void	sigint_subshell(int	sig_num);
 void	handle_sigquit(int sig_num);
 
+//
+void	signals_interactive(void);
+
 //free.c
 
 void	free_lexer(t_lexer *lex);

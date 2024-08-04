@@ -6,7 +6,7 @@
 #    By: julian <julian@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/07/28 10:30:35 by julian           ###   ########.fr        #
+#    Updated: 2024/08/02 10:27:23 by julian           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,7 @@ $(SRC_DIR)/builtins_2.c \
 $(SRC_DIR)/builtins_utils_1.c \
 $(SRC_DIR)/builtins_utils_2.c \
 $(SRC_DIR)/signals.c \
+$(SRC_DIR)/signal_handler.c \
 $(SRC_DIR)/free.c
 
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))

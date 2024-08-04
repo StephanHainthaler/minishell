@@ -59,7 +59,10 @@ int	single_execution(t_executor *exec)
 		single_child_proc(exec, exec->cmds[0]);
 	waitpid(cpid, &status, 0);
 	//if (WIFEXITED(status))
-	exec->exit_status = WEXITSTATUS(status);
+	if (global_code != 2)
+		exec->exit_status = WEXITSTATUS(status);
+	else
+		exec->exit_status = 130;
 	return (0);
 }
 
