@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julian <julian@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/08/02 11:18:25 by julian           ###   ########.fr       */
+/*   Updated: 2024/08/04 13:41:55 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,10 @@ int	single_execution(t_executor *exec)
 		single_child_proc(exec, exec->cmds[0]);
 	waitpid(cpid, &status, 0);
 	//if (WIFEXITED(status))
-	exec->exit_status = WEXITSTATUS(status);
+	if (global_code != 2)
+		exec->exit_status = WEXITSTATUS(status);
+	else
+		exec->exit_status = 130;
 	//free_exec(exec);
 	//change last cmd status in ms
 	//exit(WEXITSTATUS(status));
