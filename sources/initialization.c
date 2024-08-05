@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   initialization.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/29 13:52:50 by juitz            ###   ########.fr       */
+/*   Updated: 2024/08/05 10:18:35 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
 //Initializes the main struct of the program.
-//<PARAM> The to be initialzed main struct, the number of main args, the main args & environment pointers.
+//<PARAM> The to be initialzed main struct, 
+//<PARAM> the number of main args, the main args & environment pointers.
 //<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
 int	initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[])
 {
@@ -100,7 +101,7 @@ int	initialize_executor_2(t_minishell *ms)
 //<PARAM> The to be initialzed cmd struct & the number of the cmd.
 //<RETURN> The cmd on SUCCESS; NULL on FATAL ERROR
 t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr)
-{	
+{
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (cmd == NULL)
 		return (NULL);
@@ -112,7 +113,7 @@ t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr)
 	if (cmd->here_doc == NULL)
 	{
 		cmd->here_doc = get_random_temp_name();
-		if (cmd->here_doc== NULL)
+		if (cmd->here_doc == NULL)
 			return (free(cmd), NULL);
 	}
 	cmd->in_fd = 0;
@@ -120,5 +121,5 @@ t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr)
 	cmd->cmd_nbr = cmd_nbr;
 	cmd->has_here_doc = false;
 	cmd->is_parent = true;
-    return (cmd);
+	return (cmd);
 }

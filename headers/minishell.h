@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:26 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/31 15:48:36 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:22:33 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ typedef struct s_minishell
 	char		**envp;
 }				t_minishell;
 
-extern int	global_code;
+extern int	g_code;
 
 //initialization.c
 
@@ -143,7 +143,7 @@ bool	is_file_ambigious(char *file);
 
 int 	handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code);
 char    *get_random_temp_name(void);
-char	*check_for_here_doc_expansion(char *str, char *delim, char **envp, int ec);
+char	*check_here_doc_expansion(char *str, char *delim, char **envp, int ec);
 char    *expand_here_doc(char *str, char **envp, int exit_code, int *i);
 
 //executor.c

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/07/29 12:28:25 by shaintha         ###   ########.fr       */
+/*   Created: 2024/06/23 14:34:30 by juitz             #+#    #+#             */
+/*   Updated: 2024/08/05 10:28:39 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,11 @@ int	get_word(t_executor *exec, char *word, int i)
 		deq_word = dequote(word);
 		if (deq_word == NULL)
 			return (1);
-		exec->cmds[i]->simp_cmd = ft_stradd_tostrarr(exec->cmds[i]->simp_cmd, deq_word);
+		exec->cmds[i]->simp_cmd = ft_stradd_tostrarr(\
+			exec->cmds[i]->simp_cmd, deq_word);
 		if (exec->cmds[i]->simp_cmd == NULL)
 			return (free(deq_word), 1);
-		return (free(deq_word), 0);	
+		return (free(deq_word), 0);
 	}
 	exec->cmds[i]->simp_cmd = ft_stradd_tostrarr(exec->cmds[i]->simp_cmd, word);
 	if (exec->cmds[i]->simp_cmd == NULL)
@@ -40,7 +41,8 @@ int	get_word(t_executor *exec, char *word, int i)
 //Stores a new outfile token in the current command struct.
 //The mode of the out will depend on the given type.
 //In case of containing quotes, the out token will be dequoted.
-//<PARAM> The executor struct, the new out token, the type of out & the current cmd number.
+//<PARAM> The executor struct, the new out token, 
+//<PARAM> the type of out & the current cmd number.
 //<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 2 on standard ERROR
 int	get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i)
 {
@@ -108,7 +110,8 @@ int	get_here_doc(t_executor *exec, char *delim, int i)
 	exec->cmds[i]->infile = ft_strdup(exec->cmds[i]->here_doc);
 	if (exec->cmds[i]->infile == NULL)
 		return (1);
-	exec->cmds[i]->in_fd = open(exec->cmds[i]->here_doc, O_WRONLY | O_APPEND | O_CREAT, 0777);
+	exec->cmds[i]->in_fd = open(\
+		exec->cmds[i]->here_doc, O_WRONLY | O_APPEND | O_CREAT, 0777);
 	if (exec->cmds[i]->in_fd == -1)
 		return (1);
 	error_check = handle_here_doc(exec->cmds[i]->in_fd, delim, \

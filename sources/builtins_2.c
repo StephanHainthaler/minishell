@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 15:35:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/31 15:58:56 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 09:51:19 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	ft_echo(char **simp_cmd)
 {
 	int	i;
 	int	j;
-	int flag_n;
-	
+	int	flag_n;
+
 	i = 1;
 	j = 0;
 	flag_n = 0;
@@ -35,10 +35,10 @@ void	ft_echo(char **simp_cmd)
 			{
 				flag_n = 1;
 				i++;
-				continue;
+				continue ;
 			}
 		}
-		break;
+		break ;
 	}
 	while (simp_cmd[i])
 	{
@@ -54,7 +54,7 @@ void	ft_echo(char **simp_cmd)
 //
 //<PARAM> The current simple command.
 //<RETURN> void
-int		ft_pwd(void)
+int	ft_pwd(void)
 {
 	char	*pwd;
 
@@ -72,10 +72,10 @@ int		ft_pwd(void)
 //
 //<PARAM> The current simple command.
 //<RETURN> void
-int		ft_cd(char **simp_cmd, char **envp)
+int	ft_cd(char **simp_cmd, char **envp)
 {
 	char	*pwd;
-    char	*oldpwd;
+	char	*oldpwd;
 
 	pwd = NULL;
 	if (ft_strarrlen(simp_cmd) > 2)
@@ -84,18 +84,18 @@ int		ft_cd(char **simp_cmd, char **envp)
 	if (oldpwd == NULL)
 		return (ft_putendl_fd("cd: fatal error", 2), 1);
 	if (ft_strarrlen(simp_cmd) == 1)
-    {
+	{
 		if (is_env_set(envp, "HOME=") == false)
 			return (free(oldpwd), ft_putendl_fd("cd: HOME not set", 2), 2);
 		pwd = get_env(envp, "HOME=");
 		if (pwd == NULL)
 			return (free(oldpwd), ft_putendl_fd("cd: fatal error", 2), 1);
-        if (chdir(pwd) == -1) //fatal or not?  if not change exit to 2
-            return (free(pwd), free(oldpwd), ft_putendl_fd("cd: no such file or directory", 2), 2);
-    }
+		if (chdir(pwd) == -1) //fatal or not?  if not change exit to 2
+			return (free(pwd), free(oldpwd), ft_putendl_fd("cd: no such file or directory", 2), 2);
+	}
 	if (ft_strarrlen(simp_cmd) == 2)
-        if (chdir(simp_cmd[1]) == -1) //fatal or not? if not change exit to 2
-            return (free(oldpwd), ft_putendl_fd("cd: no such file or directory", 2), 2);
+		if (chdir(simp_cmd[1]) == -1) //fatal or not? if not change exit to 2
+			return (free(oldpwd), ft_putendl_fd("cd: no such file or directory", 2), 2);
 	if (pwd == NULL)
 	{
 		pwd = getcwd(NULL, 0);

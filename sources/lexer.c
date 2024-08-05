@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/31 14:39:38 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:23:25 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,19 @@ int	get_input(t_minishell *ms)
 
 	if (initialize_lexer(ms) == 1)
 		return (1);
-	if (read_input(ms->lex) == 1)
+	error_check = read_input(ms->lex);
+	if (error_check == 1)
 		return (1);
+	if (error_check == 3)
+		return (free_lexer(ms->lex), 3);
 	error_check = tokenize_input(ms->lex);
 	if (error_check == 1)
 		return (1);
 	if (error_check == 2)
 		return (ms->last_exit_code = 1, free_lexer(ms->lex), 2);
-	if (global_code == 2)
+	if (g_code == 2)
 		ms->last_exit_code = 130;
-	//ms->last_exit_code = global_code;
+	//ms->last_exit_code = g_code;
 	if (check_for_expansion(&ms->lex->token_list, ms->envp, ms->last_exit_code) == 1)
 		return (1);
 	return (0);
@@ -49,14 +52,14 @@ int	read_input(t_lexer *lex)
 			lex->input = readline("./minishell$ ");
 		else
 		{
-			// char *line;
+			//char *line;
 			lex->input = get_next_line(fileno(stdin));
-			// ms->lex->input = ft_strtrim(line, "\n");
-			// free(line);
+			//lex->input = ft_strtrim(line, "\n");
+			//free(line);
 		}
 		if (lex->input == NULL)
-			return (1);
-		//global_code = 2;
+			return (3);
+		//g_code = 2;
 		//signal(SIGINT, &sigint_process);
 		if (ft_are_str_indentical("./minishell", lex->input))
 			signal(SIGINT, &sigint_subshell);
@@ -70,7 +73,6 @@ int	read_input(t_lexer *lex)
 	// if (ms->lex->input[ft_strlen(ms->lex->input) - 1] == '\\')
 	// 	return (ft_putendl_fd("Input cannot end on '\\'", 2), free_lexer(ms->lex), 2);
 	return (0);
-
 }
 
 //Takes the input string and splits into specified tokens.

@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 14:01:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/31 11:51:16 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:00:37 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,14 @@ int	handle_special_expansion(t_list *node, int exit_code, int *i)
 	if (node->attr == NULL)
 		return (0);
 	if (node->attr[*i + 1] == '?')
-		return (node->attr = handle_exit_code_expansion(node->attr, exit_code, i), 0);
+		return (node->attr = handle_exit_code_expansion(\
+			node->attr, exit_code, i), 0);
 	if (ft_isspace(node->attr[*i + 1]) == true || node->attr[*i + 1] == '\0'
 		|| node->attr[*i + 1] == '$'
-		|| (node->attr[*i + 1] == '\'' && ((node->attr[*i + 2] == '\0') || ft_isspace((node->attr[*i + 2]) == true)))
-		|| (node->attr[*i + 1] == '"' && ((node->attr[*i + 2] == '\0') || ft_isspace((node->attr[*i + 2]) == true))))
+		|| (node->attr[*i + 1] == '\'' && ((node->attr[*i + 2] == '\0') \
+		|| ft_isspace((node->attr[*i + 2]) == true)))
+		|| (node->attr[*i + 1] == '"' && ((node->attr[*i + 2] == '\0') \
+		|| ft_isspace((node->attr[*i + 2]) == true))))
 		return (0);
 	return (1);
 }
@@ -52,7 +55,8 @@ int	get_envname_len(char *str, int *i)
 }
 
 //Checks, if the environment variable is the same as the second string.
-//<PARAM> The environment variable, the second string & the length to be compared.
+//<PARAM> The environment variable, the second string &
+//<PARAM> the length to be compared.
 //<RETURN> bool
 bool	check_for_env(char *str1, char *str2, int len)
 {

@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/31 09:15:56 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 09:56:15 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ void	execute_cmd(t_executor *exec, t_cmd *cmd)
 //<PARAM> The executor struct & the to be executed cmd.
 //<RETURN> void
 void	single_child_proc(t_executor *exec, t_cmd *cmd)
-{	
+{
 	cmd->is_parent = false;
 	if (cmd->in_fd == -1 || cmd->out_fd == -1)
 		exit_child(exec, -1, -1, 1);
-	if (handle_redirection(cmd, 0 ,1) == 1)
+	if (handle_redirection(cmd, 0, 1) == 1)
 		exit_child(exec, -1, -1, 1);
 	if (cmd->simp_cmd != NULL)
 	{
@@ -71,8 +71,8 @@ void	single_child_proc(t_executor *exec, t_cmd *cmd)
 //Enters a child process on a pipeline execution.
 //Checks for invalid in/out file descriptors
 //and handles possible infile/oufile redirections.
-//<PARAM> The executor struct, the to be executed cmd,
-//<PARAM> the current pipe ends & the pointer to the output end of the previous pipe.
+//<PARAM> The executor struct, the to be executed cmd, the current pipe ends &
+//<PARAM> the pointer to the out end of the previous pipe.
 //<RETURN> void
 void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
 {
@@ -98,7 +98,7 @@ void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
 	{
 		cmd->cmd_path = get_cmd_path(exec, cmd);
 		if (cmd->cmd_path == NULL)
-		exit_child(exec, -1, -1, 1);
+			exit_child(exec, -1, -1, 1);
 	}
 	execute_cmd(exec, cmd);
 }
@@ -112,7 +112,7 @@ void	multi_child_proc(t_executor *exec, t_cmd *cmd, int ends[], int *old_end)
 void	last_child_proc(t_executor *exec, t_cmd *cmd, int old_end)
 {
 	cmd->is_parent = false;
-	if (cmd->in_fd == -1 || cmd->out_fd == -1)	
+	if (cmd->in_fd == -1 || cmd->out_fd == -1)
 		exit_child(exec, old_end, -1, 1);
 	if (handle_redirection(cmd, old_end, 1) == 1)
 		exit_child(exec, old_end, -1, 1);
@@ -128,8 +128,8 @@ void	last_child_proc(t_executor *exec, t_cmd *cmd, int old_end)
 		if (cmd->cmd_path == NULL)
 			exit_child(exec, -1, -1, 1);
 	}
-	execute_cmd(exec, cmd);	
-}	
+	execute_cmd(exec, cmd);
+}
 
 //Frees memory and exits the child process with the given exit code.
 //<PARAM> The executor struct, two possible file descriptors

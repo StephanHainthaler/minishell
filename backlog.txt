@@ -29,6 +29,11 @@ Get rid of that cd [PATH] leak
 cd -> name to long error (exit 1)
 cd -> check for directoies (exit 1)
 cd -> permissions?
+cd -> cd - goes back to old_pwd
+
+echo segfault <"<<<"<<amazing
+
+single / get_cmd_path fucks with it (exit 126)
 
 handle non-pipeable buzltins CHECK the exit code logic!
 handle exit codes if return 2 to amin loop (lexer done / parser / executor)

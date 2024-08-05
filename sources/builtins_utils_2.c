@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 10:04:46 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/31 10:04:46 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 09:52:33 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ char	**increase_shlvl(char **envp)
 	char	*new_shlvl;
 	char	*temp;
 	int		shlvl;
-	
+
 	temp = get_env(envp, "SHLVL=");
 	if (temp == NULL)
 		return (ft_free_strarr(envp), NULL);
@@ -149,4 +149,3 @@ char	**increase_shlvl(char **envp)
 		return (free(new_shlvl), NULL);
 	return (free(new_shlvl), envp);
 }
-

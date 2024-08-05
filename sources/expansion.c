@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:44:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/31 11:51:03 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:02:06 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int	check_for_expansion(t_list **token_list, char **envp, int ec)
 
 //Handles a possible expansion in the current node of the list.
 //When needed, sets the position of the string accordingly.
-//<PARAM> The current node, the environment pointers, the last exit code & the position in the string.
+//<PARAM> The current node, the environment pointers, 
+//<PARAM> the last exit code & the position in the string.
 //<RETURN> The handled string on SUCCESS; NULL on FATAL ERROR
 char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i)
 {
@@ -70,7 +71,8 @@ char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i)
 }
 
 //Performs a valid expansion for the given string.
-//<PARAM> The expandable string, the environment pointers, the start of env & the position in the string.
+//<PARAM> The expandable string, the environment pointers, 
+//<PARAM> the start of env & the position in the string.
 //<RETURN> The expanded string on SUCCESS; NULL on FATAL ERROR
 char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos)
 {
@@ -121,7 +123,8 @@ char	*handle_invalid_expansion(char *str, int len, int pos)
 }
 
 //Performs a valid expansion for exit codes for the given string.
-//<PARAM> The expandable string, the last exit code & the position in the string.
+//<PARAM> The expandable string, the last exit code & 
+//<PARAM> the position in the string.
 //<RETURN> The expanded string on SUCCESS; NULL on FATAL ERROR
 char	*handle_exit_code_expansion(char *to_expand, int exit_code, int *i)
 {

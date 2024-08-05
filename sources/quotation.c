@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:46:31 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/25 14:56:29 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:29:38 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ int	get_dequoted_strlen(char *str)
 }
 
 //During tokenizing, keeps check, if there no open quotes.
-//<PARAM> The lexer struct, the opened quote, the current position in the string.
+//<PARAM> The lexer struct, the opened quote, 
+//<PARAM> the current position in the string.
 //<RETURN> 0 on SUCCESS; 1 on standard ERROR
 int	handle_quote_closure(t_lexer *lex, char quote, int *len)
 {
@@ -109,7 +110,7 @@ void	handle_quotes_in_expansion(t_list *node, char quote)
 	if (quote == '\'')
 	{
 		if (node->in_dquotes == false)
-			node->in_squotes = !(node->in_squotes);		
+			node->in_squotes = !(node->in_squotes);
 	}
 	if (quote == '"')
 	{

@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 13:46:46 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/31 10:04:46 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:23:36 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,11 @@ bool	is_replacable(char *str1, char *str2)
 //<RETURN> The exit code on SUCCESS; -1 on standard ERROR
 int	get_exitcode(char **simp_cmd, int last_exit_code)
 {
-	char 	*exitcode_str;
+	char	*exitcode_str;
 	int		exitcode;
 
 	if (ft_strarrlen(simp_cmd) == 1)
-		return (last_exit_code = global_code, last_exit_code);
+		return (last_exit_code = g_code, last_exit_code);
 	if (ft_strarrlen(simp_cmd) > 2)
 		return (ft_putendl_fd("exit\nexec: exit: too many arguments", 2), -1);
 	exitcode_str = simp_cmd[1];

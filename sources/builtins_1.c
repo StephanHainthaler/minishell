@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/07/31 15:52:36 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:05:22 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	handle_builtins_1(t_executor *exec, char **simp_cmd)
 		return (exec->exit_status = 0, 0);
 	}
 	if (ft_are_str_indentical(simp_cmd[0], "exit") == true)
-		return (exec->exit_status = get_exitcode(simp_cmd, exec->exit_status), 0);
+		return (exec->exit_status = get_exitcode(\
+			simp_cmd, exec->exit_status), 0);
 	return (1);
 }
 
@@ -82,14 +83,14 @@ int	handle_builtins_non_pipable(t_minishell *ms, char **simp_cmd)
 	{
 		ms->envp = ft_export(simp_cmd, ms->envp);
 		if (ms->envp == NULL)
-			free_and_exit(ms);
+			return (-1);
 		return (0);
 	}
 	if (ft_are_str_indentical(simp_cmd[0], "unset") == true)
 	{
 		ms->envp = ft_unset(simp_cmd, ms->envp);
 		if (ms->envp == NULL)
-			free_and_exit(ms);
+			return (-1);
 		return (0);
 	}
 	if (ft_are_str_indentical(simp_cmd[0], "exit") == true)

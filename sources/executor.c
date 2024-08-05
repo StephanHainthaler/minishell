@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/31 14:36:00 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:22:42 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int	execute_input(t_minishell *ms)
 	{
 		if (ms->exec->cmds[0]->in_fd == -1 || ms->exec->cmds[0]->out_fd == -1)
 			return (free_executor(ms->exec), ms->last_exit_code = 1, 2);
-		error_check = handle_builtins_non_pipable(ms, ms->exec->cmds[0]->simp_cmd);
+		error_check = handle_builtins_non_pipable(\
+			ms, ms->exec->cmds[0]->simp_cmd);
 		if (error_check == -1)
 			return (ms->last_exit_code = 1, 1);
 		if (error_check == 2)
@@ -59,7 +60,7 @@ int	single_execution(t_executor *exec)
 		single_child_proc(exec, exec->cmds[0]);
 	waitpid(cpid, &status, 0);
 	//if (WIFEXITED(status))
-	if (global_code != 2)
+	if (g_code != 2)
 		exec->exit_status = WEXITSTATUS(status);
 	else
 		exec->exit_status = 130;
@@ -74,7 +75,7 @@ int	multiple_execution(t_executor *exec)
 {
 	int	old_end;
 	int	i;
-	
+
 	old_end = dup(0);
 	if (old_end == -1)
 		return (1);
