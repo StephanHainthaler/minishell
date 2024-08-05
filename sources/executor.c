@@ -6,96 +6,132 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/17 12:02:37 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:22:42 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
+//Executes the parsed input in mostly child processes.
+//<PARAM> The main struct of the program.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 2 on standard ERROR
 int	execute_input(t_minishell *ms)
 {
-	if (initialize_executor_2(ms, 0) == 1)
+	int	error_check;
+
+	if (initialize_executor_2(ms) == 1)
 		return (1);
 	if (ms->exec->num_of_cmds == 1)
 	{
 		if (ms->exec->cmds[0]->in_fd == -1 || ms->exec->cmds[0]->out_fd == -1)
-			return (1);
-		if (handle_builtins_non_pipable(ms) == 0)
-			return (printf("End of cmd:3\n"), 0);
+			return (free_executor(ms->exec), ms->last_exit_code = 1, 2);
+		error_check = handle_builtins_non_pipable(\
+			ms, ms->exec->cmds[0]->simp_cmd);
+		if (error_check == -1)
+			return (ms->last_exit_code = 1, 1);
+		if (error_check == 2)
+			return (free_executor(ms->exec), ms->last_exit_code = 1, 2);
+		if (error_check == 0)
+			return (ms->last_exit_code = 0, 0);
 		if (single_execution(ms->exec) == 1)
-			return (1);
+			return (ms->last_exit_code = ms->exec->exit_status, 1);
+		return (ms->last_exit_code = ms->exec->exit_status, 0);
 	}
-	else
-	{
-		printf("Test multi_pipes\n");
-		if (multiple_execution(ms->exec) == 1)
-			return (1);
-	}
-	ms->last_exit_code = ms->exec->exit_status;
-	return (0);
+	if (multiple_execution(ms->exec) == 1)
+		return (ms->last_exit_code = ms->exec->exit_status, 1);
+	return (ms->last_exit_code = ms->exec->exit_status, 0);
 }
 
-int	single_execution(t_executor *exec) //t_minishell *ms
+//Forks into a single child process for the execution.
+//The parent process waits for its child and its exit status.
+//<PARAM> The executor struct.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
+int	single_execution(t_executor *exec)
 {
-	int	status;
+	int		status;
+	pid_t	cpid;
 
-	exec->cpids[0] = fork();
-	if (exec->cpids[0] == -1)
+	// signal(SIGINT, SIG_DFL);
+	// signal(SIGQUIT, SIG_DFL);
+	cpid = fork();
+	if (cpid == -1)
 		return (1);
-	if (exec->cpids[0] == 0)
+	if (cpid == 0)
 		single_child_proc(exec, exec->cmds[0]);
-	waitpid(exec->cpids[0], &status, 0);
+	waitpid(cpid, &status, 0);
 	//if (WIFEXITED(status))
-	exec->exit_status = WEXITSTATUS(status);
-	//free_exec(exec);
-	//change last cmd status in ms
-	//exit(WEXITSTATUS(status));
+	if (g_code != 2)
+		exec->exit_status = WEXITSTATUS(status);
+	else
+		exec->exit_status = 130;
 	return (0);
 }
 
+//Forks into mulitple child processes for the execution.
+//The parent process wait for its child and its exit status.
+//<PARAM> The executor struct.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
 int	multiple_execution(t_executor *exec)
 {
+	int	old_end;
 	int	i;
-	int	status;
 
+	old_end = dup(0);
+	if (old_end == -1)
+		return (1);
 	i = 0;
-	while (i < exec->num_of_pipes)
+	while (i < exec->num_of_cmds - 1)
 	{
-		printf("Pipe number %d\n", i + 1);
-		if (pipe(exec->pipes[i]) == -1)
+		if (multi_pipe(exec, &old_end, i) == 1)
 			return (1);
-		exec->cpids[i] = fork();
-		if (exec->cpids[i] == -1)
-			return (close(exec->pipes[i][0]), close(exec->pipes[i][1]), 1);
-		if (exec->cpids[i] == 0)
-			child_proc(exec, exec->cmds[i], exec->pipes[i]);
-		exec->cpids[i + 1] = fork();
-		if (exec->cpids[i + 1] == -1)
-			return (close(exec->pipes[i][0]), close(exec->pipes[i][1]), 1);
-		if (exec->cpids[i + 1] == 0)
-			child_proc(exec, exec->cmds[i + 1], exec->pipes[i]);
-		close(exec->pipes[i][0]);
-		close(exec->pipes[i][1]);
-		printf("Waiting...\n");
-		waitpid(exec->cpids[i], NULL, 0);
-		waitpid(exec->cpids[i + 1], &status, 0);
-		printf("End Waiting\n");
 		i++;
 	}
+	if (last_pipe(exec, old_end, i) == 1)
+		return (1);
 	return (0);
 }
 
-void	execute_cmd(t_executor *exec, t_cmd *cmd)
+//Creates most of the pipeline for the execution.
+//It pipes all the commands except the last one.
+//<PARAM> The executor struct, the end of the previous pipe & the cmd number.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
+int	multi_pipe(t_executor *exec, int *old_end, int i)
 {
-	if (cmd->cmd_path == NULL)
-		exit_child(exec, -1, -1, 127);
-	if (handle_builtin(cmd->simp_cmd, exec) == 0)
-		exit_child(exec, -1, -1, 0);
-	if (execve(cmd->cmd_path, cmd->simp_cmd, exec->envp) == -1)
-	{
-		ft_putstr_fd(cmd->cmd_path, 2);
-		ft_putendl_fd(": command not found", 2);
-		exit_child(exec, -1, -1, 127);
-	}
+	int		ends[2];
+	pid_t	cpid;
+
+	if (pipe(ends) == -1)
+		return (1);
+	// signal(SIGINT, SIG_DFL);
+	// signal(SIGQUIT, SIG_DFL);
+	cpid = fork();
+	if (cpid == -1)
+		return (1);
+	if (cpid == 0)
+		multi_child_proc(exec, exec->cmds[i], ends, old_end);
+	close(ends[1]);
+	close(*old_end);
+	*old_end = ends[0];
+	// waitpid(cpid, &status, 0);
+	// exec->exit_status = WEXITSTATUS(status);
+	return (0);
 }
 
+//Creates the end of the pipeline for the execution.
+//<PARAM> The executor struct, the end of the previous pipe & the cmd number.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
+int	last_pipe(t_executor *exec, int old_end, int i)
+{
+	int		status;
+	pid_t	cpid;
+
+	cpid = fork();
+	if (cpid == -1)
+		return (1);
+	if (cpid == 0)
+		last_child_proc(exec, exec->cmds[i], old_end);
+	close(old_end);
+	waitpid(cpid, &status, 0);
+	exec->exit_status = WEXITSTATUS(status);
+	return (0);
+}

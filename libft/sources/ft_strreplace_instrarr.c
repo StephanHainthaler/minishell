@@ -1,40 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_strreplace_instrarr.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/05 11:44:14 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/31 11:24:59 by shaintha         ###   ########.fr       */
+/*   Created: 2024/07/22 09:18:54 by shaintha          #+#    #+#             */
+/*   Updated: 2024/07/22 15:04:36 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/libft.h"
 
-size_t	ft_strlen(const char *str)
+char	**ft_strreplace_instrarr(char **strarr, char *new_str, int pos)
 {
-	int	i;
+	int		i;
 
+	if (pos < 0 || new_str == NULL)
+		return (strarr);
 	i = 0;
-	while (str[i] != '\0')
+	while (i < (int)ft_strarrlen(strarr))
+	{
+		if (i == pos)
+		{
+			ft_free(strarr[pos]);
+			strarr[pos] = ft_strdup(new_str);
+			if (strarr[pos] == NULL)
+				return (ft_free_strarr(strarr), NULL);
+			return (strarr);
+		}
 		i++;
-	return (i);
+	}
+	return (strarr);
 }
-/*
-#include <stdio.h>
-#include <string.h>
- 
-int main(int argc, char *argv[])
-{   
-    if (argc == 2)
-    {
-        char    *str;
-
-        str = argv[1];
-		printf("strlen: %lu\n", strlen(str));
-        printf("ft_strlen: %zu\n", ft_strlen(str));
-    }
-    return (0);
-}
-*/

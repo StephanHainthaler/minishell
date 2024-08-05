@@ -1,0 +1,66 @@
+echo -n -k -n -fixed
+echo -nnnnnnnn -fixed
+cd update env
+cat SIGINT prints extra minishell -fixed
+here_doc SIGINT makes empty line -fixed
+If job control is in effect (see Job Control), Bash ignores SIGTTIN, SIGTTOU, and SIGTSTP. ????
+SIGINT with valgrind in here_doc:
+	==717391== Warning: noted but unhandled ioctl 0x5412 with no size/direction hints.
+	==717391==    This could cause spurious value errors to appear.
+	==717391==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+SIGINT return code 130, wie implementieren? -fixed
+expanding calculations?
+cat << here | = segfault -fixed
+./minishell ./minishell ctrl+\ -fixed
+input: exit "number" should print exit "number"
+exit | exit | exit shouldn't do anything - fixed
+echo $"" should print newline -> $"" should expand to ""
+print individual delim error when pressing ctrl+d
+possible issue if child free executor and UNLINKS the temp file serval times? - done
+SHLVL + 1 ?
+echo '' -n - done
+handle \ in lexer part - ignore
+cannot end on \ - ignore
+
+env -i ./minishell + CRTL+D - to test
+REMOVE SET_ENV - done
+check if when child has fatal error that minishell ends ?
+Get rid of that cd [PATH] leak
+cd -> name to long error (exit 1)
+cd -> check for directoies (exit 1)
+cd -> permissions?
+cd -> cd - goes back to old_pwd
+
+echo segfault <"<<<"<<amazing
+
+single / get_cmd_path fucks with it (exit 126)
+
+handle non-pipeable buzltins CHECK the exit code logic!
+handle exit codes if return 2 to amin loop (lexer done / parser / executor)
+cat << here is broken!
+readline here_doc NULL check and ctrl+D same exit?
+"" --> gives weird output
+export =============123 may not strat with "="   !! () exit 
+export --> export a= "Hello World" ambigous check
+ambigous check needs to keep the quotes for possible spaces -DONE
+
+check multi-pipe for waitpid behavoir?
+ft_export: export a should inset a= not a
+
+
+Tested with tester:
+0_COMPARE PARSING - DONE
+	Only errors include \ that we dont need to handle
+
+10_PARSING HELL
+
+	Errors that include non-expansion for delimiter ($USER)
+
+	Splitting the expanded variables
+
+	When expansion results in a NULL string, read new input! exit_code 0
+
+BUILTINS
+
+	echo cd ~
+

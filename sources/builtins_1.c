@@ -3,141 +3,117 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 09:01:17 by juitz             #+#    #+#             */
-/*   Updated: 2024/06/17 14:21:34 by juitz            ###   ########.fr       */
+/*   Updated: 2024/08/05 10:35:41 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-#include <string.h>
 
-int	handle_builtin(char **simp_cmd, t_executor *exec)
+//The first builtin handler for child processes.
+//Sets this childs exit code accordingly.
+//<PARAM> The executor struct & the current simple command.
+//<RETURN> 0 on SUCCESS; 1 on NOT FOUND
+int	handle_builtins_1(t_executor *exec, char **simp_cmd)
 {
-	if (ft_are_str_indentical(simp_cmd[0], "echo") == true)
-		return (scuffed_echo(simp_cmd), 0);
 	if (ft_are_str_indentical(simp_cmd[0], "cd") == true)
-		return (scuffed_cd(simp_cmd), 0);
-	if (ft_are_str_indentical(simp_cmd[0], "pwd") == true)
-		return (scuffed_pwd(simp_cmd), 0);
-	if (ft_are_str_indentical(simp_cmd[0], "export") == true)
-		return (scuffed_export(simp_cmd, exec->envp), 0);
-	if (ft_are_str_indentical(simp_cmd[0], "unset") == true)
-		return (scuffed_unset(simp_cmd, exec->envp), 0);
-	if (ft_are_str_indentical(simp_cmd[0], "env") == true)
-		return (ft_putstrarr_fd(exec->envp, 1), 0);
-	if (ft_are_str_indentical(simp_cmd[0], "exit") == true)
-		return (0);
-	else
-		return (1);
-}
-
-int	handle_builtins_non_pipable(t_minishell *ms)
-{
-	char **simp_cmd;
-
-	simp_cmd = ms->exec->cmds[0]->simp_cmd;
-	if (ft_are_str_indentical(simp_cmd[0], "cd") == true)
-		return (scuffed_cd(simp_cmd), 0);
+		return (exec->exit_status = ft_cd(simp_cmd, exec->envp), 0);
 	if (ft_are_str_indentical(simp_cmd[0], "export") == true)
 	{
-		ms->envp = scuffed_export(simp_cmd, ms->envp);
-		if (ms->envp == NULL)
-			free_and_exit(ms);
-		return (0);
+		exec->envp = ft_export(simp_cmd, exec->envp);
+		if (exec->envp == NULL)
+			return (exec->exit_status = 1, 0);
+		return (exec->exit_status = 0, 0);
 	}
 	if (ft_are_str_indentical(simp_cmd[0], "unset") == true)
 	{
-		if (scuffed_unset(simp_cmd, ms->envp) == 1)
-			free_and_exit(ms);
-		return (0);
+		exec->envp = ft_unset(simp_cmd, exec->envp);
+		if (exec->envp == NULL)
+			return (exec->exit_status = 1, 0);
+		return (exec->exit_status = 0, 0);
 	}
 	if (ft_are_str_indentical(simp_cmd[0], "exit") == true)
-		free_and_exit(ms);
+		return (exec->exit_status = get_exitcode(\
+			simp_cmd, exec->exit_status), 0);
 	return (1);
 }
 
-void	scuffed_echo(char **simp_cmd)
+//The second builtin handler for child processes.
+//Sets this childs exit code accordingly.
+//<PARAM> The executor struct & the current simple command.
+//<RETURN> 0 on SUCCESS; 1 on NOT FOUND
+int	handle_builtins_2(t_executor *exec, char **simp_cmd)
 {
-	int	i;
-
-	i = 1;
-	while (simp_cmd[i])
+	if (ft_are_str_indentical(simp_cmd[0], "echo") == true)
+		return (ft_echo(simp_cmd), exec->exit_status = 0, 0);
+	if (ft_are_str_indentical(simp_cmd[0], "pwd") == true)
 	{
-		if (ft_strncmp(simp_cmd[1], "-n", ft_strlen(simp_cmd[1])) == 0)
-			i++;
-		ft_putstr_fd(simp_cmd[i], 1);
-		if (simp_cmd[i + 1])
-			ft_putstr_fd(" ", 1);
-		i++;
+		if (ft_pwd() == 1)
+			return (exec->exit_status = 1, 0);
+		return (exec->exit_status = 0, 0);
 	}
-	if ((ft_strarrlen(simp_cmd) == 1) || ft_strncmp(simp_cmd[1], "-n", ft_strlen(simp_cmd[0])) != 0)
-		ft_putstr_fd("\n", 1);
-}
-
-void	scuffed_cd(char **simp_cmd)
-{
-	if (ft_strarrlen(simp_cmd) == 1)
+	if (ft_are_str_indentical(simp_cmd[0], "env") == true)
 	{
-		if (chdir(getenv("HOME")) == -1)
-			ft_putendl_fd("cd: HOME not set\n", 2);
-	}
-	else if (ft_strarrlen(simp_cmd) == 2)
-	{
-		if (chdir(simp_cmd[1]) == -1)
-			ft_putendl_fd("cd: no such file or directory\n", 2);
-	}
-	else
-		ft_putendl_fd("cd: too many arguments", 2);
-}
-
-void	scuffed_pwd(char **simp_cmd)
-{
-	if (ft_strarrlen(simp_cmd) == 1)
-		ft_putendl_fd(getcwd(NULL, 0), 1);
-	else
-		ft_putendl_fd("pwd: too many arguments", 2);
-}
-
-char	**scuffed_export(char **simp_cmd, char **envp)
-{
-	int	i;
-
-	printf("FUCK\n");
-	if (ft_strarrlen(simp_cmd) == 1)
-		return (sort_strarray(envp), envp);
-	i = 0;
-	while (envp[i] != NULL)
-	{
-		if (ft_strncmp(simp_cmd[1], envp[i], ft_strlen(simp_cmd[1])) == 0)
+		if (ft_strarrlen(simp_cmd) > 1)
 		{
-			//replace on envp[i]
-			return (envp);
+			ft_putstr_fd("env: '", 2);
+			ft_putstr_fd(simp_cmd[1], 2);
+			ft_putendl_fd("': No such file or directory", 2);
+			return (exec->exit_status = 127, 0);
 		}
-		i++;
+		ft_putstrarr_fd(exec->envp, 1);
+		return (exec->exit_status = 0, 0);
 	}
-	envp = ft_stradd_tostrarr(envp, simp_cmd[1]);
-	if (envp == NULL)
-		return (NULL);
-	return (envp);
+	return (1);
 }
 
-int	scuffed_unset(char **simp_cmd, char **envp)
+//The builtin handler for the main process.
+//Only handles the builtins that cannot be used in a child process.
+//<PARAM> The main struct of the program & the current simple command.
+//<RETURN> 0 on SUCCESS; 1 on NOT FOUND; 2 on standard ERROR; -1 on FATAL ERROR
+int	handle_builtins_non_pipable(t_minishell *ms, char **simp_cmd)
 {
-	int i;
-
-	printf("Suffed unset\n");
-	i = 0;
-	while (envp[i] != NULL)
+	if (simp_cmd == NULL)
+		return (1);
+	if (ft_are_str_indentical(simp_cmd[0], "cd") == true)
+		return (ft_cd(simp_cmd, ms->envp));
+	if (ft_are_str_indentical(simp_cmd[0], "export") == true)
 	{
-		if (strncmp(simp_cmd[1], envp[i], ft_strlen(simp_cmd[1])) == 0)
-		{
-			printf("Found to delete %s\n", envp[i]);
-			free(envp[i]);
-			envp[i] = NULL;
-		}
-		i++;
+		ms->envp = ft_export(simp_cmd, ms->envp);
+		if (ms->envp == NULL)
+			return (-1);
+		return (0);
 	}
+	if (ft_are_str_indentical(simp_cmd[0], "unset") == true)
+	{
+		ms->envp = ft_unset(simp_cmd, ms->envp);
+		if (ms->envp == NULL)
+			return (-1);
+		return (0);
+	}
+	if (ft_are_str_indentical(simp_cmd[0], "exit") == true)
+		if (ft_exit(ms, simp_cmd) == -1)
+			return (0);
+	return (1);
+}
+
+//Exits the main process after freeing allocated memory.
+//Only ends the program on non-ERROR.
+//<PARAM> The main struct of the program & the current simple command.
+//<RETURN> 0 on SUCCESS; 1 on standard ERROR
+int	ft_exit(t_minishell *ms, char **simp_cmd)
+{
+	int	exitcode;
+
+	exitcode = get_exitcode(simp_cmd, ms->last_exit_code);
+	if (exitcode == -1)
+		return (1);
+	if (ms->envp != NULL)
+		ft_free_strarr(ms->envp);
+	free_executor(ms->exec);
+	rl_clear_history();
+	exit(exitcode);
 	return (0);
 }

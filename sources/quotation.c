@@ -6,83 +6,47 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:46:31 by shaintha          #+#    #+#             */
-/*   Updated: 2024/05/28 11:46:54 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:29:38 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int	handle_quotes(t_lexer *lex, char quote, int *len)
+//Takes a string and duplicates it in dequoted from.
+//The dequoted string needs to be freed.
+//<PARAM> The to be dequoted string.
+//<RETURN> The string on SUCCESS; NULL on FATAL ERROR
+char	*dequote(char *str)
 {
-	bool	is_closed;
-
-	is_closed = false;
-	lex->i++;
-	*len += 1;
-	while (lex->input[lex->i] != '\0')
-	{
-		if (lex->input[lex->i] == quote)
-		{
-			is_closed = true;
-			break ;
-		}
-		lex->i++;
-		*len += 1;
-	}
-	if (is_closed == false)
-		return (1);
-	return (0);
-}
-
-int	check_for_dequotation(t_list **token_list)
-{
-	t_list	*current_node;
-
-	current_node = *token_list;
-	while (current_node != NULL)
-	{
-		if (current_node->type == 1)
-		{
-			if (ft_strchr(current_node->attr, '"') != NULL
-				|| ft_strchr(current_node->attr, '\'') != NULL)
-			{
-				current_node->attr = handle_dequotation(\
-					current_node->attr, 0, 0);
-				if (current_node->attr == NULL)
-					return (1);
-				current_node->was_in_quotes = true;
-			}
-		}
-		current_node = current_node->next;
-	}
-	return (0);
-}
-
-char	*handle_dequotation(char *to_trim, int i, int j)
-{
-	char	*trim_str;
+	char	*new_str;
 	char	quote;
+	int		i;
+	int		j;
 
-	trim_str = (char *)malloc(
-			(get_dequoted_strlen(to_trim) + 1) * (sizeof(char)));
-	if (trim_str == NULL)
+	new_str = (char *)malloc((get_dequoted_strlen(str) + 1) * (sizeof(char)));
+	if (new_str == NULL)
 		return (NULL);
-	while (to_trim[i] != '\0')
+	i = 0;
+	j = 0;
+	while (str[i] != '\0')
 	{
-		if (to_trim[i] == '\'' || to_trim[i] == '"')
+		if (str[i] == '\'' || str[i] == '"')
 		{
-			quote = to_trim[i++];
-			while (to_trim[i] != quote)
-				trim_str[j++] = to_trim[i++];
+			quote = str[i++];
+			while (str[i] != quote)
+				new_str[j++] = str[i++];
 			i++;
 		}
 		else
-			trim_str[j++] = to_trim[i++];
+			new_str[j++] = str[i++];
 	}
-	trim_str[j] = '\0';
-	return (free(to_trim), trim_str);
+	new_str[j] = '\0';
+	return (new_str);
 }
 
+//Takes a string and counts its length in dequoted from.
+//<PARAM> The to be dequoted string.
+//<RETURN> The lenght of the dequoted string on SUCCESS
 int	get_dequoted_strlen(char *str)
 {
 	char	quote;
@@ -112,6 +76,35 @@ int	get_dequoted_strlen(char *str)
 	return (ft_strlen(str) - num_of_quotes);
 }
 
+//During tokenizing, keeps check, if there no open quotes.
+//<PARAM> The lexer struct, the opened quote, 
+//<PARAM> the current position in the string.
+//<RETURN> 0 on SUCCESS; 1 on standard ERROR
+int	handle_quote_closure(t_lexer *lex, char quote, int *len)
+{
+	bool	is_closed;
+
+	is_closed = false;
+	lex->i++;
+	*len += 1;
+	while (lex->input[lex->i] != '\0')
+	{
+		if (lex->input[lex->i] == quote)
+		{
+			is_closed = true;
+			break ;
+		}
+		lex->i++;
+		*len += 1;
+	}
+	if (is_closed == false)
+		return (1);
+	return (0);
+}
+
+//During expansion process, keeps check of current state of quotes.
+//<PARAM> The current node, the quote to be verified.
+//<RETURN> void
 void	handle_quotes_in_expansion(t_list *node, char quote)
 {
 	if (quote == '\'')

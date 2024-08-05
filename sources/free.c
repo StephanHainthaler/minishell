@@ -6,38 +6,45 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/13 13:18:10 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:23:30 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
+//Frees the allocated memory for the lexer struct.
+//<PARAM> The lexer to be freed.
+//<RETURN> void
 void	free_lexer(t_lexer *lex)
 {
 	if (lex == NULL)
 		return ;
 	if (lex->token_list != NULL)
 		ft_lstclear(&lex->token_list);
+	if (lex->input != NULL)
+		free(lex->input);
 	free(lex);
 	lex = NULL;
 }
 
+//Frees the allocated memory for the executor struct.
+//<PARAM> The executor to be freed.
+//<RETURN> void
 void	free_executor(t_executor *exec)
 {
 	if (exec == NULL)
 		return ;
 	if (exec->paths != NULL)
 		ft_free_strarr(exec->paths);
-	if (exec->cpids != NULL)
-		free(exec->cpids);
-	if (exec->pipes != NULL)
-		free_pipes(exec->pipes, exec->num_of_pipes);
 	free_cmds(exec->cmds, exec->num_of_cmds);
 	free(exec);
 	exec = NULL;
 }
 
-void	free_cmds(t_cmd **cmds, int	num_of_cmds)
+//Frees the allocated memory for all cmd structs.
+//<PARAM> The cmds to be freed & the total amount of cmds.
+//<RETURN> void
+void	free_cmds(t_cmd **cmds, int num_of_cmds)
 {
 	int	i;
 
@@ -46,52 +53,50 @@ void	free_cmds(t_cmd **cmds, int	num_of_cmds)
 		return ;
 	while (i < num_of_cmds)
 	{
-		if (cmds[i]->cmd_path != NULL)
-			free(cmds[i]->cmd_path);
-		if (cmds[i]->infile != NULL)
-			free(cmds[i]->infile);
-		if (cmds[i]->outfile != NULL)
-			free(cmds[i]->outfile);
-		if (cmds[i]->in_fd != 0 && cmds[i]->in_fd != -1)
-			close(cmds[i]->in_fd);
-		if (cmds[i]->out_fd != 1 && cmds[i]->out_fd != -1)
-			close(cmds[i]->out_fd);
-		if (cmds[i]->simp_cmd != NULL)
-			ft_free_strarr(cmds[i]->simp_cmd);
-		free(cmds[i]);
-		cmds[i] = NULL;
+		free_cmd(cmds[i]);
 		i++;
 	}
 	free(cmds);
 	cmds = NULL;
 }
 
-void	free_pipes(int **pipes, int num_of_pipes)
+//Frees the allocated memory for a single cmd struct.
+//<PARAM> The cmd to be freed.
+//<RETURN> void
+void	free_cmd(t_cmd *cmd)
 {
-	int	i;
-
-	if (pipes == NULL)
-		return ;
-	i = 0;
-	while (i < num_of_pipes)
-	{
-		if (pipes[i][0] != -1)
-			close(pipes[i][0]);
-		if (pipes[i][1] != -1)
-			close(pipes[i][1]);
-		ft_free(pipes[i]);
-		pipes[i] = NULL;
-		i++;	
-	}
-	free(pipes);
-	pipes = NULL;
+	if (cmd->cmd_path != NULL)
+		free(cmd->cmd_path);
+	if (cmd->infile != NULL)
+		free(cmd->infile);
+	if (cmd->outfile != NULL)
+		free(cmd->outfile);
+	if (cmd->in_fd != 0 && cmd->in_fd != -1)
+		close(cmd->in_fd);
+	if (cmd->out_fd != 1 && cmd->out_fd != -1)
+		close(cmd->out_fd);
+	if (cmd->simp_cmd != NULL)
+		ft_free_strarr(cmd->simp_cmd);
+	if (cmd->has_here_doc == true && cmd->is_parent == true)
+		unlink(cmd->here_doc);
+	if (cmd->here_doc != NULL)
+		free(cmd->here_doc);
+	free(cmd);
+	cmd = NULL;
 }
 
-void	free_and_exit(t_minishell *ms) //int exit_code
-{
-	if (ms->envp != NULL)
-		ft_free_strarr(ms->envp);
-	free_executor(ms->exec);
-	rl_clear_history();
-	exit(0);
-}
+//Frees the allocated memory and exits the program.
+//<PARAM> The main struct of the program.
+//<RETURN> void
+// void	free_and_exit(t_minishell *ms)
+// {
+// 	// int	exitcode;
+
+// 	// exitcode = get_exitcode(simp_cmd);
+// 	if (ms->envp != NULL)
+// 		ft_free_strarr(ms->envp);
+// 	free_executor(ms->exec);
+// 	rl_clear_history();
+// 	//exit(g_code);
+// 	exit(1);
+// }

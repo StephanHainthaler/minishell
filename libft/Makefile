@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
+#    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/12 09:25:55 by shaintha          #+#    #+#              #
-#    Updated: 2024/06/18 15:11:26 by juitz            ###   ########.fr        #
+#    Updated: 2024/08/05 10:35:36 by shaintha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,8 @@ SRCS :=  $(SRC_DIR)/ft_atoi.c \
 		$(SRC_DIR)/ft_split.c \
 		$(SRC_DIR)/ft_strarrdup.c \
 		$(SRC_DIR)/ft_stradd_tostrarr.c \
+		$(SRC_DIR)/ft_strdel_fromstrarr.c \
+		$(SRC_DIR)/ft_strreplace_instrarr.c \
 		$(SRC_DIR)/ft_strarrlen.c \
 		$(SRC_DIR)/ft_strchr.c \
 		$(SRC_DIR)/ft_strdup.c \
@@ -70,7 +72,7 @@ SRCS :=  $(SRC_DIR)/ft_atoi.c \
 		$(SRC_DIR)/ft_lstclear.c \
 		$(SRC_DIR)/ft_free.c \
 		$(SRC_DIR)/ft_free_strarr.c \
-		$(SRC_DIR)/ft_error.c \
+		$(SRC_DIR)/get_next_line.c
 
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 

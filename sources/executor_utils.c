@@ -6,12 +6,16 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:40:11 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/17 12:35:50 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/07/29 15:58:46 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
+//Takes PATH from environment and allocates them in an array of strings.
+//If PATH has been unset, returning NULL will be considered a standard ERROR.
+//<PARAM> The executor struct & a flag for checking a FATAL ERROR.
+//<RETURN> The paths on SUCCESS; NULL on FATAL ERROR
 char	**get_paths(t_executor *exec, int *error_flag)
 {
 	char	**paths;
@@ -38,11 +42,17 @@ char	**get_paths(t_executor *exec, int *error_flag)
 	return (*error_flag = 0, NULL);
 }
 
+//Searches the paths for the command name to allocate their path in a string.
+//If there was no match, the name of the command will be considered the path.
+//<PARAM> The executor struct & the current cmd struct.
+//<RETURN> The cmd_path on SUCCESS; NULL on FATAL ERROR
 char	*get_cmd_path(t_executor *exec, t_cmd *cmd)
 {
 	char	*temp;
 	int		i;
 
+	if (exec->is_path_set == false)
+		return (ft_strdup(cmd->simp_cmd[0]));
 	i = 0;
 	while (exec->paths[i] != NULL)
 	{
@@ -61,6 +71,9 @@ char	*get_cmd_path(t_executor *exec, t_cmd *cmd)
 	return (ft_strdup(cmd->simp_cmd[0]));
 }
 
+//Opens and returns the file descriptor of the file given.
+//<PARAM> The in/outfile, the type of file & the mode of outfile.
+//<RETURN> The fd on SUCCESS; -1 on standard ERROR
 int	get_fd(char *file, bool is_in_fd, bool is_append)
 {
 	int	fd;
@@ -78,22 +91,28 @@ int	get_fd(char *file, bool is_in_fd, bool is_append)
 	{
 		ft_putstr_fd("exec: ", 2);
 		if (ft_strncmp(file, "", 1) == 0)
-			ft_putstr_fd(": No such file or directory\n", 2);
+			ft_putendl_fd(": No such file or directory", 2);
 		else
-			perror(file);
+		{
+			ft_putstr_fd(file, 2);
+			ft_putendl_fd(": No such file or directory", 2);
+		}
 		return (-1);
 	}
 	return (fd);
 }
 
-bool	is_path_set(char *envp[])
+//Checks if a variable is set in environment. 
+//<PARAM> The environment pointers & the name of the variable.
+//<RETURN> bool
+bool	is_env_set(char *envp[], char *env_name)
 {
 	int	i;
 
 	i = 0;
 	while (envp[i] != NULL)
 	{
-		if (ft_strnstr(envp[i], "PATH=", 5) == NULL)
+		if (ft_strnstr(envp[i], env_name, ft_strlen(env_name)) == NULL)
 			i++;
 		else
 			return (true);
@@ -101,11 +120,14 @@ bool	is_path_set(char *envp[])
 	return (false);
 }
 
-int	handle_redirection(t_cmd *cmd)
+//Redirects the file descriptors and closes the old ones.
+//<PARAM> The current cmd struct, the infile fd & the outfile fd.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
+int	handle_redirection(t_cmd *cmd, int in, int out)
 {
 	if (cmd->infile != NULL)
 	{
-		if (dup2(cmd->in_fd, 0) == -1)
+		if (dup2(cmd->in_fd, in) == -1)
 		{
 			ft_putendl_fd("infile dup2 failed", 2);
 			return (1);
@@ -114,7 +136,7 @@ int	handle_redirection(t_cmd *cmd)
 	}
 	if (cmd->outfile != NULL)
 	{
-		if (dup2(cmd->out_fd, 1) == -1)
+		if (dup2(cmd->out_fd, out) == -1)
 		{
 			ft_putendl_fd("outfile dup2 failed", 2);
 			return (1);

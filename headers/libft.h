@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 11:52:49 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/18 15:10:59 by juitz            ###   ########.fr       */
+/*   Updated: 2024/08/05 10:35:23 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 17
+# endif
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -32,6 +36,7 @@ typedef struct s_list
 {
 	t_type			type;
 	char			*attr;
+	char			*tmp;
 	bool			in_squotes;
 	bool			in_dquotes;
 	bool			was_in_quotes;
@@ -69,6 +74,8 @@ void	*ft_calloc(size_t nmemb, size_t n);
 char	*ft_strdup(const char *src);
 char	**ft_strarrdup(char **src);
 char	**ft_stradd_tostrarr(char **strarr, char *str);
+char	**ft_strdel_fromstrarr(char **strarr, int pos);
+char	**ft_strreplace_instrarr(char **strarr, char *new_str, int pos);
 char	*ft_substr(char const *str, unsigned int start, size_t len);
 char	*ft_strjoin(char const *str1, char const *str2);
 char	*ft_strjoin_gnl(char *str1, char *str2);
@@ -92,6 +99,11 @@ void	ft_lstdelone(t_list **lst, t_list *node);
 void	ft_lstclear(t_list **lst);
 void	ft_free(void *ptr);
 void	ft_free_strarr(char **strarr);
-void	ft_error(char *str);
+
+//get_next_line - functions
+char	*get_next_line(int fd);
+char	*read_first_line(int fd, char *line);
+char	*get_first_line(char *line);
+int		trim_next_line(char **line);
 
 #endif
