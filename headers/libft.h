@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 11:52:49 by shaintha          #+#    #+#             */
-/*   Updated: 2024/08/05 10:35:23 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:38:35 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,5 @@ void	ft_lstdelone(t_list **lst, t_list *node);
 void	ft_lstclear(t_list **lst);
 void	ft_free(void *ptr);
 void	ft_free_strarr(char **strarr);
-
-//get_next_line - functions
-char	*get_next_line(int fd);
-char	*read_first_line(int fd, char *line);
-char	*get_first_line(char *line);
-int		trim_next_line(char **line);
 
 #endif

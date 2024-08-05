@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/08/05 10:23:25 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:37:27 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,6 @@ int	read_input(t_lexer *lex)
 		signals_interactive();
 		if (isatty(fileno(stdin)))
 			lex->input = readline("./minishell$ ");
-		else
-		{
-			//char *line;
-			lex->input = get_next_line(fileno(stdin));
-			//lex->input = ft_strtrim(line, "\n");
-			//free(line);
-		}
 		if (lex->input == NULL)
 			return (3);
 		//g_code = 2;
