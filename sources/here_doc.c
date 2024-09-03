@@ -3,51 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:24:25 by juitz             #+#    #+#             */
-/*   Updated: 2024/08/05 10:22:51 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/13 11:31:25 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-//Handler for writing to the here_doc.
+//Handler for writing to the here document.
 //Possibly needs to dequote the delimiter for expansion purposes.
 //<PARAM> The here_doc fd, the delimiter, 
 //<PARAM> the environment pointers & the last exit code.
 //<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 2 on standard ERROR
-int	handle_here_doc(int here_doc_fd, char *delim, char **envp, int exit_code)
+int	handle_here_doc(int here_doc_fd, char *delim, t_executor *exec)
 {
-	char	*temp_str;
 	char	*deq_delim;
+	int		error_check;
 
 	deq_delim = dequote(delim);
 	if (deq_delim == NULL)
 		return (1);
+	error_check = read_here_doc(here_doc_fd, delim, deq_delim, exec);
+	if (error_check == 1 || error_check == 2 || error_check == 3)
+		return (free(deq_delim), error_check);
+	return (free(deq_delim), 0);
+}
+
+//Reads the input for here_doc and writes it to the given file descriptor.
+//<PARAM> The here_doc file descriptor, the delimiter,
+//<PARAM> the dequoted delimiter & the executor struct.
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 2 on CANCEL
+int	read_here_doc(int here_doc_fd, char *delim,
+	char *deq_delim, t_executor *exec)
+{
+	char	*temp_str;
+
+	errno = 0;
 	while (true)
 	{
-		g_code = 1;
-		signal(SIGINT, &sigint_heredoc);
-		signal(SIGQUIT, SIG_IGN);
+		signals(3);
 		temp_str = readline("> ");
-		if (temp_str == NULL)
-			return (free(deq_delim), \
-				ft_putendl_fd("warning: here-doc delimited by EOF", 2), 2);
-		if (g_code == 130)
-			return (free(deq_delim), 2);
-		// if (ft_strnstr(temp_str, delim, ft_strlen(delim)) != NULL && ft_strlen(temp_str) == ft_strlen(delim))
-		// 	return (free(deq_delim), ft_putendl_fd("warning: here-doc delimited by EOF", 2), 2);
-		if (ft_strnstr(temp_str, deq_delim, ft_strlen(deq_delim)) != NULL \
+		if (temp_str == NULL && errno != 0)
+			return (1);
+		if (temp_str == NULL && errno == 0)
+			return (ft_putendl_fd("warning: here-doc delimited by EOF", 2),
+				g_code = 0, 3);
+		if (g_code == 2)
+			return (free(temp_str), 2);
+		if (ft_strnstr(temp_str, deq_delim, ft_strlen(deq_delim)) != NULL
 			&& ft_strlen(temp_str) == ft_strlen(deq_delim))
 			break ;
-		temp_str = check_here_doc_expansion(temp_str, delim, envp, exit_code);
+		temp_str = check_here_doc_expansion(temp_str, delim,
+				exec->envp, exec->exit_status);
 		if (temp_str == NULL)
-			return (free(deq_delim), 1);
+			return (1);
 		ft_putendl_fd(temp_str, here_doc_fd);
 		free(temp_str);
 	}
-	return (free(deq_delim), 0);
+	return (free(temp_str), 0);
 }
 
 //Allocates a random string for a non-existing file in the current directory.
@@ -81,7 +96,7 @@ char	*get_random_temp_name(void)
 //<RETURN> The input string on SUCCESS; NULL on FATAL ERROR
 char	*check_here_doc_expansion(char *str, char *delim, char **envp, int ec)
 {
-	int	i;
+	size_t	i;
 
 	if (ft_strchr(delim, '\'') || ft_strchr(delim, '"'))
 		return (str);
@@ -103,11 +118,11 @@ char	*check_here_doc_expansion(char *str, char *delim, char **envp, int ec)
 //<PARAM> The input string, the environment pointers, 
 //<PARAM> the last exit code & the position in the string.
 //<RETURN> The expanded string on SUCCESS; NULL on FATAL ERROR
-char	*expand_here_doc(char *str, char **envp, int exit_code, int *i)
+char	*expand_here_doc(char *str, char **envp, int exit_code, size_t *i)
 {
-	int		len;
-	int		pos;
-	int		j;
+	size_t	len;
+	size_t	pos;
+	size_t	j;
 
 	if (str[*i + 1] == '?')
 		return (str = handle_exit_code_expansion(str, exit_code, i));

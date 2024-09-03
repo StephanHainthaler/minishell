@@ -84,19 +84,3 @@ void	free_cmd(t_cmd *cmd)
 	free(cmd);
 	cmd = NULL;
 }
-
-//Frees the allocated memory and exits the program.
-//<PARAM> The main struct of the program.
-//<RETURN> void
-// void	free_and_exit(t_minishell *ms)
-// {
-// 	// int	exitcode;
-
-// 	// exitcode = get_exitcode(simp_cmd);
-// 	if (ms->envp != NULL)
-// 		ft_free_strarr(ms->envp);
-// 	free_executor(ms->exec);
-// 	rl_clear_history();
-// 	//exit(g_code);
-// 	exit(1);
-// }

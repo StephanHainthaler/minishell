@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 16:03:26 by shaintha          #+#    #+#             */
-/*   Updated: 2023/09/14 13:41:07 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/05 13:37:05 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 char	*ft_strjoin(char const *str1, char const *str2)
 {
 	char	*strjoin;
-	int		i;
-	int		j;
+	size_t	i;
+	size_t	j;
 	int		count;
 
 	count = ft_strlen(str1) + ft_strlen(str2);

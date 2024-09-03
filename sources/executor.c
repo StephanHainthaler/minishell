@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 09:00:58 by shaintha          #+#    #+#             */
-/*   Updated: 2024/08/05 10:22:42 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:29:33 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+#include <stdlib.h>
 
 //Executes the parsed input in mostly child processes.
 //<PARAM> The main struct of the program.
@@ -24,22 +25,23 @@ int	execute_input(t_minishell *ms)
 	if (ms->exec->num_of_cmds == 1)
 	{
 		if (ms->exec->cmds[0]->in_fd == -1 || ms->exec->cmds[0]->out_fd == -1)
-			return (free_executor(ms->exec), ms->last_exit_code = 1, 2);
+			return (g_code = 0, free_executor(ms->exec), \
+				ms->last_exit_code = 1, 2);
 		error_check = handle_builtins_non_pipable(\
 			ms, ms->exec->cmds[0]->simp_cmd);
 		if (error_check == -1)
-			return (ms->last_exit_code = 1, 1);
+			return (g_code = 0, 1);
 		if (error_check == 2)
-			return (free_executor(ms->exec), ms->last_exit_code = 1, 2);
+			return (g_code = 0, free_executor(ms->exec), 2);
 		if (error_check == 0)
-			return (ms->last_exit_code = 0, 0);
+			return (g_code = 0, 0);
 		if (single_execution(ms->exec) == 1)
-			return (ms->last_exit_code = ms->exec->exit_status, 1);
+			return (1);
 		return (ms->last_exit_code = ms->exec->exit_status, 0);
 	}
 	if (multiple_execution(ms->exec) == 1)
-		return (ms->last_exit_code = ms->exec->exit_status, 1);
-	return (ms->last_exit_code = ms->exec->exit_status, 0);
+		return (g_code = 0, ms->last_exit_code = ms->exec->exit_status, 1);
+	return (g_code = 0, ms->last_exit_code = ms->exec->exit_status, 0);
 }
 
 //Forks into a single child process for the execution.
@@ -51,19 +53,18 @@ int	single_execution(t_executor *exec)
 	int		status;
 	pid_t	cpid;
 
-	// signal(SIGINT, SIG_DFL);
-	// signal(SIGQUIT, SIG_DFL);
+	signal(SIGQUIT, &handle_sigquit);
 	cpid = fork();
 	if (cpid == -1)
 		return (1);
 	if (cpid == 0)
 		single_child_proc(exec, exec->cmds[0]);
 	waitpid(cpid, &status, 0);
-	//if (WIFEXITED(status))
-	if (g_code != 2)
-		exec->exit_status = WEXITSTATUS(status);
+	if (WIFSIGNALED(status))
+		exec->exit_status = 128 + g_code;
 	else
-		exec->exit_status = 130;
+		exec->exit_status = WEXITSTATUS(status);
+	g_code = 0;
 	return (0);
 }
 
@@ -76,6 +77,7 @@ int	multiple_execution(t_executor *exec)
 	int	old_end;
 	int	i;
 
+	signal(SIGQUIT, &handle_sigquit);
 	old_end = dup(0);
 	if (old_end == -1)
 		return (1);
@@ -99,11 +101,10 @@ int	multi_pipe(t_executor *exec, int *old_end, int i)
 {
 	int		ends[2];
 	pid_t	cpid;
+	int		status;
 
 	if (pipe(ends) == -1)
 		return (1);
-	// signal(SIGINT, SIG_DFL);
-	// signal(SIGQUIT, SIG_DFL);
 	cpid = fork();
 	if (cpid == -1)
 		return (1);
@@ -112,8 +113,7 @@ int	multi_pipe(t_executor *exec, int *old_end, int i)
 	close(ends[1]);
 	close(*old_end);
 	*old_end = ends[0];
-	// waitpid(cpid, &status, 0);
-	// exec->exit_status = WEXITSTATUS(status);
+	waitpid(cpid, &status, WNOHANG);
 	return (0);
 }
 
@@ -132,6 +132,10 @@ int	last_pipe(t_executor *exec, int old_end, int i)
 		last_child_proc(exec, exec->cmds[i], old_end);
 	close(old_end);
 	waitpid(cpid, &status, 0);
-	exec->exit_status = WEXITSTATUS(status);
+	if (WIFSIGNALED(status))
+		exec->exit_status = 128 + g_code;
+	else
+		exec->exit_status = WEXITSTATUS(status);
+	g_code = 0;
 	return (0);
 }

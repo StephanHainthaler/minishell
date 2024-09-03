@@ -1,32 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   ft_sort_strarr.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 10:34:53 by shaintha          #+#    #+#             */
-/*   Updated: 2024/08/05 11:26:12 by shaintha         ###   ########.fr       */
+/*   Created: 2024/08/08 14:28:14 by juitz             #+#    #+#             */
+/*   Updated: 2024/08/08 14:29:46 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/libft.h"
 
-void	ft_lstdelone(t_list **lst, t_list *node)
+char	**ft_sort_strarr(char **strarray)
 {
-	t_list	*to_delete;
+	char	**arrdup;
+	char	*temp;
+	size_t	i;
+	size_t	j;
 
-	if (*lst == NULL)
-		return ;
-	if (node != NULL)
+	arrdup = ft_strarrdup(strarray);
+	if (arrdup == NULL)
+		return (NULL);
+	i = 0;
+	while (arrdup[i])
 	{
-		to_delete = node;
-		if (to_delete->attr != NULL || to_delete->type == WORD)
-			free(to_delete->attr);
-		if (to_delete->raw_attr != NULL || to_delete->type == WORD)
-			free(to_delete->raw_attr);
-		node = node->next;
-		free(to_delete);
-		*lst = node;
+		j = i + 1;
+		while (arrdup[j])
+		{
+			if (ft_strncmp(arrdup[i], arrdup[j], ft_strlen(arrdup[i])) > 0)
+			{
+				temp = arrdup[i];
+				arrdup[i] = arrdup[j];
+				arrdup[j] = temp;
+			}
+			j++;
+		}
+		i++;
 	}
+	return (arrdup);
 }

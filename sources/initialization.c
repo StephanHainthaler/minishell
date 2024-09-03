@@ -6,14 +6,14 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:52:39 by shaintha          #+#    #+#             */
-/*   Updated: 2024/08/05 10:18:35 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/13 10:10:39 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
 //Initializes the main struct of the program.
-//<PARAM> The to be initialzed main struct, 
+//<PARAM> The to be initialized main struct, 
 //<PARAM> the number of main args, the main args & environment pointers.
 //<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
 int	initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[])
@@ -23,12 +23,12 @@ int	initialize_minishell(t_minishell *ms, int argc, char *argv[], char *env[])
 	ms->envp = ft_strarrdup(env);
 	if (ms->envp == NULL)
 		return (1);
-	// if (env != NULL && is_env_set(env, "SHLVL=") == true)
-	// {
-	// 	ms->envp = increase_shlvl(ms->envp);
-	// 	if (ms->envp == NULL)
-	// 		return (1);
-	// }
+	if (is_env_set(env, "SHLVL=") == true)
+		ms->envp = increase_shlvl(ms->envp);
+	else
+		ms->envp = ft_stradd_tostrarr(ms->envp, "SHLVL=0");
+	if (ms->envp == NULL)
+		return (1);
 	ms->lex = NULL;
 	ms->exec = NULL;
 	ms->last_exit_code = 0;
@@ -45,6 +45,8 @@ int	initialize_lexer(t_minishell *ms)
 		return (1);
 	ms->lex->token_list = NULL;
 	ms->lex->input = NULL;
+	ms->lex->in_squotes = false;
+	ms->lex->in_dquotes = false;
 	ms->lex->i = 0;
 	ms->lex->envp = ms->envp;
 	return (0);
@@ -61,7 +63,6 @@ int	initialize_executor(t_minishell *ms)
 	if (ms->exec == NULL)
 		return (1);
 	ms->exec->num_of_cmds = count_cmds(&ms->lex->token_list);
-	ms->exec->num_of_pipes = ms->exec->num_of_cmds - 1;
 	ms->exec->cmds = (t_cmd **)malloc(ms->exec->num_of_cmds * sizeof(t_cmd *));
 	if (ms->exec->cmds == NULL)
 		return (free(ms->exec), 1);
@@ -110,12 +111,9 @@ t_cmd	*initialize_cmd(t_cmd *cmd, int cmd_nbr)
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
 	cmd->here_doc = NULL;
+	cmd->here_doc = get_random_temp_name();
 	if (cmd->here_doc == NULL)
-	{
-		cmd->here_doc = get_random_temp_name();
-		if (cmd->here_doc == NULL)
-			return (free(cmd), NULL);
-	}
+		return (free(cmd), NULL);
 	cmd->in_fd = 0;
 	cmd->out_fd = 1;
 	cmd->cmd_nbr = cmd_nbr;

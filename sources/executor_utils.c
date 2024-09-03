@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:40:11 by shaintha          #+#    #+#             */
-/*   Updated: 2024/07/29 15:58:46 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/13 09:47:21 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,35 +42,6 @@ char	**get_paths(t_executor *exec, int *error_flag)
 	return (*error_flag = 0, NULL);
 }
 
-//Searches the paths for the command name to allocate their path in a string.
-//If there was no match, the name of the command will be considered the path.
-//<PARAM> The executor struct & the current cmd struct.
-//<RETURN> The cmd_path on SUCCESS; NULL on FATAL ERROR
-char	*get_cmd_path(t_executor *exec, t_cmd *cmd)
-{
-	char	*temp;
-	int		i;
-
-	if (exec->is_path_set == false)
-		return (ft_strdup(cmd->simp_cmd[0]));
-	i = 0;
-	while (exec->paths[i] != NULL)
-	{
-		temp = ft_strjoin(exec->paths[i], "/");
-		if (temp == NULL)
-			return (NULL);
-		cmd->cmd_path = ft_strjoin(temp, cmd->simp_cmd[0]);
-		if (cmd->cmd_path == NULL)
-			return (ft_free(temp), free_executor(exec), NULL);
-		ft_free(temp);
-		if (access(cmd->cmd_path, F_OK | X_OK) == 0)
-			return (cmd->cmd_path);
-		ft_free(cmd->cmd_path);
-		i++;
-	}
-	return (ft_strdup(cmd->simp_cmd[0]));
-}
-
 //Opens and returns the file descriptor of the file given.
 //<PARAM> The in/outfile, the type of file & the mode of outfile.
 //<RETURN> The fd on SUCCESS; -1 on standard ERROR
@@ -102,22 +73,59 @@ int	get_fd(char *file, bool is_in_fd, bool is_append)
 	return (fd);
 }
 
-//Checks if a variable is set in environment. 
-//<PARAM> The environment pointers & the name of the variable.
-//<RETURN> bool
-bool	is_env_set(char *envp[], char *env_name)
+//Searches the paths for the command name to allocate their path in a string.
+//If there was no match, the name of the command will be considered the path.
+//<PARAM> The executor struct, the current cmd struct,
+//<PARAM> the error indicator & the iterator at 0.
+//<RETURN> The cmd_path on SUCCESS; NULL on FATAL ERROR
+char	*get_cmd_path(t_executor *exec, t_cmd *cmd, int *error_flag, size_t i)
 {
-	int	i;
+	char	*temp;
+	bool	skip;
 
+	skip = false;
+	if (is_cmd_path_special_case(cmd->simp_cmd[0], exec) == true)
+		skip = true;
 	i = 0;
-	while (envp[i] != NULL)
+	while (skip == false && exec->paths[i] != NULL)
 	{
-		if (ft_strnstr(envp[i], env_name, ft_strlen(env_name)) == NULL)
-			i++;
-		else
-			return (true);
+		temp = ft_strjoin(exec->paths[i], "/");
+		if (temp == NULL)
+			return (*error_flag = 1, NULL);
+		cmd->cmd_path = ft_strjoin(temp, cmd->simp_cmd[0]);
+		if (cmd->cmd_path == NULL)
+			return (*error_flag = 1, ft_free(temp), NULL);
+		ft_free(temp);
+		if (access(cmd->cmd_path, F_OK | X_OK) == 0)
+			return (cmd->cmd_path);
+		ft_free(cmd->cmd_path);
+		i++;
 	}
-	return (false);
+	temp = ft_strdup(cmd->simp_cmd[0]);
+	if (temp == NULL)
+		return (*error_flag = 1, NULL);
+	return (*error_flag = 0, temp);
+}
+
+//Checks for special cases for the get_cmd_path() function.
+//<PARAM> The cmd path to be checked & the executor struct.
+//<RETURN> bool
+bool	is_cmd_path_special_case(char *cmd_path, t_executor *exec)
+{
+	size_t	i;
+
+	if (exec->is_path_set == false || ft_is_same(cmd_path, ".") == true
+		|| ft_is_same(cmd_path, "") == true
+		|| ft_is_same(cmd_path, "/") == true)
+		return (true);
+	i = 0;
+	while (cmd_path[i] != '\0')
+	{
+		if (cmd_path[i] != '.' && cmd_path[i] != '/')
+			return (false);
+		i++;
+	}
+	return (true);
 }
 
 //Redirects the file descriptors and closes the old ones.

@@ -6,7 +6,7 @@
 #    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/22 09:06:14 by shaintha          #+#    #+#              #
-#    Updated: 2024/08/05 10:35:01 by shaintha         ###   ########.fr        #
+#    Updated: 2024/08/16 15:42:01 by shaintha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,17 +14,6 @@ NAME := minishell
 
 CC := cc
 CFLAGS := -Wall -Wextra -Werror -g
-VALGRIND := $(shell which valgrind)
-VFLAGS := --suppressions=./supp.supp \
---errors-for-leak-kinds=all \
---leak-check=full \
---read-var-info=yes \
---show-error-list=yes \
---show-leak-kinds=all \
---suppressions=./supp.supp \
---trace-children=yes \
---track-origins=yes
-#--track-fds=yes
 
 SRC_DIR := sources
 OBJ_DIR := objects
@@ -33,6 +22,7 @@ MAIN_DIR := main
 
 SRCS := $(SRC_DIR)/main.c \
 $(SRC_DIR)/initialization.c \
+$(SRC_DIR)/environment.c \
 $(SRC_DIR)/lexer.c \
 $(SRC_DIR)/lexer_utils.c \
 $(SRC_DIR)/expansion.c \
@@ -48,6 +38,7 @@ $(SRC_DIR)/builtins_1.c \
 $(SRC_DIR)/builtins_2.c \
 $(SRC_DIR)/builtins_utils_1.c \
 $(SRC_DIR)/builtins_utils_2.c \
+$(SRC_DIR)/builtins_utils_3.c \
 $(SRC_DIR)/signals.c \
 $(SRC_DIR)/signal_handler.c \
 $(SRC_DIR)/free.c
@@ -75,8 +66,5 @@ fclean: clean
 	@cd $(LIBFT_DIR) && make -s fclean
 
 re: fclean all
-
-val: all
-	@$(VALGRIND) $(VFLAGS) "./$(NAME)"
 
 .PHONY: all clean fclean re val

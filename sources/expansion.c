@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:44:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/08/05 10:02:06 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/08 13:50:03 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 int	check_for_expansion(t_list **token_list, char **envp, int ec)
 {
 	t_list	*cur_node;
-	int		i;
+	size_t	i;
 
 	cur_node = *token_list;
 	while (cur_node != NULL)
@@ -49,11 +49,11 @@ int	check_for_expansion(t_list **token_list, char **envp, int ec)
 //<PARAM> The current node, the environment pointers, 
 //<PARAM> the last exit code & the position in the string.
 //<RETURN> The handled string on SUCCESS; NULL on FATAL ERROR
-char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i)
+char	*handle_expansion(t_list *node, char **envp, int exit_code, size_t *i)
 {
-	int		len;
-	int		pos;
-	int		j;
+	size_t	len;
+	size_t	pos;
+	size_t	j;
 
 	if (handle_special_expansion(node, exit_code, i) == 0)
 		return (node->attr);
@@ -63,7 +63,7 @@ char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i)
 	while (envp[j] != NULL)
 	{
 		if (check_for_env(envp[j], node->attr + pos + 1, len - 1) == true)
-			return (*i = pos - 1,
+			return (*i = pos - 1 + get_envvar_len(envp[j]),
 				handle_valid_expansion(node->attr, envp[j], len, pos));
 		j++;
 	}
@@ -74,12 +74,13 @@ char	*handle_expansion(t_list *node, char **envp, int exit_code, int *i)
 //<PARAM> The expandable string, the environment pointers, 
 //<PARAM> the start of env & the position in the string.
 //<RETURN> The expanded string on SUCCESS; NULL on FATAL ERROR
-char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos)
+char	*handle_valid_expansion(char *to_expand, char *env,
+			size_t len, size_t pos)
 {
 	char	*exp_str;
 	char	*exp_var;
-	int		i;
-	int		j;
+	size_t	i;
+	size_t	j;
 
 	exp_var = ft_substr(env, len, ft_strlen(env) - len);
 	if (exp_var == NULL)
@@ -105,10 +106,10 @@ char	*handle_valid_expansion(char *to_expand, char *env, int len, int pos)
 //Performs an invalid expansion for the given string.
 //<PARAM> The expandable string, the start of env & the position in the string.
 //<RETURN> The expanded string on SUCCESS; NULL on FATAL ERROR
-char	*handle_invalid_expansion(char *str, int len, int pos)
+char	*handle_invalid_expansion(char *str, size_t len, size_t pos)
 {
 	char	*new_str;
-	int		i;
+	size_t	i;
 
 	new_str = (char *)malloc(sizeof(char) * (ft_strlen(str) - len + 1));
 	if (new_str == NULL)
@@ -126,13 +127,13 @@ char	*handle_invalid_expansion(char *str, int len, int pos)
 //<PARAM> The expandable string, the last exit code & 
 //<PARAM> the position in the string.
 //<RETURN> The expanded string on SUCCESS; NULL on FATAL ERROR
-char	*handle_exit_code_expansion(char *to_expand, int exit_code, int *i)
+char	*handle_exit_code_expansion(char *to_expand, int exit_code, size_t *i)
 {
 	char	*exp_str;
 	char	*exp_var;
-	int		j;
-	int		k;
-	int		l;
+	size_t	j;
+	size_t	k;
+	size_t	l;
 
 	exp_var = ft_itoa(exit_code);
 	if (exp_var == NULL)

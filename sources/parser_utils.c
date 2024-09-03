@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 14:34:30 by juitz             #+#    #+#             */
-/*   Updated: 2024/08/05 10:28:39 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/13 11:01:26 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 //In case of containing quotes, the word token will be dequoted.
 //<PARAM> The executor struct, the new word token & the current cmd number.
 //<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
-int	get_word(t_executor *exec, char *word, int i)
+int	get_word(t_executor *exec, char *word, size_t i)
 {
 	char	*deq_word;
 
@@ -44,7 +44,7 @@ int	get_word(t_executor *exec, char *word, int i)
 //<PARAM> The executor struct, the new out token, 
 //<PARAM> the type of out & the current cmd number.
 //<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 2 on standard ERROR
-int	get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i)
+int	get_outfile_redir(t_executor *exec, char *outfile, t_type type, size_t i)
 {
 	if (exec->cmds[i]->outfile != NULL)
 		free(exec->cmds[i]->outfile);
@@ -69,7 +69,7 @@ int	get_outfile_redir(t_executor *exec, char *outfile, t_type type, int i)
 //In case of containing quotes, the out token will be dequoted.
 //<PARAM> The executor struct, the new in token & the current cmd number.
 //<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 2 on standard ERROR
-int	get_infile_redir(t_executor *exec, char *infile, int i)
+int	get_infile_redir(t_executor *exec, char *infile, size_t i)
 {
 	if (exec->cmds[i]->infile != NULL)
 		free(exec->cmds[i]->infile);
@@ -86,8 +86,6 @@ int	get_infile_redir(t_executor *exec, char *infile, int i)
 		exec->cmds[i]->infile = ft_strdup(infile);
 	if (exec->cmds[i]->infile == NULL)
 		return (1);
-	if (is_file_ambigious(exec->cmds[i]->infile) == true)
-		return (2);
 	exec->cmds[i]->in_fd = get_fd(exec->cmds[i]->infile, true, false);
 	return (0);
 }
@@ -96,7 +94,7 @@ int	get_infile_redir(t_executor *exec, char *infile, int i)
 //Creates a temporary infile in the directory for redirection.
 //<PARAM> The executor struct, the delimiter & the current cmd number.
 //<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 2 on standard ERROR
-int	get_here_doc(t_executor *exec, char *delim, int i)
+int	get_here_doc(t_executor *exec, char *delim, size_t i)
 {
 	int	error_check;
 
@@ -114,9 +112,8 @@ int	get_here_doc(t_executor *exec, char *delim, int i)
 		exec->cmds[i]->here_doc, O_WRONLY | O_APPEND | O_CREAT, 0777);
 	if (exec->cmds[i]->in_fd == -1)
 		return (1);
-	error_check = handle_here_doc(exec->cmds[i]->in_fd, delim, \
-		exec->envp, exec->exit_status);
-	if (error_check == 1 || error_check == 2)
+	error_check = handle_here_doc(exec->cmds[i]->in_fd, delim, exec);
+	if (error_check == 1 || error_check == 2 || error_check == 3)
 		return (error_check);
 	close(exec->cmds[i]->in_fd);
 	exec->cmds[i]->in_fd = open(exec->cmds[i]->here_doc, O_RDONLY, 0777);
@@ -125,13 +122,13 @@ int	get_here_doc(t_executor *exec, char *delim, int i)
 	return (0);
 }
 
-//Checks, if the redirection for the in/outfile is ambigious.
+//Checks if the redirection for the in/outfile is ambigious.
 //<PARAM> The file to be checked.
 //<RETURN> bool
 bool	is_file_ambigious(char *file)
 {
 	char	quote;
-	int		i;
+	size_t	i;
 
 	i = 0;
 	while (file[i] != '\0')

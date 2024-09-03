@@ -6,13 +6,13 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:46:31 by shaintha          #+#    #+#             */
-/*   Updated: 2024/08/05 10:29:38 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/12 09:45:02 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-//Takes a string and duplicates it in dequoted from.
+//Takes a string and duplicates it in dequoted form.
 //The dequoted string needs to be freed.
 //<PARAM> The to be dequoted string.
 //<RETURN> The string on SUCCESS; NULL on FATAL ERROR
@@ -20,8 +20,8 @@ char	*dequote(char *str)
 {
 	char	*new_str;
 	char	quote;
-	int		i;
-	int		j;
+	size_t	i;
+	size_t	j;
 
 	new_str = (char *)malloc((get_dequoted_strlen(str) + 1) * (sizeof(char)));
 	if (new_str == NULL)
@@ -44,7 +44,7 @@ char	*dequote(char *str)
 	return (new_str);
 }
 
-//Takes a string and counts its length in dequoted from.
+//Takes a string and counts its length in dequoted form.
 //<PARAM> The to be dequoted string.
 //<RETURN> The lenght of the dequoted string on SUCCESS
 int	get_dequoted_strlen(char *str)
@@ -76,11 +76,11 @@ int	get_dequoted_strlen(char *str)
 	return (ft_strlen(str) - num_of_quotes);
 }
 
-//During tokenizing, keeps check, if there no open quotes.
-//<PARAM> The lexer struct, the opened quote, 
+//During tokenizing, keeps check, if there are no open quotes.
+//<PARAM> The lexer struct, the opened quote & 
 //<PARAM> the current position in the string.
 //<RETURN> 0 on SUCCESS; 1 on standard ERROR
-int	handle_quote_closure(t_lexer *lex, char quote, int *len)
+int	handle_quote_closure(t_lexer *lex, char quote, size_t *len)
 {
 	bool	is_closed;
 
@@ -103,7 +103,7 @@ int	handle_quote_closure(t_lexer *lex, char quote, int *len)
 }
 
 //During expansion process, keeps check of current state of quotes.
-//<PARAM> The current node, the quote to be verified.
+//<PARAM> The current node & the quote to be verified.
 //<RETURN> void
 void	handle_quotes_in_expansion(t_list *node, char quote)
 {

@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:06:32 by shaintha          #+#    #+#             */
-/*   Updated: 2024/08/05 10:36:19 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/13 12:00:56 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int	g_code;
+int	g_code = 0;
 
 //The main loop of the program. A FATAL ERROR (1) and
 //a certain SIGNAL (3) will end the loop, while 
-// a standard ERROR (2) will start the loop at the top again.
+//a standard ERROR (2) will start the loop at the top again.
 //<PARAM> The main struct of the program & the indicator for checking errors.
 //<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
 int	main_loop(t_minishell *ms, int error_check)
@@ -55,9 +55,9 @@ int	main(int argc, char *argv[], char *env[])
 	int			error_check;
 
 	if (argc != 1)
-		return (1);
+		return (ft_putendl_fd("./minishell: too many arguments", 2), 1);
 	if (initialize_minishell(&ms, argc, argv, env) == 1)
-		return (1);
+		return (ft_putendl_fd("./minishell: FATAL", 2), 1);
 	error_check = 0;
 	if (main_loop(&ms, error_check) == 1)
 		return (ft_free_strarr(ms.envp), 1);

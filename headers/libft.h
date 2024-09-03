@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 11:52:49 by shaintha          #+#    #+#             */
-/*   Updated: 2024/08/05 10:38:35 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/13 11:56:58 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,9 @@ typedef struct s_list
 {
 	t_type			type;
 	char			*attr;
-	char			*tmp;
+	char			*raw_attr;
 	bool			in_squotes;
 	bool			in_dquotes;
-	bool			was_in_quotes;
-	int				last_exit_code;
 	struct s_list	*next;
 }					t_list;
 
@@ -53,6 +51,7 @@ bool	ft_isascii(int c);
 bool	ft_isprint(int c);
 bool	ft_isspace(int c);
 bool	ft_isspace_str(char *str);
+bool	ft_is_same(char *str1, char *str2);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
 size_t	ft_strlen(const char *str);
@@ -76,6 +75,7 @@ char	**ft_strarrdup(char **src);
 char	**ft_stradd_tostrarr(char **strarr, char *str);
 char	**ft_strdel_fromstrarr(char **strarr, int pos);
 char	**ft_strreplace_instrarr(char **strarr, char *new_str, int pos);
+char	**ft_sort_strarr(char **strarray);
 char	*ft_substr(char const *str, unsigned int start, size_t len);
 char	*ft_strjoin(char const *str1, char const *str2);
 char	*ft_strjoin_gnl(char *str1, char *str2);

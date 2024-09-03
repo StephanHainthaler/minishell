@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+         #
+#    By: juitz <juitz@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/12 09:25:55 by shaintha          #+#    #+#              #
-#    Updated: 2024/08/05 10:39:18 by shaintha         ###   ########.fr        #
+#    Updated: 2024/08/13 11:57:11 by juitz            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRCS :=  $(SRC_DIR)/ft_atoi.c \
 		$(SRC_DIR)/ft_isint.c \
 		$(SRC_DIR)/ft_isprint.c \
 		$(SRC_DIR)/ft_isspace.c \
+		$(SRC_DIR)/ft_is_same.c \
 		$(SRC_DIR)/ft_itoa.c \
 		$(SRC_DIR)/ft_memchr.c \
 		$(SRC_DIR)/ft_memcmp.c \
@@ -45,6 +46,7 @@ SRCS :=  $(SRC_DIR)/ft_atoi.c \
 		$(SRC_DIR)/ft_stradd_tostrarr.c \
 		$(SRC_DIR)/ft_strdel_fromstrarr.c \
 		$(SRC_DIR)/ft_strreplace_instrarr.c \
+		$(SRC_DIR)/ft_sort_strarr.c \
 		$(SRC_DIR)/ft_strarrlen.c \
 		$(SRC_DIR)/ft_strchr.c \
 		$(SRC_DIR)/ft_strdup.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/23 09:31:04 by shaintha          #+#    #+#             */
-/*   Updated: 2024/08/05 10:37:27 by shaintha         ###   ########.fr       */
+/*   Created: 2024/05/12 09:06:32 by shaintha          #+#    #+#             */
+/*   Updated: 2024/08/16 15:26:59 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@ int	get_input(t_minishell *ms)
 	error_check = read_input(ms->lex);
 	if (error_check == 1)
 		return (1);
+	if (g_code == 2)
+		ms->last_exit_code = 130;
+	if (g_code == 3)
+		ms->last_exit_code = 131;
 	if (error_check == 3)
 		return (free_lexer(ms->lex), 3);
 	error_check = tokenize_input(ms->lex);
@@ -32,39 +36,34 @@ int	get_input(t_minishell *ms)
 		return (1);
 	if (error_check == 2)
 		return (ms->last_exit_code = 1, free_lexer(ms->lex), 2);
-	if (g_code == 2)
-		ms->last_exit_code = 130;
-	//ms->last_exit_code = g_code;
-	if (check_for_expansion(&ms->lex->token_list, ms->envp, ms->last_exit_code) == 1)
+	if (check_for_expansion(&ms->lex->token_list, \
+		ms->envp, ms->last_exit_code) == 1)
 		return (1);
-	return (0);
+	return (g_code = 0, 0);
 }
 
 //Reads the input and stores it in a string in the lexer struct.
 //<PARAM> The lexer struct.
-//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR
+//<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 3 on EXIT
 int	read_input(t_lexer *lex)
 {
+	errno = 0;
 	while (true)
 	{
 		signals_interactive();
-		if (isatty(fileno(stdin)))
-			lex->input = readline("./minishell$ ");
-		if (lex->input == NULL)
+		lex->input = readline("./minishell$ ");
+		if (lex->input == NULL && errno != 0)
+			return (1);
+		if (lex->input == NULL && errno == 0)
 			return (3);
-		//g_code = 2;
-		//signal(SIGINT, &sigint_process);
-		if (ft_are_str_indentical("./minishell", lex->input))
-			signal(SIGINT, &sigint_subshell);
-		signal(SIGQUIT, &handle_sigquit);
-		if (ft_are_str_indentical("cat", lex->input))
-			signal(SIGINT, &sigint_process);
+		if (ft_is_same (lex->input, "./minishell ")
+			|| (ft_is_same (lex->input, "./minishell")))
+			signals(1);
 		if (ft_isspace_str(lex->input) == false)
 			break ;
+		free(lex->input);
 	}
 	add_history(lex->input);
-	// if (ms->lex->input[ft_strlen(ms->lex->input) - 1] == '\\')
-	// 	return (ft_putendl_fd("Input cannot end on '\\'", 2), free_lexer(ms->lex), 2);
 	return (0);
 }
 

@@ -31,7 +31,7 @@ t_list	*get_word_token(t_lexer *lex, int *error)
 {
 	t_list	*new_token;
 	char	*attr;
-	int		len;
+	size_t	len;
 
 	attr = NULL;
 	len = 0;

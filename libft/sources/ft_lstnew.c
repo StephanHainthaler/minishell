@@ -6,7 +6,7 @@
 /*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 10:33:31 by shaintha          #+#    #+#             */
-/*   Updated: 2024/06/17 09:52:19 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/13 09:18:21 by shaintha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,16 @@ t_list	*ft_lstnew(t_type type, char *attr)
 		return (NULL);
 	new_lst->type = type;
 	new_lst->attr = attr;
+	if (type == WORD)
+	{
+		new_lst->raw_attr = ft_strdup(new_lst->attr);
+		if (new_lst->raw_attr == NULL)
+			return (free(new_lst), NULL);
+	}
+	else
+		new_lst->raw_attr = NULL;
 	new_lst->in_squotes = false;
 	new_lst->in_dquotes = false;
-	new_lst->was_in_quotes = false;
 	new_lst->next = NULL;
 	return (new_lst);
 }

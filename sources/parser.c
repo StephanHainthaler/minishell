@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shaintha <shaintha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juitz <juitz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:28:56 by juitz             #+#    #+#             */
-/*   Updated: 2024/08/05 09:45:55 by shaintha         ###   ########.fr       */
+/*   Updated: 2024/08/13 11:06:07 by juitz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,15 @@ int	parse_input(t_minishell *ms)
 	if (error_check == 2)
 		return (ms->last_exit_code = 1, free_lexer(ms->lex),
 			free_executor(ms->exec), 2);
+	if (error_check == 3)
+		return (ms->last_exit_code = 0, free_lexer(ms->lex),
+			free_executor(ms->exec), 2);
 	return (0);
 }
 
 //Reads the entire linked list and counts the total amount of commands.
-//<PARAM> The executor struct, the list, an error indicator & an iterator at 0
-//<RETURN> total number of cmds on SUCCESS
+//<PARAM> The executor struct, the list, an error indicator & an iterator at 0.
+//<RETURN> The total number of cmds on SUCCESS
 int	count_cmds(t_list **list)
 {
 	t_list	*current_node;
@@ -54,12 +57,12 @@ int	count_cmds(t_list **list)
 }
 
 //Checks the entire list for allowed order of tokens.
-//<PARAM> The lexer struct
+//<PARAM> The lexer struct.
 //<RETURN> bool
 bool	is_valid_input(t_lexer *lex)
 {
 	t_list	*cur;
-	int		i;
+	size_t	i;
 
 	i = 0;
 	cur = lex->token_list;
@@ -86,9 +89,9 @@ bool	is_valid_input(t_lexer *lex)
 }
 
 //Converts every node of the linked list into a command struct.
-//<PARAM> The executor struct, the list, an error indicator & an iterator at 0
+//<PARAM> The executor struct, the list, an error indicator & an iterator at 0.
 //<RETURN> 0 on SUCCESS; 1 on FATAL ERROR; 2 on standard ERROR
-int	get_cmds(t_executor *exec, t_list **list, int error_check, int i)
+int	get_cmds(t_executor *exec, t_list **list, int error_check, size_t i)
 {
 	t_list	*cur;
 
@@ -105,10 +108,10 @@ int	get_cmds(t_executor *exec, t_list **list, int error_check, int i)
 				error_check = get_outfile_redir(exec, cur->next->attr, \
 					cur->type, i);
 			if (cur->type == HERE_DOC)
-				error_check = get_here_doc(exec, cur->next->attr, i);
+				error_check = get_here_doc(exec, cur->next->raw_attr, i);
 			cur = cur->next;
 		}
-		if (error_check == 1 || error_check == 2)
+		if (error_check == 1 || error_check == 2 || error_check == 3)
 			return (error_check);
 		if (cur->type == PIPE)
 			i++;
